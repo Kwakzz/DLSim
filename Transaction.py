@@ -3,7 +3,7 @@ from Network import Network
 import random
 
 class Transaction:
-    def __init__ (self, id, timestamp, recipient_id, sender_id, amount_sent, size = 0, fee = 0):
+    def __init__ (self, id=0, timestamp=0, recipient_id=0, sender_id=0, amount_sent=0, size = 0, fee = 0, is_confirmed=False):
         self.id = id
         self.timestamp = timestamp
         self.recipient_id = recipient_id
@@ -12,6 +12,7 @@ class Transaction:
         self.size = size
         self.gas = Configuration.transaction_gas
         self.fee = fee
+        self.is_confirmed = is_confirmed
                 
     def is_sender_equal_to_recipient(self):
         return self.sender_id == self.recipient_id
@@ -28,7 +29,7 @@ class Transaction:
     def create_random_transaction(self):
         sender = random.choice(Network.nodes)
         recipient = random.choice(Network.nodes)
-        amount_sent = random.randrange(1, sender.balance + 10)
+        amount_sent = random.randrange(1, sender.balance + 100)
         
         self.id = random.randrange(100000000000)
         self.timestamp = Configuration.current_time
@@ -38,5 +39,5 @@ class Transaction:
         
         for node in Network.nodes:
             node.memory_pool.append(self)
+
         
-        Network.memory_pool.append(self)
