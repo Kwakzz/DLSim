@@ -1,12 +1,12 @@
 from Block import Block
 from Configuration import Configuration
 from Network import Network
-from Transaction import Transaction
 import random
 
 if Configuration.selected_platform == "Ethereum":
     from Ethereum.Node import Node
     from Ethereum.Consensus import Consensus as Proof_of_Stake
+    from Ethereum.Transaction import Transaction
 
 def main ():
     

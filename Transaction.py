@@ -10,18 +10,13 @@ class Transaction:
         self.sender_id = sender_id
         self.amount_sent = amount_sent
         self.size = size
-        self.gas = Configuration.transaction_gas
         self.fee = fee
-        self.is_confirmed = is_confirmed
                 
     def is_sender_equal_to_recipient(self):
         return self.sender_id == self.recipient_id
     
     def is_amount_sent_greater_than_sender_balance(self):
         return self.amount_sent > self.sender.balance
-                
-    def within_block_limit (self):
-        return self.gas_limit < Configuration.block_limit
     
     def is_valid (self):
         return not self.is_sender_equal_to_recipient and not self.is_amount_sent_greater_than_sender_balance
@@ -39,5 +34,7 @@ class Transaction:
         
         for node in Network.nodes:
             node.memory_pool.append(self)
+            
+            
 
         

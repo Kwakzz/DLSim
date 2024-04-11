@@ -21,4 +21,4 @@ class Network:
     @staticmethod
     def discard_block(block):
         for node in Network.nodes:
-            node.block_memory.pop(block.id)
+            del node.block_memory[block.id]

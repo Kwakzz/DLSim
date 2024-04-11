@@ -8,6 +8,9 @@ class Configuration:
     no_of_runs = 3
     
     block_limit = 80000
+    fee_per_unit_of_gas = 10 # aka gas price
+    transaction_gas_limit = 5000
+    block_gas_limit = 1000
     transaction_gas = 50
     
     no_of_transactions_per_round = 30
@@ -19,7 +22,7 @@ class Configuration:
     no_of_nodes_staking = random.randrange(no_of_nodes/2, no_of_nodes+1)
     maximum_hashpower = 100
     minimum_hashpower = 20
-    
+        
     selected_platform = "Ethereum"
     
     @staticmethod

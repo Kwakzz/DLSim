@@ -14,9 +14,8 @@ class Block:
         
     def are_transactions_valid(self):
         for transaction in self.transactions:
-            if not transaction.is_sender_equal_to_recipient:
-                return False
-            
+            if not transaction.is_valid:
+                return False      
         return True
         
     
