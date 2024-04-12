@@ -1,28 +1,28 @@
 from Block import Block
-from Configuration import Configuration
+from Configuration import GeneralConfiguration
 from Network import Network
 import random
 
-if Configuration.selected_platform == "Ethereum":
+if GeneralConfiguration.selected_platform == "Ethereum":
     from Ethereum.Node import Node
     from Ethereum.Consensus import Consensus as Proof_of_Stake
     from Ethereum.Transaction import Transaction
 
 def main ():
     
-    Configuration.start_timer(10)
+    GeneralConfiguration.start_timer(10)
     
     Network.initialize_network()
     
-    for run_count in range(Configuration.no_of_runs):
+    for run_count in range(GeneralConfiguration.no_of_runs):
         
         print("\nRUN {}".format(run_count+1))
         
-        for transaction_count in range (Configuration.no_of_transactions_per_round):
+        for transaction_count in range (GeneralConfiguration.no_of_transactions_per_round):
             transaction = Transaction()
             transaction.create_random_transaction()
             
-        if Configuration.selected_platform == "Ethereum":
+        if GeneralConfiguration.selected_platform == "Ethereum":
             
             Proof_of_Stake.staking_round()
             Proof_of_Stake.select_eligible_forgers()

@@ -1,6 +1,3 @@
-from Network import Network
-from Configuration import Configuration
-
 class Block:
     
     def __init__(self, id,  miner_id, previous = None, timestamp = 0, size = 0, transactions = []):

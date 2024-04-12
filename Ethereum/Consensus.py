@@ -1,5 +1,5 @@
 from Network import Network
-from Configuration import Configuration
+from Configuration import GeneralConfiguration, EthereumConfiguration
 import random
 
 class Consensus:
@@ -36,7 +36,7 @@ class Consensus:
     @staticmethod
     def staking_round():
         print("\nSTAKING ROUND...")
-        for node_count in range(Configuration.no_of_nodes_staking):
+        for node_count in range(EthereumConfiguration.no_of_nodes_staking):
             balance_staked = random.randrange(Network.nodes[node_count].balance // 2, Network.nodes[node_count].balance + 1)
             Network.nodes[node_count].stake_coins(balance_staked)
             print("Node {} staked {} ETH.".format(Network.nodes[node_count].id, balance_staked))

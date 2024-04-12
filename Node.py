@@ -1,5 +1,5 @@
 from Block import Block
-from Configuration import Configuration
+from Configuration import GeneralConfiguration
 
 class Node:
     def __init__(self, id, balance=0):
@@ -16,7 +16,7 @@ class Node:
     def propagate_block(self, block):
         from Network import Network
         self.block_memory.remove(block)
-        for node_count in range(Configuration.no_of_nodes):
+        for node_count in range(GeneralConfiguration.no_of_nodes):
             current_node = Network.nodes[node_count]
             current_node.blockchain.insert(block.id, block)
         print("\nBlock {} has been added to the blockchain".format(block.id))

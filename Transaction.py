@@ -1,9 +1,9 @@
-from Configuration import Configuration
+from Configuration import GeneralConfiguration
 from Network import Network 
 import random
 
 class Transaction:
-    def __init__ (self, id=0, timestamp=0, recipient_id=0, sender_id=0, amount_sent=0, size = 0, fee = 0, is_confirmed=False):
+    def __init__ (self, id=0, timestamp=0, recipient_id=0, sender_id=0, amount_sent=0, size = 0, fee = 0):
         self.id = id
         self.timestamp = timestamp
         self.recipient_id = recipient_id
@@ -27,7 +27,7 @@ class Transaction:
         amount_sent = random.randrange(1, sender.balance + 100)
         
         self.id = random.randrange(100000000000)
-        self.timestamp = Configuration.current_time
+        self.timestamp = GeneralConfiguration.current_time
         self.sender_id = sender.id
         self.recipient_id = recipient.id
         self.amount_sent = amount_sent

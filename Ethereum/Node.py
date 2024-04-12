@@ -1,5 +1,5 @@
 from Block import Block
-from Configuration import Configuration
+from Configuration import GeneralConfiguration, EthereumConfiguration
 from Node import Node as BaseNode
 
 class Node (BaseNode):
@@ -16,12 +16,12 @@ class Node (BaseNode):
             transactions_to_include = []
             length_of_blockchain = len(self.blockchain)
             block = Block(id=length_of_blockchain, miner_id=self.id)
-            block.timestamp = Configuration.current_time
+            block.timestamp = GeneralConfiguration.current_time
             
             # Ensure transactions don't exceed the block's gas limit
             for transaction in self.memory_pool:
-                if total_gas_used + transaction.gas <= Configuration.block_gas_limit:
-                    if transaction.gas < Configuration.transaction_gas_limit:
+                if total_gas_used + transaction.gas <= EthereumConfiguration.block_gas_limit:
+                    if transaction.gas < EthereumConfiguration.transaction_gas_limit:
                         transactions_to_include.append(transaction)
                         total_gas_used += transaction.gas
                 else:
