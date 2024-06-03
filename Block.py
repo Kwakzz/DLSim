@@ -1,16 +1,16 @@
+from datetime import datetime
+
 class Block:
     
-    def __init__(self, id,  miner_id, previous = None, timestamp = 0, size = 0, transactions = []):
-        self.id = id
-        self.previous = previous
-        self.timestamp = timestamp
-        self.size = size
+    def __init__(self, block_hash, parent_id = None, transactions = {}):
+        self.hash = block_hash
+        self.parent_id = parent_id
+        self.timestamp = datetime.now()
         self.transactions = transactions
-        self.miner_id = miner_id
         
         
     def are_transactions_valid(self):
-        for transaction in self.transactions:
+        for transaction in self.transactions.values():
             if not transaction.is_valid:
                 return False      
         return True

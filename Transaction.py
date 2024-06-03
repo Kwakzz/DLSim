@@ -1,39 +1,34 @@
-from Configuration import GeneralConfiguration
+from datetime import datetime
+from Configuration import GeneralConfiguration, sha256_hash
 from Network import Network 
 import random
+import sys
+
 
 class Transaction:
-    def __init__ (self, id=0, timestamp=0, recipient_id=0, sender_id=0, amount_sent=0, size = 0, fee = 0):
-        self.id = id
-        self.timestamp = timestamp
+    def __init__ (self, recipient_id, sender_id, value):
+        self.id = sha256_hash(str(self))
+        self.timestamp = datetime.now()
         self.recipient_id = recipient_id
         self.sender_id = sender_id
-        self.amount_sent = amount_sent
-        self.size = size
-        self.fee = fee
+        self.value = value
+        self.size = sys.getsizeof(self)
                 
-    def is_sender_equal_to_recipient(self):
+    def is_external_transfer(self):
         return self.sender_id == self.recipient_id
     
-    def is_amount_sent_greater_than_sender_balance(self):
-        return self.amount_sent > self.sender.balance
+    def within_sender_balance(self):
+        sender = Network.nodes[self.recipient_id]
+        return self.value > sender.balance
     
+    def sender_exists(self):
+        return Network.nodes[self.sender_id] != None
+    
+    def recipient_exists(self):
+        return Network.nodes[self.recipient_id] != None
+            
     def is_valid (self):
-        return not self.is_sender_equal_to_recipient and not self.is_amount_sent_greater_than_sender_balance
-    
-    def create_random_transaction(self):
-        sender = random.choice(Network.nodes)
-        recipient = random.choice(Network.nodes)
-        amount_sent = random.randrange(1, sender.balance + 100)
-        
-        self.id = random.randrange(100000000000)
-        self.timestamp = GeneralConfiguration.current_time
-        self.sender_id = sender.id
-        self.recipient_id = recipient.id
-        self.amount_sent = amount_sent
-        
-        for node in Network.nodes:
-            node.memory_pool.append(self)
+        return self.is_external_transfer and self.within_sender_balance and self.sender_exists and self.recipient_exists
             
             
 

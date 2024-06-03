@@ -46,3 +46,11 @@ class Consensus:
         if Consensus.forger:
             Consensus.forger.balance_staked = 0
             print("Forger with ID {} was caught being dishonest. Stake has been slashed.".format(Consensus.forger.id))
+            
+    
+    @staticmethod        
+    def reset_coin_age():
+        for node in Network.nodes:
+            if node.elapsed_stake_time_in_days == 30:
+                node.elapsed_stake_time_in_days = 0
+                node.balance_staked = 0

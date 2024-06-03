@@ -6,9 +6,9 @@ class Node (BaseNode):
     
     def __init__(self, id, balance):
         super().__init__(id=id, balance=balance)
-        self.elapsed_stake_time = 86400*10
+        self.elapsed_stake_time_in_days = 10 # 86400*10 
         self.balance_staked = 0
-        self.coin_age = self.balance_staked * (self.elapsed_stake_time/86400) #86400s make a day
+        self.coin_age = self.balance_staked * self.elapsed_stake_time_in_days # (self.elapsed_stake_time/86400) 86400s make a day
         
     def generate_block(self):
         if self.memory_pool:
