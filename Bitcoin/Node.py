@@ -1,12 +1,8 @@
-from datetime import datetime
 import random
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
-from Configuration import GeneralConfiguration, BitcoinConfiguration, set_bitcoin_transaction_fee, generate_block_hash, sha256_hash, generate_random_32_bit_number, is_pow_found
+from Configuration import BitcoinConfiguration, set_bitcoin_transaction_fee, generate_block_hash, sha256_hash, generate_random_32_bit_number
 from Node import Node as BaseNode
-from Bitcoin.Consensus import Consensus as PoW
-from Bitcoin.Transaction import Transaction as BitcoinTransaction
-import threading
-import secrets
+
 
 class Node (BaseNode):
     
@@ -18,20 +14,31 @@ class Node (BaseNode):
         block_memory_pool={}
     ):
         super().__init__(
+            balance,
+            transactions_memory_pool={},
+            block_memory_pool={}
         )
+        self.blockchain = blockchain
+
 
     def initiate_transaction(self):
-        from Bitcoin.Transaction import Transaction
+        
+        from Bitcoin.Transaction import Transaction as BitcoinTransaction
         from Network import Network
+        
         transaction_value = random.randrange(1, self.balance)
-        recipient = random.choice(Network.nodes.values())
-        transaction = Transaction(
+        other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
+        recipient = random.choice(other_nodes)
+        transaction = BitcoinTransaction(
             sender_id = self.id,
             recipient_id = recipient.id,
             value = transaction_value
         )
+        transaction.id = sha256_hash(str(transaction))
         transaction.fee = set_bitcoin_transaction_fee(transaction.size)
+        print(transaction)
         return transaction
+
 
     def create_block(self):
         block = BitcoinBlock()
@@ -46,10 +53,17 @@ class Node (BaseNode):
                 
         return block
     
+    
     def scan_pow(self, block):
         nonce = generate_random_32_bit_number()
         block_hash = sha256_hash(str(block.id) + nonce)
         return block_hash
     
+    
+    def __str__(self):
+        node_type = "Full"
+        if not self.blockchain:
+            node_type = "Lightweight"
+        return f"Node(ID: {self.id}, Balance: {self.balance}, Type: {node_type})\n"
                 
     

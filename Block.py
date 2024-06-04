@@ -2,8 +2,8 @@ from datetime import datetime
 
 class Block:
     
-    def __init__(self, block_hash, parent_id = None, transactions = {}):
-        self.hash = block_hash
+    def __init__(self, hash, parent_id = None, transactions = {}):
+        self.hash = hash
         self.parent_id = parent_id
         self.timestamp = datetime.now()
         self.transactions = transactions

@@ -9,7 +9,7 @@ class Block (BaseBlock):
 
     def __init__(
         self, 
-        block_hash,
+        hash,
         difficulty_target = BitcoinConfiguration.difficulty_target, 
         nonce=0, 
         size=0, 
@@ -21,7 +21,7 @@ class Block (BaseBlock):
         
  
 genesis_block = Block(
-    block_hash=0
+    hash=0
 )       
     
         

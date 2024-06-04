@@ -9,13 +9,11 @@ class Network:
         pass  
     
     def add_node():
-        from Node import Node
         initial_balance = random.randrange(GeneralConfiguration.minumum_initial_balance, GeneralConfiguration.maximum_initial_balance)
         if GeneralConfiguration.selected_platform == "Bitcoin":
             from Bitcoin.Node import Node as BitcoinNode
             node = BitcoinNode(balance=initial_balance)
-            node_id = generate_node_id()
-            Network.nodes[node_id] = node
+            Network.nodes[node.id] = node
             print(node)
         
     @staticmethod

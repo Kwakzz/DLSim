@@ -4,10 +4,14 @@ from Network import Network
 
 
 class Node:
-    def __init__(self, balance=0, blockchain=[], transactions_memory_pool={}, block_memory_pool={}):
+    def __init__(
+        self, 
+        balance, 
+        transactions_memory_pool={}, 
+        block_memory_pool={}
+    ):
         self.id = generate_node_id()
         self.balance = balance
-        self.blockchain=blockchain
         self.transactions_memory_pool=transactions_memory_pool
         self.block_memory_pool=block_memory_pool 
     
@@ -27,10 +31,6 @@ class Node:
             return False
         return self.id == other.id 
     
-    def __str__(self):
-        node_type = "Full"
-        if not self.blockchain:
-            node_type = "Lightweight"
-        return f"Node(ID: {self.id}, Balance: {self.balance}, Type: {node_type})\n"
+    
         
             

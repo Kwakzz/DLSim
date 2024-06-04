@@ -1,11 +1,11 @@
 import random
 import secrets
 import string
-import time
-import threading
+
 
 def generate_random_32_bit_number():
     return secrets.randbelow(2**32)
+
 
 def sha256_hash(data):
     import hashlib
@@ -14,6 +14,7 @@ def sha256_hash(data):
     hasher = hashlib.sha256(encoded_data)
     hex_digest = hasher.hexdigest() # string representation of hash in hex
     return hex_digest
+
 
 def generate_block_hash(block):
     
@@ -34,33 +35,60 @@ def generate_block_hash(block):
     separator = ""
     block.hash = separator.join([string for hash in paired_transaction_hashes])
     return block.hash
+
         
 def generate_node_id():
+    
     import os
 
     random_bytes = os.urandom(6)
     node_id_in_hex = random_bytes.hex()
     return node_id_in_hex
 
+
 def set_bitcoin_transaction_fee(transaction_size):
-    ((transaction_size/1000) * no_of_pending_transactions) * 0.00005
+    ((transaction_size/1000) * GeneralConfiguration.no_of_pending_transactions) * 0.00005
+    
     
 def is_pow_found(block_hash):
     return block_hash.startswith("0"*BitcoinConfiguration.difficulty_target)
 
-no_of_pending_transactions = 0
 
+def create_random_transactions():
+    
+    from Network import Network
+    
+    print("Nodes are conducting transactions...\n")
+    for i in range(GeneralConfiguration.transaction_count_per_run):
+        sender = random.choice(list(Network.nodes.values()))
+        transaction = sender.initiate_transaction()
+        sender.broadcast_transaction(transaction)
+    
+
+def assign_miners():
+    
+    from Network import Network
+    from itertools import combinations
+    
+    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+    
+    print("Miners:")
+        
+    for miner in GeneralConfiguration.miners:
+        print(miner)
 
 class GeneralConfiguration:
         
-    no_of_runs = 3
+    no_of_runs = 1
     
     no_of_transactions_per_round = 30
+    no_of_pending_transactions = 0
+    transaction_count_per_run = 10
     
     maximum_initial_balance = 200
     minumum_initial_balance = 10
     
-    no_of_nodes = 50
+    no_of_nodes = 10
         
     selected_platform = "Bitcoin"
 
@@ -78,9 +106,10 @@ class EthereumConfiguration:
     
 
 class BitcoinConfiguration:
-    block_size_limit = 1000 # actual block size limit for Bitcoin is 1MB. 1000 here represents 1000KB, which is approximately 1MB.
+    block_size_limit = 100 # actual block size limit for Bitcoin is 1MB.
     maximum_hashpower = 100
     minimum_hashpower = 20
     difficulty_target = 4
     no_of_miners = 3
+    miners = []
     

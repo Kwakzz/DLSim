@@ -1,5 +1,5 @@
 from Block import Block
-from Configuration import GeneralConfiguration
+from Configuration import GeneralConfiguration, create_random_transactions, assign_miners
 from Network import Network
 import random
 
@@ -15,7 +15,9 @@ def main ():
     for run_count in range(GeneralConfiguration.no_of_runs):
                     
         if GeneralConfiguration.selected_platform == "Bitcoin":
-            pass
+            create_random_transactions()
+            assign_miners()
+            
             
             
                 
