@@ -1,81 +1,5 @@
 import random
-import secrets
-import string
 
-
-def generate_random_32_bit_number():
-    return secrets.randbelow(2**32)
-
-
-def sha256_hash(data):
-    import hashlib
-    
-    encoded_data = data.encode()
-    hasher = hashlib.sha256(encoded_data)
-    hex_digest = hasher.hexdigest() # string representation of hash in hex
-    return hex_digest
-
-
-def generate_block_hash(block):
-    
-    number_of_transactions = len(block.transactions)
-    transaction_hashes = []
-    paired_transaction_hashes = []
-    
-    for transaction in block.transactions.values():
-        transaction_hashes.append(transaction.id)
-        
-    if (number_of_transactions % 2 == 1):
-        transaction_hashes.append(transaction_hashes[-1]) # duplicate final hash if list is odd-numbered
-        
-    for i in range (0, len(transaction_hashes)-1, 2):
-        paired_transaction_hash = sha256_hash(transaction_hashes[i] + transaction_hashes[i+1])
-        paired_transaction_hashes.append(paired_transaction_hash)
-    
-    separator = ""
-    block.hash = separator.join([string for hash in paired_transaction_hashes])
-    return block.hash
-
-        
-def generate_node_id():
-    
-    import os
-
-    random_bytes = os.urandom(6)
-    node_id_in_hex = random_bytes.hex()
-    return node_id_in_hex
-
-
-def set_bitcoin_transaction_fee(transaction_size):
-    ((transaction_size/1000) * GeneralConfiguration.no_of_pending_transactions) * 0.00005
-    
-    
-def is_pow_found(block_hash):
-    return block_hash.startswith("0"*BitcoinConfiguration.difficulty_target)
-
-
-def create_random_transactions():
-    
-    from Network import Network
-    
-    print("Nodes are conducting transactions...\n")
-    for i in range(GeneralConfiguration.transaction_count_per_run):
-        sender = random.choice(list(Network.nodes.values()))
-        transaction = sender.initiate_transaction()
-        sender.broadcast_transaction(transaction)
-    
-
-def assign_miners():
-    
-    from Network import Network
-    from itertools import combinations
-    
-    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
-    
-    print("Miners:")
-        
-    for miner in GeneralConfiguration.miners:
-        print(miner)
 
 class GeneralConfiguration:
         
@@ -106,7 +30,7 @@ class EthereumConfiguration:
     
 
 class BitcoinConfiguration:
-    block_size_limit = 100 # actual block size limit for Bitcoin is 1MB.
+    block_size_limit = 144 # actual block size limit for Bitcoin is 1MB.
     maximum_hashpower = 100
     minimum_hashpower = 20
     difficulty_target = 4

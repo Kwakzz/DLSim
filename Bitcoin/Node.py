@@ -1,6 +1,9 @@
 import random
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
-from Configuration import BitcoinConfiguration, set_bitcoin_transaction_fee, generate_block_hash, sha256_hash, generate_random_32_bit_number
+from Bitcoin.Transaction import set_bitcoin_transaction_fee
+from Configuration import GeneralConfiguration, BitcoinConfiguration
+from Util import sha256_hash, generate_random_32_bit_number
+from Block import generate_block_hash
 from Node import Node as BaseNode
 
 
@@ -67,3 +70,25 @@ class Node (BaseNode):
         return f"Node(ID: {self.id}, Balance: {self.balance}, Type: {node_type})\n"
                 
     
+    
+def assign_miners():
+    
+    from Network import Network
+    from itertools import combinations
+    
+    
+    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+            
+    for miner in GeneralConfiguration.miners:
+        print(f"{miner.id} is mining a block\n")
+        
+        
+def miners_create_blocks():
+    
+    from Network import Network
+    from itertools import combinations
+    
+    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+            
+    for miner in GeneralConfiguration.miners:
+        print(f"{miner.id} is mining a block\n")

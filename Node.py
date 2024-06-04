@@ -1,5 +1,3 @@
-from Block import Block
-from Configuration import GeneralConfiguration, generate_node_id
 from Network import Network
 
 
@@ -30,6 +28,16 @@ class Node:
         if not isinstance (other, Node):
             return False
         return self.id == other.id 
+    
+    
+    
+def generate_node_id():
+    
+    import os
+
+    random_bytes = os.urandom(6)
+    node_id_in_hex = random_bytes.hex()
+    return node_id_in_hex
     
     
         

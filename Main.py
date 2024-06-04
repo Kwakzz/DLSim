@@ -1,7 +1,8 @@
 from Block import Block
-from Configuration import GeneralConfiguration, create_random_transactions, assign_miners
+from Configuration import GeneralConfiguration
+from Transaction import create_random_transactions
+from Bitcoin.Node import assign_miners
 from Network import Network
-import random
 
 if GeneralConfiguration.selected_platform == "Ethereum":
     from Ethereum.Node import Node

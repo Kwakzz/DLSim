@@ -1,5 +1,5 @@
 from datetime import datetime
-from Configuration import GeneralConfiguration, sha256_hash
+from Configuration import GeneralConfiguration
 from Network import Network 
 import random
 import sys
@@ -35,8 +35,18 @@ class Transaction:
             
     def is_valid (self):
         return self.is_external_transfer and self.within_sender_balance and self.sender_exists and self.recipient_exists
-    
-    
             
+            
+def create_random_transactions():
+    
+    from Network import Network
+    
+    print("Nodes are conducting transactions...\n")
+    for i in range(GeneralConfiguration.transaction_count_per_run):
+        sender = random.choice(list(Network.nodes.values()))
+        transaction = sender.initiate_transaction()
+        sender.broadcast_transaction(transaction)
+        
+
 
         

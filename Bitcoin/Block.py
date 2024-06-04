@@ -1,9 +1,5 @@
-from datetime import datetime
-import random
 from Block import Block as BaseBlock
-from Configuration import GeneralConfiguration, BitcoinConfiguration
-from Node import Node as BaseNode
-from Bitcoin.Consensus import Consensus
+from Configuration import BitcoinConfiguration
 
 class Block (BaseBlock):
 

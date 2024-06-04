@@ -1,9 +1,4 @@
-from datetime import datetime
-import random
-import sys
-from Block import Block as BaseBlock
-from Configuration import EthereumConfiguration, GeneralConfiguration, sha256_hash
-from Network import Network
+from Configuration import GeneralConfiguration
 from Transaction import Transaction as BaseTransaction
 
 class Transaction (BaseTransaction):
@@ -27,5 +22,6 @@ class Transaction (BaseTransaction):
         return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes)"
     
             
-
     
+def set_bitcoin_transaction_fee(transaction_size):
+    ((transaction_size/1000) * GeneralConfiguration.no_of_pending_transactions) * 0.00005

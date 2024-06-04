@@ -1,6 +1,4 @@
-import random
-from Configuration import GeneralConfiguration, is_pow_found
-from Network import Network
+from Configuration import BitcoinConfiguration
 import threading
 
 class Consensus:
@@ -28,3 +26,6 @@ class Consensus:
         for thread in threads:
             thread.join()
             
+
+def is_pow_found(block_hash):
+    return block_hash.startswith("0"*BitcoinConfiguration.difficulty_target)

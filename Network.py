@@ -1,4 +1,4 @@
-from Configuration import GeneralConfiguration, generate_node_id
+from Configuration import GeneralConfiguration
 import random
 
 class Network:
