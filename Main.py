@@ -1,7 +1,7 @@
-from Block import Block
-from Configuration import GeneralConfiguration
+from Bitcoin.Consensus import Consensus as PoW
+from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
-from Bitcoin.Node import assign_miners
+from Bitcoin.Node import assign_miners, miners_create_blocks
 from Network import Network
 
 if GeneralConfiguration.selected_platform == "Ethereum":
@@ -18,6 +18,9 @@ def main ():
         if GeneralConfiguration.selected_platform == "Bitcoin":
             create_random_transactions()
             assign_miners()
+            miners_create_blocks()
+            PoW.competition(BitcoinConfiguration.miners)
+            
             
             
             

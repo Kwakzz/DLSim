@@ -11,14 +11,21 @@ class Consensus:
             block_hash = miner.scan_pow(block)
             if is_pow_found(block_hash):
                 Consensus.winner_flag.set()
+                print(f"Node {miner.id} has solved the PoW.")
                 break
     
     @staticmethod   
     def competition(miners):
         threads = []
+                
+        miner_ids = []
         for miner in miners:
-            mined_block = miner.block_memory_pool.popitem[1] # popitem removes and returns the last item in a dictionary as a tuple. A miner can't have more than one block in its block memory. dict.popitem[1] returns the value of the item being popped
-            thread = threading.Thread(target=Consensus.pow, args=(miner, mined_block))
+            miner_ids.append(miner.id)
+        print(", ".join(miner_ids) + " are mining.")
+        
+        for miner in miners:
+            block = miner.created_blocks.pop(-1)
+            thread = threading.Thread(target=Consensus.pow, args=(miner, block))
             thread.start()
             threads.append(thread)
             

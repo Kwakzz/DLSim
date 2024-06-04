@@ -6,7 +6,7 @@ class Node:
         self, 
         balance, 
         transactions_memory_pool={}, 
-        block_memory_pool={}
+        block_memory_pool=[]
     ):
         self.id = generate_node_id()
         self.balance = balance
@@ -20,7 +20,7 @@ class Node:
     
     def broadcast_block(self, block):
         for node in Network.nodes.values():
-            node.block_memory_pool[block.hash] = block
+            node.block_memory_pool.append(block)
         print("\nNode {} has broadcasted block {} to the network. It contains {} transactions.\n".format(self.id, block.id, len(block.transactions)))
         return block
         

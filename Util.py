@@ -3,8 +3,8 @@ import secrets
 import string
 
 
-def generate_random_32_bit_number():
-    return secrets.randbelow(2**32)
+def generate_nonce():
+    return str(secrets.randbelow(2**32))
 
 
 def sha256_hash(data):

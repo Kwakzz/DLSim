@@ -2,7 +2,7 @@ import random
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
 from Bitcoin.Transaction import set_bitcoin_transaction_fee
 from Configuration import GeneralConfiguration, BitcoinConfiguration
-from Util import sha256_hash, generate_random_32_bit_number
+from Util import sha256_hash, generate_nonce
 from Block import generate_block_hash
 from Node import Node as BaseNode
 
@@ -14,14 +14,16 @@ class Node (BaseNode):
         balance, 
         blockchain=[genesis_block], 
         transactions_memory_pool={}, 
-        block_memory_pool={}
+        block_memory_pool=[],
+        created_blocks=[]
     ):
         super().__init__(
             balance,
             transactions_memory_pool={},
-            block_memory_pool={}
+            block_memory_pool=[],
         )
         self.blockchain = blockchain
+        self.created_blocks = created_blocks
 
 
     def initiate_transaction(self):
@@ -49,17 +51,25 @@ class Node (BaseNode):
         
         for transaction in self.transactions_memory_pool.values():
             cumulative_transaction_size += transaction.size
-            while cumulative_transaction_size < BitcoinConfiguration.block_size_limit:
+            if cumulative_transaction_size < BitcoinConfiguration.block_size_limit:
                 block.transactions[transaction.id] = transaction
+            else:
+                break
         
         generate_block_hash(block)
-                
+        block.size=cumulative_transaction_size
+        block.parent_hash = self.blockchain[-1].hash
+        
+        self.created_blocks.append(block)
+        
+        print(block)
         return block
     
     
     def scan_pow(self, block):
-        nonce = generate_random_32_bit_number()
-        block_hash = sha256_hash(str(block.id) + nonce)
+        nonce = generate_nonce()
+        block_hash = sha256_hash(str(block.hash) + nonce)
+        print(f"Hash produced by node {self.id} is {block_hash}.")
         return block_hash
     
     
@@ -77,10 +87,10 @@ def assign_miners():
     from itertools import combinations
     
     
-    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
             
-    for miner in GeneralConfiguration.miners:
-        print(f"{miner.id} is mining a block\n")
+    for miner in BitcoinConfiguration.miners:
+        print(f"{miner.id} is a miner\n")
         
         
 def miners_create_blocks():
@@ -91,4 +101,5 @@ def miners_create_blocks():
     GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
             
     for miner in GeneralConfiguration.miners:
-        print(f"{miner.id} is mining a block\n")
+        print(f"{miner.id} is creating a block.")
+        miner.create_block()

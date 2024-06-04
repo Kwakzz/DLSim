@@ -33,7 +33,7 @@ class BitcoinConfiguration:
     block_size_limit = 144 # actual block size limit for Bitcoin is 1MB.
     maximum_hashpower = 100
     minimum_hashpower = 20
-    difficulty_target = 4
+    difficulty_target = 1
     no_of_miners = 3
     miners = []
     

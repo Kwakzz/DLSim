@@ -22,7 +22,4 @@ class Network:
         for node_count in range(GeneralConfiguration.no_of_nodes):
             Network.add_node()
 
-    @staticmethod
-    def discard_block(block):
-        for node in Network.nodes.values():
-            del node.block_memory_pool[block.hash]
+    
