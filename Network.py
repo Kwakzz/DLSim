@@ -21,5 +21,20 @@ class Network:
         print(f"Welcome to a simulation of the {GeneralConfiguration.selected_platform} blockchain network.\nNodes are joing the network...\n")
         for node_count in range(GeneralConfiguration.no_of_nodes):
             Network.add_node()
-
+            
     
+    def verify_block(block, miner):
+        if block.is_valid():
+            
+            for node in Network.nodes.values():
+                node.blockchain.append(block)
+                
+            for node in Network.nodes.values():
+                node.block_memory_pool.pop(block.hash)
+                
+            for transaction in Network.nodes.values():
+                transaction.finalize(miner)
+                
+            
+    
+        

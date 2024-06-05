@@ -15,6 +15,12 @@ class Block:
                 return False      
         return True
         
+    
+    def __is_eq__(self, other):
+        if not isinstance (other, Block):
+            return False
+        return self.id == other.id 
+        
         
         
 def generate_block_hash(block):

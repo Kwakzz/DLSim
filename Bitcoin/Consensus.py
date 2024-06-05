@@ -1,21 +1,42 @@
 from Configuration import BitcoinConfiguration
 import threading
+from time import time
+from Util import adjust_difficulty_target
 
 class Consensus:
     
     winner_flag = threading.Event() # indicates whether a miner has found the PoW.
+    latest_winner = None
+    latest_block = None
     
     @staticmethod
     def pow(miner, block):
         while not Consensus.winner_flag.is_set():
-            block_hash = miner.scan_pow(block)
-            if is_pow_found(block_hash):
+            start_time = time()
+            block.hash = miner.scan_pow(block)
+            
+            if block.is_pow_valid():
+                
                 Consensus.winner_flag.set()
-                print(f"Node {miner.id} has solved the PoW.")
-                break
+                Consensus.latest_winner = miner
+                Consensus.latest_block = block
+                                
+                end_time = time()
+                elapsed_time = end_time - start_time
+                BitcoinConfiguration.current_elapsed_time_for_finding_pow = elapsed_time
+                
+                print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds.\n")
+                
+                miner.broadcast_block(block)
+                break        
     
     @staticmethod   
     def competition(miners):
+        
+        adjust_difficulty_target()
+        
+        BitcoinConfiguration.prev_elapsed_time_for_finding_pow = BitcoinConfiguration.current_elapsed_time_for_finding_pow
+        
         threads = []
                 
         miner_ids = []
@@ -32,7 +53,4 @@ class Consensus:
         # wait for miners to find pow before continuing program.
         for thread in threads:
             thread.join()
-            
-
-def is_pow_found(block_hash):
-    return block_hash.startswith("0"*BitcoinConfiguration.difficulty_target)
+        

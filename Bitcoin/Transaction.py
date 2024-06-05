@@ -18,6 +18,19 @@ class Transaction (BaseTransaction):
         self.fee = fee
         
         
+    def finalize(self, miner):
+        
+        from Network import Network
+        
+        miner = Network.nodes[miner.id]
+        sender = Network.nodes[self.sender_id]
+        recipient = Network.nodes[self.recipient_id]
+        
+        sender.balace -= self.value
+        recipient.balance += self.value
+        miner.balance += self.fee
+        
+        
     def __str__(self):
         return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes)"
     

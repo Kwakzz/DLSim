@@ -14,16 +14,16 @@ class Node (BaseNode):
         balance, 
         blockchain=[genesis_block], 
         transactions_memory_pool={}, 
-        block_memory_pool=[],
+        block_memory_pool={},
         created_blocks=[]
     ):
         super().__init__(
             balance,
             transactions_memory_pool={},
-            block_memory_pool=[],
+            block_memory_pool={},
+            created_blocks=[]
         )
         self.blockchain = blockchain
-        self.created_blocks = created_blocks
 
 
     def initiate_transaction(self):
@@ -58,6 +58,7 @@ class Node (BaseNode):
         
         generate_block_hash(block)
         block.size=cumulative_transaction_size
+        
         block.parent_hash = self.blockchain[-1].hash
         
         self.created_blocks.append(block)
@@ -98,8 +99,8 @@ def miners_create_blocks():
     from Network import Network
     from itertools import combinations
     
-    GeneralConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
             
-    for miner in GeneralConfiguration.miners:
+    for miner in BitcoinConfiguration.miners:
         print(f"{miner.id} is creating a block.")
         miner.create_block()

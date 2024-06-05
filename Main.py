@@ -1,13 +1,12 @@
-from Bitcoin.Consensus import Consensus as PoW
 from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
-from Bitcoin.Node import assign_miners, miners_create_blocks
 from Network import Network
+from Util import print_chain
 
-if GeneralConfiguration.selected_platform == "Ethereum":
-    from Ethereum.Node import Node
-    from Ethereum.Consensus import Consensus as Proof_of_Stake
-    from Ethereum.Transaction import Transaction
+if GeneralConfiguration.selected_platform == "Bitcoin":
+    from Bitcoin.Node import assign_miners, miners_create_blocks
+    from Bitcoin.Consensus import Consensus as PoW
+
 
 def main ():
     
@@ -20,6 +19,9 @@ def main ():
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
+            Network.verify_block(PoW.latest_block, PoW.latest_winner)
+            print_chain()
+            
             
             
             

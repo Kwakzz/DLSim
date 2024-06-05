@@ -6,23 +6,28 @@ class Node:
         self, 
         balance, 
         transactions_memory_pool={}, 
-        block_memory_pool=[]
+        block_memory_pool={},
+        created_blocks=[]
     ):
         self.id = generate_node_id()
         self.balance = balance
-        self.transactions_memory_pool=transactions_memory_pool
-        self.block_memory_pool=block_memory_pool 
+        self.transactions_memory_pool = transactions_memory_pool
+        self.block_memory_pool = block_memory_pool 
+        self.created_blocks = created_blocks
+    
     
     def broadcast_transaction(self, transaction):
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction
-        print("Node {} has broadcasted transaction {} to the network\n".format(self.id, transaction.id))
+        print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network\n")
+    
     
     def broadcast_block(self, block):
         for node in Network.nodes.values():
-            node.block_memory_pool.append(block)
-        print("\nNode {} has broadcasted block {} to the network. It contains {} transactions.\n".format(self.id, block.id, len(block.transactions)))
+            node.block_memory_pool[block.hash] = block
+        print(f"\nNode {self.id} has broadcasted block {block.hash} to the network. It contains {len(block.transactions)} transactions.\n")
         return block
+        
         
     def __eq__(self, other):
         if not isinstance (other, Node):
