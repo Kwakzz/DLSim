@@ -1,4 +1,5 @@
 import random
+import time
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
 from Configuration import BitcoinConfiguration
 from Util import sha256_hash, generate_nonce
@@ -21,10 +22,10 @@ class Node (BaseNode):
             balance,
             transactions_memory_pool=None,
             block_memory_pool=None,
-            created_blocks=None
+            created_blocks=None,
+            hashpower=hashpower
         )
         self.blockchain = blockchain
-        self.hashpower = hashpower
 
 
     def initiate_transaction(self):
@@ -32,7 +33,7 @@ class Node (BaseNode):
         from Bitcoin.Transaction import Transaction as BitcoinTransaction
         from Network import Network
         
-        if self.balance != 0:
+        if self.balance > 0:
             transaction_value = random.randrange(0, self.balance//2.5)
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
@@ -71,6 +72,14 @@ class Node (BaseNode):
     
     
     def scan_pow(self, block):
+        
+        from Network import Network
+        
+        total_hashpower = sum(node.hashpower for node in Network.nodes.values())
+        hashpower_ratio = self.hashpower/total_hashpower
+        sleep_time = hashpower_ratio * BitcoinConfiguration.base_pow_time
+        time.sleep(sleep_time)
+        
         nonce = generate_nonce()
         block_hash = sha256_hash(str(block.hash) + nonce)
         print(f"Hash produced by node {self.id} is {block_hash}.")
@@ -81,7 +90,7 @@ class Node (BaseNode):
         node_type = "Full"
         if not self.blockchain:
             node_type = "Lightweight"
-        return f"Node(ID: {self.id}, Balance: {self.balance}, Type: {node_type})\n"
+        return f"Node(ID: {self.id}, Balance: {self.balance}, Hashpower: {self.hashpower}, Type: {node_type})\n"
                 
     
     

@@ -31,8 +31,11 @@ class EthereumConfiguration:
 class BitcoinConfiguration:
     block_size_limit = 144 # actual block size limit for Bitcoin is 1MB.
     
-    maximum_hashpower = 100
-    minimum_hashpower = 20
+    low_power_hashpower = random.randrange(1, 6)
+    medium_power_hashpower = random.randrange(6, 21)
+    high_power_hashpower = random.randrange(21, 101)
+    
+    base_pow_time = 60
     
     difficulty_target = 3
     no_of_miners = 3

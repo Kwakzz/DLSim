@@ -1,10 +1,9 @@
-from Configuration import GeneralConfiguration
+from Configuration import GeneralConfiguration, BitcoinConfiguration
 import random
 
 class Network:
     
     nodes = {}
-    
     
     def __init__(self):
         pass  
@@ -20,7 +19,20 @@ class Network:
         initial_balance = random.randrange(GeneralConfiguration.minumum_initial_balance, GeneralConfiguration.maximum_initial_balance)
         if GeneralConfiguration.selected_platform == "Bitcoin":
             from Bitcoin.Node import Node as BitcoinNode
-            node = BitcoinNode(balance=initial_balance)
+            
+            hashpower_class_no = random.randrange(1, 4) 
+            hashpower_class = BitcoinConfiguration.low_power_hashpower
+            
+            if hashpower_class_no == 1:
+                hashpower_class = BitcoinConfiguration.low_power_hashpower
+            elif hashpower_class_no == 2:
+                hashpower_class = BitcoinConfiguration.medium_power_hashpower
+            elif hashpower_class_no == 1:
+                hashpower_class = BitcoinConfiguration.high_power_hashpower
+            
+            hashpower = hashpower_class
+            
+            node = BitcoinNode(balance=initial_balance, hashpower=hashpower)
             Network.nodes[node.id] = node
             print(node)
         
