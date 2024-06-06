@@ -12,9 +12,10 @@ class Consensus:
     @staticmethod
     def pow(miner, block):
         
+        start_time = time()
+    
         while not Consensus.winner_flag.is_set():
             
-            start_time = time()
             block.hash = miner.scan_pow(block)
             
             if block.is_pow_valid():
