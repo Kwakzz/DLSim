@@ -11,7 +11,7 @@ class GeneralConfiguration:
     maximum_initial_balance = 200
     minumum_initial_balance = 10
     
-    no_of_nodes = 10
+    no_of_nodes = 20
         
     selected_platform = "Bitcoin"
 
