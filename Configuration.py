@@ -3,10 +3,9 @@ import random
 
 class GeneralConfiguration:
         
-    no_of_runs = 1
+    no_of_runs = 5
     
     no_of_transactions_per_round = 30
-    no_of_pending_transactions = 0
     transaction_count_per_run = 10
     
     maximum_initial_balance = 200
@@ -35,7 +34,7 @@ class BitcoinConfiguration:
     maximum_hashpower = 100
     minimum_hashpower = 20
     
-    difficulty_target = 1
+    difficulty_target = 3
     no_of_miners = 3
     miners = []
     

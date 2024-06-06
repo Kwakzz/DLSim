@@ -26,15 +26,27 @@ class Transaction (BaseTransaction):
         sender = Network.nodes[self.sender_id]
         recipient = Network.nodes[self.recipient_id]
         
-        sender.balace -= self.value
+        sender.balance -= self.value
+        sender.balance -= self.fee
         recipient.balance += self.value
         miner.balance += self.fee
         
         
     def __str__(self):
-        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes)"
+        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes, Fee: {self.fee} BTC)"
     
             
     
-def set_bitcoin_transaction_fee(transaction_size):
-    ((transaction_size/1000) * GeneralConfiguration.no_of_pending_transactions) * 0.00005
+    def set_fee(self):
+        self.fee = self.size * 0.0005
+        
+        
+    def within_sender_balance(self):
+        
+        from Network import Network
+        
+        super().within_sender_balance()
+        
+        sender = Network.nodes[self.sender_id]
+        return (self.value + self.fee) <= sender.balance
+    

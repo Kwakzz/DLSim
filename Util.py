@@ -31,4 +31,10 @@ def print_chain():
     from Network import Network
     
     random_node = next(iter(Network.nodes.values()))
-    print(random_node.blockchain)
+    
+    print ("Blockchain:", end=" ")
+    
+    print ("[", end="")
+    for block in random_node.blockchain:
+        print(block.hash, end="->")
+    print("]")

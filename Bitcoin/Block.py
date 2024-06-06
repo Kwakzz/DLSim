@@ -7,12 +7,12 @@ class Block (BaseBlock):
         self, 
         hash=0,
         parent_hash=None,
-        transactions={},
+        transactions=None,
         difficulty_target = BitcoinConfiguration.difficulty_target, 
         nonce=0, 
         size=0, 
     ):
-        super().__init__(hash=0, parent_hash = None, transactions = {})
+        super().__init__(hash=0, parent_hash = None, transactions = None)
         self.difficulty_target = BitcoinConfiguration.difficulty_target
         self.nonce = nonce
         self.size = size
@@ -31,7 +31,7 @@ class Block (BaseBlock):
             
         
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {self.transactions.keys()},\nSize: {self.size},\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
         
  
 genesis_block = Block(

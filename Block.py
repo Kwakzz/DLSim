@@ -2,11 +2,11 @@ from datetime import datetime
 
 class Block:
     
-    def __init__(self, hash=0, parent_hash = None, transactions = {}):
+    def __init__(self, hash=0, parent_hash = None, transactions = None):
         self.hash = hash
         self.parent_hash = parent_hash
         self.timestamp = datetime.now()
-        self.transactions = transactions
+        self.transactions = transactions if transactions is not None else {}
         
         
     def are_transactions_valid(self):
@@ -14,18 +14,26 @@ class Block:
             if not transaction.is_valid:
                 return False      
         return True
-        
     
-    def __is_eq__(self, other):
+    
+    def add_to_chain(self):
+        
+        from Network import Network
+        
+        for node in Network.nodes.values():
+            if self not in node.blockchain:
+                node.blockchain.append(self)
+
+    
+    def __eq__(self, other):
         if not isinstance (other, Block):
             return False
-        return self.id == other.id 
+        return self.hash == other.hash
         
         
         
 def generate_block_hash(block):
     
-    import string
     from Util import sha256_hash
     
     number_of_transactions = len(block.transactions)

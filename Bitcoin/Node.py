@@ -1,7 +1,6 @@
 import random
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
-from Bitcoin.Transaction import set_bitcoin_transaction_fee
-from Configuration import GeneralConfiguration, BitcoinConfiguration
+from Configuration import BitcoinConfiguration
 from Util import sha256_hash, generate_nonce
 from Block import generate_block_hash
 from Node import Node as BaseNode
@@ -13,17 +12,19 @@ class Node (BaseNode):
         self, 
         balance, 
         blockchain=[genesis_block], 
-        transactions_memory_pool={}, 
-        block_memory_pool={},
-        created_blocks=[]
+        transactions_memory_pool=None, 
+        block_memory_pool=None,
+        created_blocks=None,
+        hashpower = 0
     ):
         super().__init__(
             balance,
-            transactions_memory_pool={},
-            block_memory_pool={},
-            created_blocks=[]
+            transactions_memory_pool=None,
+            block_memory_pool=None,
+            created_blocks=None
         )
         self.blockchain = blockchain
+        self.hashpower = hashpower
 
 
     def initiate_transaction(self):
@@ -31,18 +32,20 @@ class Node (BaseNode):
         from Bitcoin.Transaction import Transaction as BitcoinTransaction
         from Network import Network
         
-        transaction_value = random.randrange(1, self.balance)
-        other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
-        recipient = random.choice(other_nodes)
-        transaction = BitcoinTransaction(
-            sender_id = self.id,
-            recipient_id = recipient.id,
-            value = transaction_value
-        )
-        transaction.id = sha256_hash(str(transaction))
-        transaction.fee = set_bitcoin_transaction_fee(transaction.size)
-        print(transaction)
-        return transaction
+        if self.balance != 0:
+            transaction_value = random.randrange(0, self.balance//2.5)
+            other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
+            recipient = random.choice(other_nodes)
+            transaction = BitcoinTransaction(
+                sender_id = self.id,
+                recipient_id = recipient.id,
+                value = transaction_value
+            )
+            transaction.id = sha256_hash(str(transaction))
+            transaction.set_fee()
+            
+            print(transaction)
+            return transaction
 
 
     def create_block(self):
@@ -51,7 +54,7 @@ class Node (BaseNode):
         
         for transaction in self.transactions_memory_pool.values():
             cumulative_transaction_size += transaction.size
-            if cumulative_transaction_size < BitcoinConfiguration.block_size_limit:
+            if cumulative_transaction_size < BitcoinConfiguration.block_size_limit and transaction.is_valid():
                 block.transactions[transaction.id] = transaction
             else:
                 break

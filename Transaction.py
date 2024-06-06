@@ -22,7 +22,7 @@ class Transaction:
     
     def within_sender_balance(self):
         sender = Network.nodes[self.recipient_id]
-        return self.value > sender.balance
+        return self.value <= sender.balance
     
     
     def sender_exists(self):
@@ -46,7 +46,3 @@ def create_random_transactions():
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
         sender.broadcast_transaction(transaction)
-        
-
-
-        

@@ -11,7 +11,9 @@ class Consensus:
     
     @staticmethod
     def pow(miner, block):
+        
         while not Consensus.winner_flag.is_set():
+            
             start_time = time()
             block.hash = miner.scan_pow(block)
             
@@ -28,12 +30,12 @@ class Consensus:
                 print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds.\n")
                 
                 miner.broadcast_block(block)
+                
+                Consensus.winner_flag.clear()
                 break        
     
     @staticmethod   
     def competition(miners):
-        
-        adjust_difficulty_target()
         
         BitcoinConfiguration.prev_elapsed_time_for_finding_pow = BitcoinConfiguration.current_elapsed_time_for_finding_pow
         

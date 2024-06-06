@@ -1,7 +1,7 @@
 from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
 from Network import Network
-from Util import print_chain
+from Util import print_chain, adjust_difficulty_target
 
 if GeneralConfiguration.selected_platform == "Bitcoin":
     from Bitcoin.Node import assign_miners, miners_create_blocks
@@ -21,6 +21,8 @@ def main ():
             PoW.competition(BitcoinConfiguration.miners)
             Network.verify_block(PoW.latest_block, PoW.latest_winner)
             print_chain()
+            adjust_difficulty_target()
+            Network.print_nodes()
             
             
             

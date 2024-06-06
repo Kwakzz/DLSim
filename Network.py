@@ -5,8 +5,16 @@ class Network:
     
     nodes = {}
     
+    
     def __init__(self):
         pass  
+    
+    
+    def print_nodes():
+        print("Network Nodes: ")
+        for node in Network.nodes.values():
+            print(node)
+        
     
     def add_node():
         initial_balance = random.randrange(GeneralConfiguration.minumum_initial_balance, GeneralConfiguration.maximum_initial_balance)
@@ -24,17 +32,18 @@ class Network:
             
     
     def verify_block(block, miner):
+        
         if block.is_valid():
             
-            for node in Network.nodes.values():
-                node.blockchain.append(block)
+            block.add_to_chain()
                 
             for node in Network.nodes.values():
                 node.block_memory_pool.pop(block.hash)
                 
-            for transaction in Network.nodes.values():
+            for transaction in block.transactions.values():
                 transaction.finalize(miner)
-                
+                                
+    
             
     
         

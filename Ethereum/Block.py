@@ -10,5 +10,7 @@ class Block (BaseBlock):
         self.gas_limit = EthereumConfiguration.transaction_gas
         self.base_fee = random.randrange(0.001, 0.002) # the minimum price per gas for a transaction to be eligible for selection
         
+    
+        
         
     
