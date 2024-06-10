@@ -6,6 +6,8 @@ from Transaction import Transaction as BaseTransaction
 
 class Transaction (BaseTransaction):
     
-    def __init__(self):
-        super().__init__()
+    def __init__(self, recipient_id, sender_id, value, tip, gas_limit, id=0):
+        super().__init__(recipient_id, sender_id, value, id=0)
+        self.tip = tip
+        self.gas_limit = gas_limit
     

@@ -31,6 +31,9 @@ class Transaction (BaseTransaction):
         recipient.balance += self.value
         miner.balance += self.fee
         
+        for node in Network.nodes.values():
+            node.transactions_memory_pool.pop(self.id)
+        
         
     def __str__(self):
         return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes, Fee: {self.fee} BTC)"

@@ -6,23 +6,23 @@ from Util import adjust_difficulty_target
 class Consensus:
     
     winner_flag = threading.Event() # indicates whether a miner has found the PoW.
-    latest_winner = None
-    latest_block = None
+    latest_winners = []
+    latest_blocks = []
     
     @staticmethod
-    def pow(miner, block):
+    def pow(miner, block, max_no_of_winners=3):
         
         start_time = time()
     
-        while not Consensus.winner_flag.is_set():
+        while not Consensus.winner_flag.is_set() and len(Consensus.latest_winners) < max_no_of_winners:
             
             block.hash = miner.scan_pow(block)
             
-            if block.is_pow_valid():
+            if block.is_pow_valid():                
                 
                 Consensus.winner_flag.set()
-                Consensus.latest_winner = miner
-                Consensus.latest_block = block
+                Consensus.latest_winners.append(miner)
+                Consensus.latest_blocks.append(block)
                                 
                 end_time = time()
                 elapsed_time = end_time - start_time

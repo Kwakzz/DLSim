@@ -19,10 +19,9 @@ def main ():
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
-            Network.verify_block(PoW.latest_block, PoW.latest_winner)
+            Network.verify_broadcasted_blocks(PoW.latest_blocks, PoW.latest_winners)
             print_chain()
             adjust_difficulty_target()
-            Network.print_nodes()
             
             
             

@@ -5,8 +5,10 @@ import random
 
 class Block (BaseBlock):
     
-    def __init__():
-        super().__init__()
+    def __init__(self, hash=0, parent_hash = None, transactions = None):
+        super().__init__(hash=0, parent_hash=None, transactions=None)
+        
+        
         
     
         

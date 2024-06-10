@@ -22,12 +22,20 @@ class Block (BaseBlock):
         return self.hash.startswith("0"*self.difficulty_target)
     
     
-    def parent_exists():
-        pass
+    def parent_exists(self):
+        
+        from Network import Network
+        
+        for node in Network.nodes.values():
+            for block in node.blockchain:
+                if block.hash == self.parent_hash:
+                    return True
+                
+        return False
     
     
     def is_valid(self):
-        return self.is_pow_valid and self.are_transactions_valid
+        return self.is_pow_valid and self.are_transactions_valid and self.parent_exists
             
         
     def __str__(self):
