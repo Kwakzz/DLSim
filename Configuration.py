@@ -5,8 +5,11 @@ class GeneralConfiguration:
         
     no_of_runs = 1
     
-    no_of_transactions_per_round = 30
-    transaction_count_per_run = 10
+    processed_transaction_count = 0
+    transaction_batch_start_time = 0
+    transaction_batch_end_time = 0
+    
+    transaction_count_per_run = 60
     
     transaction_propagation_delay = 2
     block_propagation_delay = 10
@@ -14,7 +17,7 @@ class GeneralConfiguration:
     maximum_initial_balance = 500
     minumum_initial_balance = 10
     
-    no_of_nodes = 20
+    no_of_nodes = 50
         
     selected_platform = "Bitcoin"
 
@@ -32,14 +35,12 @@ class EthereumConfiguration:
     
 
 class BitcoinConfiguration:
-    block_size_limit = 144 # actual block size limit for Bitcoin is 1MB.
+    block_size_limit = 1000 # actual block size limit for Bitcoin is 1MB.
     
     low_power_hashpower = range(1, 6)
     medium_power_hashpower = range(6, 21)
     high_power_hashpower = range(21, 101)
-    
-    hash_rate = 0 # number of guesses per second in pow
-    
+        
     base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
     target_block_time = 600 # average time it takes to create a block. set by the network to ensure consistency
     

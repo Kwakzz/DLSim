@@ -1,7 +1,7 @@
 import random
 import time
 from Bitcoin.Block import Block as BitcoinBlock, genesis_block
-from Configuration import BitcoinConfiguration
+from Configuration import BitcoinConfiguration, GeneralConfiguration
 from Util import sha256_hash, generate_nonce
 from Block import generate_block_hash
 from Node import Node as BaseNode
@@ -54,11 +54,11 @@ class Node (BaseNode):
         cumulative_transaction_size = 0
         
         for transaction in self.transactions_memory_pool.values():
-            cumulative_transaction_size += transaction.size
-            if cumulative_transaction_size < BitcoinConfiguration.block_size_limit and transaction.is_valid():
-                block.transactions[transaction.id] = transaction
-            else:
+            if cumulative_transaction_size + transaction.size > BitcoinConfiguration.block_size_limit:
                 break
+            if transaction.is_valid():
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_size += transaction.size
         
         generate_block_hash(block)
         block.size=cumulative_transaction_size

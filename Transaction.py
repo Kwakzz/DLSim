@@ -40,6 +40,9 @@ class Transaction:
 def create_random_transactions():
     
     from Network import Network
+    from time import time
+    
+    GeneralConfiguration.transaction_batch_start_time = time()
     
     print("Nodes are conducting transactions...\n")
     for i in range(GeneralConfiguration.transaction_count_per_run):

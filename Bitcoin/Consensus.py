@@ -1,21 +1,25 @@
-from Configuration import BitcoinConfiguration
+from Configuration import BitcoinConfiguration, GeneralConfiguration
 import threading
 from time import time
-from Util import adjust_difficulty_target
 
 class Consensus:
     
-    winner_flag = threading.Event() # indicates whether a miner has found the PoW.
     latest_winners = []
     latest_blocks = []
     hash_attempts = 0 # attempts made in most recent competition
+    
+    @staticmethod
+    def reset_winners_and_blocks():
+        Consensus.latest_winners.clear
+        Consensus.latest_blocks.clear
+    
     
     @staticmethod
     def pow(miner, block, max_no_of_winners=3):
         
         start_time = time()
     
-        while not Consensus.winner_flag.is_set() and len(Consensus.latest_winners) < max_no_of_winners:
+        while len(Consensus.latest_winners) <= max_no_of_winners:
             
             Consensus.hash_attempts += 1
             
@@ -23,18 +27,18 @@ class Consensus:
             
             if block.is_pow_valid():                
                 
-                Consensus.winner_flag.set()
                 Consensus.latest_winners.append(miner)
                 Consensus.latest_blocks.append(block)
                                 
                 end_time = time()
-                elapsed_time = end_time - start_time
+                elapsed_time = end_time - start_time # block propagation time
+                
+                GeneralConfiguration.processed_transaction_count += len(block.transactions)
                 
                 print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds.\n")
-                
+        
                 miner.broadcast_block(block)
                 
-                Consensus.winner_flag.clear()
                 break        
     
     @staticmethod   
@@ -67,10 +71,10 @@ class Consensus:
         elapsed_time_for_mining_round = end_time - start_time
         BitcoinConfiguration.current_elapsed_time_for_mining_round = elapsed_time_for_mining_round
         
-        from Network import calculate_bitcoin_network_hash_rate
-        calculate_bitcoin_network_hash_rate(Consensus.hash_attempts, elapsed_time_for_mining_round) 
+        GeneralConfiguration.transaction_batch_end_time = end_time
         
-        adjust_difficulty_target()
+        from Network import Network
+        Network.adjust_difficulty_target()
         
         
 

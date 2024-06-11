@@ -1,4 +1,5 @@
 from Configuration import GeneralConfiguration, BitcoinConfiguration
+from Statistics import hash_rates, throughputs
 import random
 
 class Network:
@@ -9,12 +10,14 @@ class Network:
         pass  
     
     
+    @staticmethod
     def print_nodes():
         print("Network Nodes: ")
         for node in Network.nodes.values():
             print(node)
         
-    
+        
+    @staticmethod
     def add_node():
         initial_balance = random.randrange(GeneralConfiguration.minumum_initial_balance, GeneralConfiguration.maximum_initial_balance)
         if GeneralConfiguration.selected_platform == "Bitcoin":
@@ -36,13 +39,15 @@ class Network:
             Network.nodes[node.id] = node
             print(node)
         
+        
     @staticmethod
     def initialize_network():
         print(f"Welcome to a simulation of the {GeneralConfiguration.selected_platform} blockchain network.\nNodes are joing the network...\n")
         for node_count in range(GeneralConfiguration.no_of_nodes):
             Network.add_node()
+         
             
-    
+    @staticmethod
     def verify_block(block, miner):
         
         if block.is_valid():
@@ -59,7 +64,8 @@ class Network:
         
         return False
                 
-                
+    
+    @staticmethod    
     def verify_broadcasted_blocks(broadcasted_blocks, miners):
         
         for i in range (len(broadcasted_blocks)):
@@ -68,22 +74,17 @@ class Network:
             miner = miners[i]
             
             if Network.verify_block(block, miner):
-                break
-            
-                                
-def calculate_bitcoin_network_hash_rate(latest_no_of_hash_attempts_per_mining_round, latest_elapsed_time_for_mining_round):
-    BitcoinConfiguration.hash_rate = latest_no_of_hash_attempts_per_mining_round/latest_elapsed_time_for_mining_round
-    return BitcoinConfiguration.hash_rate
-
-
-def print_bitcoin_network_hash_rate():
-    print(f"Network hash rate: {BitcoinConfiguration.hash_rate} TH/s.\n")
-     
-    
-def print_bitcoin_network_total_hashpower():
-    total_hashpower = sum(node.hashpower for node in Network.nodes.values()) 
-    print(f"Network total hashpower: {total_hashpower}\n.")
-    
+                break   
             
     
+    @staticmethod
+    def adjust_difficulty_target():
+        if BitcoinConfiguration.prev_elapsed_time_for_mining_round > 0:
+            ratio = BitcoinConfiguration.current_elapsed_time_for_mining_round / BitcoinConfiguration.target_block_time
+            BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
+            BitcoinConfiguration.base_pow_time *= ratio
+            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty}.\n")
+            print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")         
+            
         
+                                
