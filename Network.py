@@ -71,6 +71,18 @@ class Network:
                 break
             
                                 
+def calculate_bitcoin_network_hash_rate(latest_no_of_hash_attempts_per_mining_round, latest_elapsed_time_for_mining_round):
+    BitcoinConfiguration.hash_rate = latest_no_of_hash_attempts_per_mining_round/latest_elapsed_time_for_mining_round
+    return BitcoinConfiguration.hash_rate
+
+
+def print_bitcoin_network_hash_rate():
+    print(f"Network hash rate: {BitcoinConfiguration.hash_rate} TH/s.\n")
+     
+    
+def print_bitcoin_network_total_hashpower():
+    total_hashpower = sum(node.hashpower for node in Network.nodes.values()) 
+    print(f"Network total hashpower: {total_hashpower}\n.")
     
             
     

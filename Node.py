@@ -1,3 +1,4 @@
+from time import sleep
 from Network import Network
 
 
@@ -19,14 +20,20 @@ class Node:
     
     
     def broadcast_transaction(self, transaction):
+        from Configuration import GeneralConfiguration
+        
         for node in Network.nodes.values():
+            sleep(GeneralConfiguration.transaction_propagation_delay) 
             node.transactions_memory_pool[transaction.id] = transaction
         print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
         return transaction
     
     
     def broadcast_block(self, block):
+        from Configuration import GeneralConfiguration
+        
         for node in Network.nodes.values():
+            sleep(GeneralConfiguration.block_propagation_delay)
             node.block_memory_pool[block.hash] = block
         print(f"\nNode {self.id} has broadcasted block {block.hash} to the network. It contains {len(block.transactions)} transactions.\n")
         return block

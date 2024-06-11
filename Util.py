@@ -18,12 +18,12 @@ def sha256_hash(data):
 
 
 def adjust_difficulty_target():
-    if BitcoinConfiguration.prev_elapsed_time_for_finding_pow is not None and BitcoinConfiguration.current_elapsed_time_for_finding_pow is not None:
-        if BitcoinConfiguration.prev_elapsed_time_for_finding_pow >= BitcoinConfiguration.current_elapsed_time_for_finding_pow:
-            BitcoinConfiguration.difficulty_target+=1
-        else:
-            if BitcoinConfiguration.difficulty_target >= 2:
-                BitcoinConfiguration.difficulty_target-=1
+    if BitcoinConfiguration.prev_elapsed_time_for_mining_round > 0:
+        ratio = BitcoinConfiguration.current_elapsed_time_for_mining_round / BitcoinConfiguration.target_block_time
+        BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
+        BitcoinConfiguration.base_pow_time *= ratio
+        print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty}.\n")
+        print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")
                 
                 
 def print_chain():

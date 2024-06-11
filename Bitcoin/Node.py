@@ -75,9 +75,7 @@ class Node (BaseNode):
         
         from Network import Network
         
-        total_hashpower = sum(node.hashpower for node in Network.nodes.values())
-        hashpower_ratio = self.hashpower/total_hashpower
-        sleep_time = hashpower_ratio * BitcoinConfiguration.base_pow_time
+        sleep_time = BitcoinConfiguration.base_pow_time/self.hashpower 
         time.sleep(sleep_time)
         
         nonce = generate_nonce()

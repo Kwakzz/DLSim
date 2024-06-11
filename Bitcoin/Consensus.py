@@ -8,6 +8,7 @@ class Consensus:
     winner_flag = threading.Event() # indicates whether a miner has found the PoW.
     latest_winners = []
     latest_blocks = []
+    hash_attempts = 0 # attempts made in most recent competition
     
     @staticmethod
     def pow(miner, block, max_no_of_winners=3):
@@ -15,6 +16,8 @@ class Consensus:
         start_time = time()
     
         while not Consensus.winner_flag.is_set() and len(Consensus.latest_winners) < max_no_of_winners:
+            
+            Consensus.hash_attempts += 1
             
             block.hash = miner.scan_pow(block)
             
@@ -26,7 +29,6 @@ class Consensus:
                                 
                 end_time = time()
                 elapsed_time = end_time - start_time
-                BitcoinConfiguration.current_elapsed_time_for_finding_pow = elapsed_time
                 
                 print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds.\n")
                 
@@ -38,7 +40,11 @@ class Consensus:
     @staticmethod   
     def competition(miners):
         
-        BitcoinConfiguration.prev_elapsed_time_for_finding_pow = BitcoinConfiguration.current_elapsed_time_for_finding_pow
+        Consensus.hash_attempts = 0
+        
+        start_time = time()
+        
+        BitcoinConfiguration.prev_elapsed_time_for_mining_round = BitcoinConfiguration.current_elapsed_time_for_mining_round
         
         threads = []
                 
@@ -56,4 +62,17 @@ class Consensus:
         # wait for miners to find pow before continuing program.
         for thread in threads:
             thread.join()
+        
+        end_time = time()
+        elapsed_time_for_mining_round = end_time - start_time
+        BitcoinConfiguration.current_elapsed_time_for_mining_round = elapsed_time_for_mining_round
+        
+        from Network import calculate_bitcoin_network_hash_rate
+        calculate_bitcoin_network_hash_rate(Consensus.hash_attempts, elapsed_time_for_mining_round) 
+        
+        adjust_difficulty_target()
+        
+        
+
+        
         

@@ -8,6 +8,9 @@ class GeneralConfiguration:
     no_of_transactions_per_round = 30
     transaction_count_per_run = 10
     
+    transaction_propagation_delay = 2
+    block_propagation_delay = 10
+    
     maximum_initial_balance = 500
     minumum_initial_balance = 10
     
@@ -35,12 +38,15 @@ class BitcoinConfiguration:
     medium_power_hashpower = range(6, 21)
     high_power_hashpower = range(21, 101)
     
-    base_pow_time = 60
+    hash_rate = 0 # number of guesses per second in pow
+    
+    base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
+    target_block_time = 600 # average time it takes to create a block. set by the network to ensure consistency
     
     difficulty_target = 1
     no_of_miners = 3
     miners = []
     
-    prev_elapsed_time_for_finding_pow = None
-    current_elapsed_time_for_finding_pow = None
+    prev_elapsed_time_for_mining_round = 0
+    current_elapsed_time_for_mining_round = 0
     

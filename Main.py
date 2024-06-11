@@ -21,7 +21,7 @@ def main ():
             PoW.competition(BitcoinConfiguration.miners)
             Network.verify_broadcasted_blocks(PoW.latest_blocks, PoW.latest_winners)
             print_chain()
-            adjust_difficulty_target()
+            
             
             
             
