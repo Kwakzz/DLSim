@@ -29,7 +29,8 @@ class EthereumConfiguration:
     transaction_gas = 21000 # Typical Ethereum transaction requires 21000 units of gas
     block_gas_limit = 210000
     transaction_gas = 50 # measures the computational effort required to execute a transaction.
-    target_gas_rate = 0.5 # 50% of maximum gas limit per block.
+    target_gas_usage_rate = 0.5 # 50% of maximum gas limit per block.
+    target_gas_usage = target_gas_usage_rate * block_gas_limit
     
     initial_base_fee = 10 * (10**-9)
     current_base_fee = initial_base_fee

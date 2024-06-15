@@ -1,7 +1,7 @@
 import random
-from Block import Block
+from Block import Block, generate_block_hash, genesis_block
 from Configuration import GeneralConfiguration, EthereumConfiguration
-from Block import generate_block_hash, genesis_block
+from Ethereum.Block import Block as EthereumBlock
 from Node import Node as BaseNode
 
 class Node (BaseNode):
@@ -43,6 +43,28 @@ class Node (BaseNode):
             
             print(transaction)
             return transaction
+        
+        
+    def create_block(self):
+        block = EthereumBlock()
+        cumulative_transaction_gas = 0
+        
+        for transaction in self.transactions_memory_pool.values():
+            if cumulative_transaction_gas + transaction.gas_used > EthereumConfiguration.block_gas_limit:
+                break
+            if transaction.is_valid():
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_gas += transaction.gas_used
+        
+        generate_block_hash(block)
+        block.gas_used=cumulative_transaction_gas
+        
+        block.parent_hash = self.blockchain[-1].hash
+        
+        self.created_blocks.append(block)
+        
+        print(block)
+        return block
         
         
     def __str__(self):
