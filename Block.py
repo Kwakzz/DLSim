@@ -55,3 +55,7 @@ def generate_block_hash(block):
     return block.hash
     
     
+    
+genesis_block = Block(
+    hash=0
+) 

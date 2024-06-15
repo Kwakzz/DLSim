@@ -14,9 +14,10 @@ def main ():
     Network.initialize_network()
     
     for run_count in range(GeneralConfiguration.no_of_runs):
+        
+        create_random_transactions()
                     
         if GeneralConfiguration.selected_platform == "Bitcoin":
-            create_random_transactions()
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
@@ -25,6 +26,12 @@ def main ():
             print_chain()
             print_bitcoin_statistics()
             record_bitcoin_statistics()
+            
+            
+        if GeneralConfiguration.selected_platform == "Ethereum":
+            pass
+            
+        
             
             
             

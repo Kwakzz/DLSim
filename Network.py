@@ -15,36 +15,24 @@ class Network:
         print("Network Nodes: ")
         for node in Network.nodes.values():
             print(node)
-        
-        
-    @staticmethod
-    def add_node():
-        initial_balance = random.randrange(GeneralConfiguration.minumum_initial_balance, GeneralConfiguration.maximum_initial_balance)
-        if GeneralConfiguration.selected_platform == "Bitcoin":
-            from Bitcoin.Node import Node as BitcoinNode
-            
-            hashpower_class_no = random.randrange(1, 4) 
-            hashpower_class = None
-            
-            if hashpower_class_no == 1:
-                hashpower_class = random.choice(BitcoinConfiguration.low_power_hashpower)
-            elif hashpower_class_no == 2:
-                hashpower_class = random.choice(BitcoinConfiguration.medium_power_hashpower)
-            elif hashpower_class_no == 3:
-                hashpower_class = random.choice(BitcoinConfiguration.high_power_hashpower)
-            
-            hashpower = hashpower_class
-            
-            node = BitcoinNode(balance=initial_balance, hashpower=hashpower)
-            Network.nodes[node.id] = node
-            print(node)
+
         
         
     @staticmethod
     def initialize_network():
         print(f"Welcome to a simulation of the {GeneralConfiguration.selected_platform} blockchain network.\nNodes are joing the network...\n")
-        for node_count in range(GeneralConfiguration.no_of_nodes):
-            Network.add_node()
+
+        if GeneralConfiguration.selected_platform == "Bitcoin":
+            from Bitcoin.Network import Network as BitcoinNetwork
+            
+            for node_count in range(GeneralConfiguration.no_of_nodes):
+                BitcoinNetwork.add_node()
+                
+        if GeneralConfiguration.selected_platform == "Ethereum":
+            from Ethereum.Network import Network as EthereumNetwork
+            
+            for node_count in range(GeneralConfiguration.no_of_nodes):
+                EthereumNetwork.add_node()
          
             
     @staticmethod
@@ -75,16 +63,3 @@ class Network:
             
             if Network.verify_block(block, miner):
                 break   
-            
-    
-    @staticmethod
-    def adjust_difficulty_target():
-        if BitcoinConfiguration.prev_elapsed_time_for_mining_round > 0:
-            ratio = BitcoinConfiguration.current_elapsed_time_for_mining_round / BitcoinConfiguration.target_block_time
-            BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
-            BitcoinConfiguration.base_pow_time *= ratio
-            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty}.\n")
-            print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")         
-            
-        
-                                

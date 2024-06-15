@@ -40,11 +40,7 @@ class Block (BaseBlock):
         
     def __str__(self):
         return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
-        
- 
-genesis_block = Block(
-    hash=0
-)       
+              
     
     
 

@@ -48,7 +48,7 @@ class Consensus:
         
         start_time = time()
         
-        BitcoinConfiguration.prev_elapsed_time_for_mining_round = BitcoinConfiguration.current_elapsed_time_for_mining_round
+        BitcoinConfiguration.prev_total_block_time = BitcoinConfiguration.current_total_block_time
         
         threads = []
                 
@@ -68,13 +68,13 @@ class Consensus:
             thread.join()
         
         end_time = time()
-        elapsed_time_for_mining_round = end_time - start_time
-        BitcoinConfiguration.current_elapsed_time_for_mining_round = elapsed_time_for_mining_round
+        total_block_time = end_time - start_time 
+        BitcoinConfiguration.current_total_block_time = total_block_time
         
         GeneralConfiguration.transaction_batch_end_time = end_time
         
-        from Network import Network
-        Network.adjust_difficulty_target()
+        from Bitcoin.Network import Network as BitcoinNetwork
+        BitcoinNetwork.adjust_difficulty_target()
         
         
 

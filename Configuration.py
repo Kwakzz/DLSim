@@ -1,6 +1,8 @@
 import random
 
 
+available_platforms = ["Bitcoin", "Ethereum"]
+
 class GeneralConfiguration:
         
     no_of_runs = 1
@@ -19,22 +21,24 @@ class GeneralConfiguration:
     
     no_of_nodes = 50
         
-    selected_platform = "Bitcoin"
+    selected_platform = available_platforms[1]
 
 
 class EthereumConfiguration:
         
-    transaction_gas_limit = 21000 # maximum amount you are willing to consume on a transaction. Standard transaction gas limit is 21000 units of gas
+    transaction_gas = 21000 # Typical Ethereum transaction requires 21000 units of gas
     block_gas_limit = 210000
     transaction_gas = 50 # measures the computational effort required to execute a transaction.
-    base_fee = 10 # minimum transaction fee in Ethereum
-    target_size = 15000000 # the amount of cumulative gas a block takes
+    target_gas_rate = 0.5 # 50% of maximum gas limit per block.
     
-    from Configuration import GeneralConfiguration
-    no_of_nodes_staking = random.randrange(GeneralConfiguration.no_of_nodes/2, GeneralConfiguration.no_of_nodes+1)
-    
+    initial_base_fee = 10 * (10**-9)
+    current_base_fee = initial_base_fee
+    base_fee_change_rate = 0.125
+    max_tip = 20 # in gwei. 1 gwei = 1*10^-9 ETH
+        
 
 class BitcoinConfiguration:
+    
     block_size_limit = 1000 # actual block size limit for Bitcoin is 1MB.
     
     low_power_hashpower = range(1, 6)
@@ -42,12 +46,12 @@ class BitcoinConfiguration:
     high_power_hashpower = range(21, 101)
         
     base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
-    target_block_time = 600 # average time it takes to create a block. set by the network to ensure consistency
+    target_block_time = 600 # average time it takes to create a block and add to the chain. set by the network to ensure consistency
     
     difficulty_target = 1
     no_of_miners = 3
     miners = []
     
-    prev_elapsed_time_for_mining_round = 0
-    current_elapsed_time_for_mining_round = 0
+    prev_total_block_time = 0 # time it takes to create all blocks in a mining round, verify and add them to the chain
+    current_total_block_time = 0
     

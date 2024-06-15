@@ -1,9 +1,9 @@
 import random
 import time
-from Bitcoin.Block import Block as BitcoinBlock, genesis_block
+from Bitcoin.Block import Block as BitcoinBlock
 from Configuration import BitcoinConfiguration, GeneralConfiguration
 from Util import sha256_hash, generate_nonce
-from Block import generate_block_hash
+from Block import generate_block_hash, genesis_block
 from Node import Node as BaseNode
 
 
@@ -23,9 +23,9 @@ class Node (BaseNode):
             transactions_memory_pool=None,
             block_memory_pool=None,
             created_blocks=None,
-            hashpower=hashpower
         )
         self.blockchain = blockchain
+        self.hashpower = hashpower
 
 
     def initiate_transaction(self):
@@ -72,9 +72,7 @@ class Node (BaseNode):
     
     
     def scan_pow(self, block):
-        
-        from Network import Network
-        
+                
         sleep_time = BitcoinConfiguration.base_pow_time/self.hashpower 
         time.sleep(sleep_time)
         
