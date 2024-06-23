@@ -5,11 +5,12 @@ import random
 
 class Block (BaseBlock):
     
-    def __init__(self, target_gas_usage, base_fee, hash=0, parent_hash = None, transactions = None):
+    def __init__(self, target_gas_usage, base_fee, slot, hash=0, parent_hash = None, transactions = None):
         super().__init__(hash=0, parent_hash=None, transactions=None)
         gas_used = 0
         target_gas_usage = EthereumConfiguration.target_gas_usage
         base_fee = EthereumConfiguration.current_base_fee
+        slot = EthereumConfiguration.c
         
         
     def is_valid(self):

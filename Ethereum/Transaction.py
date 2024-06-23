@@ -39,6 +39,5 @@ def suggest_tip():
 
 
 def convert_eth_to_gwei(fee):
-    return fee * 10**9
-
-
+    gwei_amount = fee * 10**9
+    return round(gwei_amount, 2)

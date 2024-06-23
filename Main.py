@@ -4,10 +4,7 @@ from Network import Network
 from Util import print_chain
 from Statistics import print_bitcoin_statistics, record_bitcoin_statistics
 
-if GeneralConfiguration.selected_platform == "Bitcoin":
-    from Bitcoin.Node import assign_miners, miners_create_blocks
-    from Bitcoin.Consensus import Consensus as PoW
-
+    
 
 def main ():
     
@@ -18,6 +15,10 @@ def main ():
         create_random_transactions()
                     
         if GeneralConfiguration.selected_platform == "Bitcoin":
+            
+            from Bitcoin.Node import assign_miners, miners_create_blocks
+            from Bitcoin.Consensus import Consensus as PoW
+            
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
@@ -29,20 +30,20 @@ def main ():
             
             
         if GeneralConfiguration.selected_platform == "Ethereum":
-            pass
+            
+            from Ethereum.DepositContract import DepositContract, nodes_stake
+            from Ethereum.Consensus import Consensus as PoS
+            
+            DepositContract.create()
+            nodes_stake()
+            DepositContract.print_deposits()
+            PoS.select_validators()
+            PoS.print_validators()
             
         
             
             
-            
-            
-            
-            
-            
-                
-            
-                
-            
+                     
             
 if __name__ == '__main__':
     main()

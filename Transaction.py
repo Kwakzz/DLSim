@@ -44,6 +44,8 @@ def create_random_transactions():
     
     GeneralConfiguration.transaction_batch_start_time = time()
     
+    GeneralConfiguration.overall_start_time = time()
+    
     print("Nodes are conducting transactions...\n")
     for i in range(GeneralConfiguration.transaction_count_per_run):
         sender = random.choice(list(Network.nodes.values()))

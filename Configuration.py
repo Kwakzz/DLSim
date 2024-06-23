@@ -7,11 +7,13 @@ class GeneralConfiguration:
         
     no_of_runs = 1
     
+    overall_start_time = 0
+    
     processed_transaction_count = 0
     transaction_batch_start_time = 0
     transaction_batch_end_time = 0
     
-    transaction_count_per_run = 60
+    transaction_count_per_run = 5
     
     transaction_propagation_delay = 2
     block_propagation_delay = 10
@@ -19,7 +21,7 @@ class GeneralConfiguration:
     maximum_initial_balance = 500
     minumum_initial_balance = 10
     
-    no_of_nodes = 50
+    no_of_nodes = 10
         
     selected_platform = available_platforms[1]
 
@@ -32,10 +34,18 @@ class EthereumConfiguration:
     target_gas_usage_rate = 0.5 # 50% of maximum gas limit per block.
     target_gas_usage = target_gas_usage_rate * block_gas_limit
     
-    initial_base_fee = 10 * (10**-9)
+    initial_base_fee = 100 * (10**-9)
     current_base_fee = initial_base_fee
     base_fee_change_rate = 0.125
     max_tip = 20 # in gwei. 1 gwei = 1*10^-9 ETH
+    
+    no_of_validators_per_slot = 13 # churn limit
+    validators = []
+    
+    current_epoch = 1
+    slot_duration = 12 # 12 seconds
+    current_slot = 1
+    epoch_duration = slot_duration * 32
         
 
 class BitcoinConfiguration:

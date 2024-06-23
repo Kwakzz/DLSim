@@ -34,7 +34,7 @@ class Node (BaseNode):
         from Network import Network
         
         if self.balance > 0:
-            transaction_value = random.randrange(0, self.balance//2.5)
+            transaction_value = random.randrange(0, self.balance//5.5)
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
             transaction = BitcoinTransaction(
@@ -86,7 +86,7 @@ class Node (BaseNode):
         node_type = "Full"
         if not self.blockchain:
             node_type = "Lightweight"
-        return f"Node(ID: {self.id}, Balance: {self.balance}, Hashpower: {self.hashpower}, Type: {node_type})\n"
+        return f"Node(ID: {self.id}, Balance: {self.balance} BTC, Hashpower: {self.hashpower}, Type: {node_type})\n"
                 
     
     

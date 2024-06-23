@@ -2,6 +2,7 @@ import random
 from Block import Block, generate_block_hash, genesis_block
 from Configuration import GeneralConfiguration, EthereumConfiguration
 from Ethereum.Block import Block as EthereumBlock
+from Ethereum.DepositContract import DepositContract
 from Node import Node as BaseNode
 
 class Node (BaseNode):
@@ -45,6 +46,12 @@ class Node (BaseNode):
             return transaction
         
         
+    def stake(self, amount):
+        DepositContract.deposits[self.id] += amount
+        print(f"{self.id} has staked {amount} ETH into the deposit contract.")
+        return amount
+        
+        
     def create_block(self):
         block = EthereumBlock()
         cumulative_transaction_gas = 0
@@ -65,10 +72,34 @@ class Node (BaseNode):
         
         print(block)
         return block
+    
+    
+    def generate_secret_value_hash(self):
+        import secrets
+        from Util import sha256_hash
+        
+        secret_value = secrets.token_bytes(32)
+        return sha256_hash(secret_value)
+        
         
         
     def __str__(self):
-        return f"Node(ID: {self.id}, Balance: {self.balance})\n"
+        return f"Node(ID: {self.id}, Balance: {self.balance} ETH)\n"
     
     
+    
+def assign_validators():
+
+    from Network import Network
+    from itertools import combinations
         
+    EthereumConfiguration.validators = random.choice(list(combinations(Network.nodes.values(), EthereumConfiguration.no_of_validators_per_slot)))
+            
+    for validator in EthereumConfiguration.validators:
+        print(f"{validator.id} is a validator\n")
+        
+        
+
+def choose_validator():
+    
+    pass
