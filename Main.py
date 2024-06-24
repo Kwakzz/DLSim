@@ -33,12 +33,17 @@ def main ():
             
             from Ethereum.DepositContract import DepositContract, nodes_stake
             from Ethereum.Consensus import Consensus as PoS
+            from Ethereum.Consensus import RANDAO 
             
             DepositContract.create()
             nodes_stake()
             DepositContract.print_deposits()
+            
             PoS.select_validators()
             PoS.print_validators()
+            
+            RANDAO.set_random_beacon()
+            RANDAO.select_block_proposer()
             
         
             

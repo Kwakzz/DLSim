@@ -19,7 +19,12 @@ class DepositContract:
     def print_deposits():
         print("\nDeposits")
         for deposit in DepositContract.deposits.items():
-            print(f"{deposit[0]}: {deposit[1]} ETH")
+            print(f"Node {deposit[0]}: {deposit[1]} ETH")
+            
+            
+    @staticmethod
+    def get_total_stake():
+        return sum(DepositContract.deposits.values())
         
         
         

@@ -74,12 +74,10 @@ class Node (BaseNode):
         return block
     
     
-    def generate_secret_value_hash(self):
+    def generate_secret_value(self):
         import secrets
-        from Util import sha256_hash
         
-        secret_value = secrets.token_bytes(32)
-        return sha256_hash(secret_value)
+        return secrets.token_bytes(32)
         
         
         
