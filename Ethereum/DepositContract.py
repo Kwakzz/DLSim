@@ -19,7 +19,8 @@ class DepositContract:
     def print_deposits():
         print("\nDeposits")
         for deposit in DepositContract.deposits.items():
-            print(f"Node {deposit[0]}: {deposit[1]} ETH")
+            if deposit[1] != 0:
+                print(f"Node {deposit[0]}: {deposit[1]} ETH")
             
             
     @staticmethod

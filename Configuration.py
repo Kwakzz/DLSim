@@ -42,9 +42,7 @@ class EthereumConfiguration:
     no_of_validators_per_slot = 13 # churn limit
     validators = []
     
-    current_epoch = 1
     slot_duration = 12 # 12 seconds
-    current_slot = 1
     epoch_duration = slot_duration * 32
         
 

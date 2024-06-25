@@ -13,13 +13,11 @@ class Node (BaseNode):
         blockchain=[genesis_block], 
         transactions_memory_pool=None, 
         block_memory_pool=None,
-        created_blocks=None,
     ):
         super().__init__(
             balance,
             transactions_memory_pool=None,
             block_memory_pool=None,
-            created_blocks=None,
         )
         self.blockchain = blockchain
         
@@ -52,8 +50,8 @@ class Node (BaseNode):
         return amount
         
         
-    def create_block(self):
-        block = EthereumBlock()
+    def create_block(self, slot):
+        block = EthereumBlock(slot=slot)
         cumulative_transaction_gas = 0
         
         for transaction in self.transactions_memory_pool.values():
@@ -67,9 +65,7 @@ class Node (BaseNode):
         block.gas_used=cumulative_transaction_gas
         
         block.parent_hash = self.blockchain[-1].hash
-        
-        self.created_blocks.append(block)
-        
+                
         print(block)
         return block
     
@@ -83,21 +79,3 @@ class Node (BaseNode):
         
     def __str__(self):
         return f"Node(ID: {self.id}, Balance: {self.balance} ETH)\n"
-    
-    
-    
-def assign_validators():
-
-    from Network import Network
-    from itertools import combinations
-        
-    EthereumConfiguration.validators = random.choice(list(combinations(Network.nodes.values(), EthereumConfiguration.no_of_validators_per_slot)))
-            
-    for validator in EthereumConfiguration.validators:
-        print(f"{validator.id} is a validator\n")
-        
-        
-
-def choose_validator():
-    
-    pass

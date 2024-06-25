@@ -1,3 +1,4 @@
+import threading
 from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
 from Network import Network
@@ -9,6 +10,13 @@ from Statistics import print_bitcoin_statistics, record_bitcoin_statistics
 def main ():
     
     Network.initialize_network()
+    
+    if GeneralConfiguration.selected_platform == "Ethereum":
+        from Ethereum.DepositContract import DepositContract, nodes_stake
+        from Ethereum.Slot import Slot
+        
+        DepositContract.create()
+        
     
     for run_count in range(GeneralConfiguration.no_of_runs):
         
@@ -31,24 +39,15 @@ def main ():
             
         if GeneralConfiguration.selected_platform == "Ethereum":
             
-            from Ethereum.DepositContract import DepositContract, nodes_stake
-            from Ethereum.Consensus import Consensus as PoS
-            from Ethereum.Consensus import RANDAO 
-            
-            DepositContract.create()
             nodes_stake()
             DepositContract.print_deposits()
             
-            PoS.select_validators()
-            PoS.print_validators()
-            
-            RANDAO.set_random_beacon()
-            RANDAO.select_block_proposer()
-            
-        
+          
+            Slot.slot_thread = threading.Thread(target=Slot.run_slot)
+            Slot.slot_thread.start()
             
             
-                     
+                  
             
 if __name__ == '__main__':
     main()

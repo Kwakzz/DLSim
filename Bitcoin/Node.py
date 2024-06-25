@@ -22,10 +22,10 @@ class Node (BaseNode):
             balance,
             transactions_memory_pool=None,
             block_memory_pool=None,
-            created_blocks=None,
         )
         self.blockchain = blockchain
         self.hashpower = hashpower
+        self.created_blocks = created_blocks if created_blocks is not None else []
 
 
     def initiate_transaction(self):

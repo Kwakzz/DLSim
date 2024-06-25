@@ -8,13 +8,11 @@ class Node:
         balance, 
         transactions_memory_pool=None, 
         block_memory_pool=None,
-        created_blocks=None,
     ):
         self.id = generate_node_id()
         self.balance = balance
         self.transactions_memory_pool = transactions_memory_pool if transactions_memory_pool is not None else {}
         self.block_memory_pool = block_memory_pool if block_memory_pool is not None else {}
-        self.created_blocks = created_blocks if created_blocks is not None else []
     
     
     def broadcast_transaction(self, transaction):

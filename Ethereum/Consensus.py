@@ -1,4 +1,5 @@
 from Ethereum.Network import Network as EthereumNetwork
+from Ethereum.Slot import Slot
 from Configuration import GeneralConfiguration, EthereumConfiguration
 import random
 
@@ -11,8 +12,7 @@ class Consensus:
     
     
     @staticmethod
-    def select_validators():
-        EthereumNetwork.validators.clear()
+    def update_validators_list():
         
         from Ethereum.DepositContract import DepositContract
         
@@ -22,6 +22,7 @@ class Consensus:
                 EthereumNetwork.validators[node_id] = node
                 
      
+    @staticmethod
     def print_validators():
         from Ethereum.DepositContract import DepositContract
         
@@ -29,6 +30,23 @@ class Consensus:
         for node in EthereumNetwork.validators.values():
             print(f"Node {node.id}: {DepositContract.deposits.get(node.id)} ETH")
             
+            
+    @staticmethod
+    def verify_block(block, block_proposer):
+        
+        if block.is_valid():
+            
+            block.add_to_chain()
+                
+            for node in EthereumNetwork.nodes.values():
+                node.block_memory_pool.pop(block.hash)
+                
+            for transaction in block.transactions.values():
+                transaction.finalize(block_proposer)
+                
+            return True
+        
+        return False
     
 class RANDAO:
     
@@ -49,7 +67,7 @@ class RANDAO:
     
     @staticmethod
     def print_random_beacon():
-        print(f"\nRandom beacon generated for slot {str(EthereumConfiguration.current_slot)} is {RANDAO.random_beacon}.\n")
+        print(f"\nRandom beacon generated for slot {str(Slot.current_slot_number)} is {RANDAO.random_beacon}.\n")
     
     
     @staticmethod
@@ -62,7 +80,7 @@ class RANDAO:
     def generate_unique_value_for_slot():
         
         from Util import sha256_hash
-        return sha256_hash(RANDAO.random_beacon + str(EthereumConfiguration.current_slot))
+        return sha256_hash(RANDAO.random_beacon + str(Slot.current_slot_number))
     
     
     @staticmethod
@@ -77,7 +95,7 @@ class RANDAO:
             current += DepositContract.deposits[validator.id]
             if current > pick:
                 Consensus.block_proposer = validator
-                print(f"{validator.id} has been selected as the block proposer for slot {str(EthereumConfiguration.current_slot)}.")
+                print(f"{validator.id} has been selected as the block proposer for slot {str(Slot.current_slot_number)}.")
                 return validator
     
     

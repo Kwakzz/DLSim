@@ -26,6 +26,22 @@ class Transaction (BaseTransaction):
         return excess * self.gas_used
     
     
+    def finalize(self, block_proposer):
+        
+        from Ethereum.Network import Network as EthereumNetwork
+        
+        sender = EthereumNetwork.nodes[self.sender_id]
+        recipient = EthereumNetwork.nodes[self.recipient_id]
+        
+        sender.balance -= self.value
+        sender.balance -= self.tip
+        recipient.balance += self.value
+        block_proposer.balance += self.tip
+        
+        for node in EthereumNetwork.nodes.values():
+            node.transactions_memory_pool.pop(self.id)
+    
+    
     def __str__(self):
         return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes, Gas Used: {self.gas_used}, Fee: {convert_eth_to_gwei(self.get_transaction_fee())} gwei)"
          

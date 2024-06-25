@@ -35,31 +35,4 @@ class Network:
                 EthereumNetwork.add_node()
          
             
-    @staticmethod
-    def verify_block(block, miner):
-        
-        if block.is_valid():
-            
-            block.add_to_chain()
-                
-            for node in Network.nodes.values():
-                node.block_memory_pool.pop(block.hash)
-                
-            for transaction in block.transactions.values():
-                transaction.finalize(miner)
-                
-            return True
-        
-        return False
-                
-    
-    @staticmethod    
-    def verify_broadcasted_blocks(broadcasted_blocks, miners):
-        
-        for i in range (len(broadcasted_blocks)):
-            
-            block = broadcasted_blocks[i]
-            miner = miners[i]
-            
-            if Network.verify_block(block, miner):
-                break   
+   
