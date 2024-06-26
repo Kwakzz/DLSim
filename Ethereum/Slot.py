@@ -15,14 +15,17 @@ class Slot:
     def run_slot ():
         
         from Ethereum.Consensus import Consensus as PoS
-        from Ethereum.Consensus import RANDAO        
+        from Ethereum.Consensus import RANDAO      
+        from Ethereum.SlashContract import SlashContract
         
         while True:
             
             slot_start_time = datetime.now()
             Slot.current_slot_number += 1
             
-            print(f"\nEntered Slot {Slot.current_slot_number} at {slot_start_time}.")
+            formatted_datetime = slot_start_time.strftime("%Y-%m-%d %H:%M:%S")
+    
+            print(f"\nEntered Slot {Slot.current_slot_number} at {formatted_datetime}.")
             
             Epoch.update()
 
@@ -45,13 +48,15 @@ class Slot:
             block_proposer.broadcast_block(block)
             
             sleep(3)
-            if PoS.verify_block(block, block_proposer):
-                print(f"Attestors have verified block {block.hash}. It has been added to the chain.")
-            else:
-                print(f"Attestors have detected an invalid block {block.hash}. Proposer {block_proposer.id} will be penalized.")
+            is_block_valid = PoS.verify_block(block)
             
-                       
-            print(f"Slot {Slot.current_slot_number} completed. Proposer: {Slot.get_block_proposer(Slot.current_slot_number).id}")
+            if is_block_valid:
+                block.add_to_chain()
+                block.finalize_transactions(block_proposer)
+            else:
+                SlashContract.slash(block_proposer)
+            
+            print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
             
             print_chain()
                         

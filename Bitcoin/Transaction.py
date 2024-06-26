@@ -20,15 +20,14 @@ class Transaction (BaseTransaction):
     def finalize(self, miner):
         
         from Bitcoin.Network import Network as BitcoinNetwork
+        from Bitcoin.Consensus import Consensus as PoW
         
         miner = BitcoinNetwork.nodes[miner.id]
         sender = BitcoinNetwork.nodes[self.sender_id]
         recipient = BitcoinNetwork.nodes[self.recipient_id]
         
-        sender.balance -= self.value
-        sender.balance -= self.fee
-        recipient.balance += self.value
-        miner.balance += self.fee
+        self.transfer_funds(sender, recipient)
+        PoW.reward_miner(miner, sender, self.fee)
         
         for node in BitcoinNetwork.nodes.values():
             node.transactions_memory_pool.pop(self.id)

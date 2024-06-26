@@ -8,6 +8,13 @@ class Consensus:
     latest_blocks = []
     hash_attempts = 0 # attempts made in most recent competition
     
+    
+    @staticmethod
+    def reward_miner(miner, sender, fee):
+        miner.balance += fee
+        sender.balance -= fee
+    
+    
     @staticmethod
     def reset_winners_and_blocks():
         Consensus.latest_winners.clear

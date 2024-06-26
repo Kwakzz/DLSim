@@ -1,7 +1,5 @@
 import random
-from Block import Block
 from Configuration import EthereumConfiguration, GeneralConfiguration
-from Network import Network
 from Transaction import Transaction as BaseTransaction
 
 class Transaction (BaseTransaction):
@@ -29,14 +27,13 @@ class Transaction (BaseTransaction):
     def finalize(self, block_proposer):
         
         from Ethereum.Network import Network as EthereumNetwork
+        from Ethereum.Consensus import Consensus as PoS
         
         sender = EthereumNetwork.nodes[self.sender_id]
         recipient = EthereumNetwork.nodes[self.recipient_id]
         
-        sender.balance -= self.value
-        sender.balance -= self.tip
-        recipient.balance += self.value
-        block_proposer.balance += self.tip
+        self.transfer_funds(sender, recipient)
+        PoS.reward_validator(block_proposer, sender, self.tip)
         
         for node in EthereumNetwork.nodes.values():
             node.transactions_memory_pool.pop(self.id)

@@ -5,17 +5,25 @@ from Network import Network
 from Util import print_chain
 from Statistics import print_bitcoin_statistics, record_bitcoin_statistics
 
-    
 
-def main ():
+def main():
     
     Network.initialize_network()
+    create_random_transactions()
     
     if GeneralConfiguration.selected_platform == "Ethereum":
         from Ethereum.DepositContract import DepositContract, nodes_stake
         from Ethereum.Slot import Slot
+        from Ethereum.SlashContract import SlashContract
         
         DepositContract.create()
+        SlashContract.create()
+        
+        nodes_stake()
+        DepositContract.print_deposits()
+        
+        Slot.slot_thread = threading.Thread(target=Slot.run_slot)
+        Slot.slot_thread.start()
         
     
     for run_count in range(GeneralConfiguration.no_of_runs):
@@ -23,7 +31,6 @@ def main ():
         create_random_transactions()
                     
         if GeneralConfiguration.selected_platform == "Bitcoin":
-            
             from Bitcoin.Node import assign_miners, miners_create_blocks
             from Bitcoin.Consensus import Consensus as PoW
             
@@ -35,25 +42,7 @@ def main ():
             print_chain()
             print_bitcoin_statistics()
             record_bitcoin_statistics()
-            
-            
-        if GeneralConfiguration.selected_platform == "Ethereum":
-            
-            nodes_stake()
-            DepositContract.print_deposits()
-            
-          
-            Slot.slot_thread = threading.Thread(target=Slot.run_slot)
-            Slot.slot_thread.start()
-            
-            
-                  
-            
+
+
 if __name__ == '__main__':
     main()
-            
-            
-            
-            
-        
-    

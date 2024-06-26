@@ -23,6 +23,15 @@ class Block:
         for node in Network.nodes.values():
             if self not in node.blockchain:
                 node.blockchain.append(self)
+        
+        print(f"{self.hash} has been added to the chain.\n")
+        
+        
+    def finalize_transactions(self, creator):
+        for transaction in self.transactions.values():
+            transaction.finalize(creator)
+        print(f"Block {self.hash} transactions have been finalized.")
+        
 
     
     def __eq__(self, other):

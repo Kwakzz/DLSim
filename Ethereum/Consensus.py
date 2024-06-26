@@ -1,6 +1,6 @@
 from Ethereum.Network import Network as EthereumNetwork
 from Ethereum.Slot import Slot
-from Configuration import GeneralConfiguration, EthereumConfiguration
+from Ethereum.DepositContract import DepositContract
 import random
 
 class Consensus:
@@ -13,9 +13,7 @@ class Consensus:
     
     @staticmethod
     def update_validators_list():
-        
-        from Ethereum.DepositContract import DepositContract
-        
+                
         for node_id, node in EthereumNetwork.nodes.items():
             deposit = DepositContract.deposits.get(node_id, 0)
             if deposit >= 32:
@@ -24,7 +22,6 @@ class Consensus:
      
     @staticmethod
     def print_validators():
-        from Ethereum.DepositContract import DepositContract
         
         print("\nValidators:")
         for node in EthereumNetwork.validators.values():
@@ -32,21 +29,24 @@ class Consensus:
             
             
     @staticmethod
-    def verify_block(block, block_proposer):
+    def verify_block(block):
+        
+        for node in EthereumNetwork.nodes.values():
+            node.block_memory_pool.pop(block.hash)
         
         if block.is_valid():
-            
-            block.add_to_chain()
-                
-            for node in EthereumNetwork.nodes.values():
-                node.block_memory_pool.pop(block.hash)
-                
-            for transaction in block.transactions.values():
-                transaction.finalize(block_proposer)
-                
             return True
         
+        print(f"Invalid block {block.hash} detected")
         return False
+        
+        
+    @staticmethod
+    def reward_validator(validator, sender, tip):
+        validator.balance += tip
+        sender.balance -= tip
+    
+        
     
 class RANDAO:
     

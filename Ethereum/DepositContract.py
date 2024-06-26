@@ -6,13 +6,16 @@ from Configuration import EthereumConfiguration
 class DepositContract:
     
     deposits = {}
+    events = []
     
     
     @staticmethod
-    def create():
-        
+    def create():       
         for node in EthereumNetwork.nodes.values():
             DepositContract.deposits[node.id] = 0
+        event = f"Deposit Contract created."
+        DepositContract.events.append(event)
+        print(event)
         
     
     @staticmethod   
@@ -28,6 +31,37 @@ class DepositContract:
         return sum(DepositContract.deposits.values())
         
         
+    @staticmethod
+    def deposit(node, amount):
+        if node.balance >= amount:
+            node.balance -= amount
+            DepositContract.deposits[node.id] += amount
+            event = f"Node {node.id} deposited {amount} ETH. New deposit: {DepositContract.deposits[node.id]} ETH"         
+        else:
+            event = f"Node {node.id} does not have enough balance to deposit {amount} ETH"
+            
+        DepositContract.events.append(event)
+        print(event)
+        
+        
+    @staticmethod
+    def withdraw(node, amount):
+        if DepositContract.deposits[node.id] >= amount:
+            DepositContract.deposits[node.id] -= amount
+            node.balance += amount
+            event = f"Node {node.id} withdrew {amount} ETH. New deposit: {DepositContract.deposits[node.id]} ETH"
+        else:
+            event = f"Node {node.id} does not have enough deposit to withdraw {amount} ETH"
+
+        DepositContract.events.append(event)
+        print(event)
+        
+        
+    @staticmethod
+    def print_events():
+        print("\nDeposit Contract Events")
+        for event in DepositContract.events:
+            print(event)
         
         
 def nodes_stake():

@@ -9,11 +9,16 @@ class Transaction:
     
     def __init__ (self, recipient_id, sender_id, value, id=0):
         self.id = id
-        self.timestamp = datetime.now()
+        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.recipient_id = recipient_id
         self.sender_id = sender_id
         self.value = value
         self.size = sys.getsizeof(self)
+        
+        
+    def transfer_funds(self, sender, recipient):
+        sender.balance -= self.value
+        recipient.balance += self.value
     
                 
     def is_external_transfer(self):

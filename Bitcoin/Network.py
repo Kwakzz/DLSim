@@ -39,18 +39,12 @@ class Network (BaseNetwork):
 
 
     @staticmethod
-    def verify_block(block, miner):
+    def verify_block(block):
+        
+        for node in Network.nodes.values():
+            node.block_memory_pool.pop(block.hash)
         
         if block.is_valid():
-            
-            block.add_to_chain()
-                
-            for node in Network.nodes.values():
-                node.block_memory_pool.pop(block.hash)
-                
-            for transaction in block.transactions.values():
-                transaction.finalize(miner)
-                
             return True
         
         return False
@@ -65,4 +59,6 @@ class Network (BaseNetwork):
             miner = miners[i]
             
             if Network.verify_block(block, miner):
+                block.add_to_chain()
+                block.finalize_transactions(miner)
                 break   
