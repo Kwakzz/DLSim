@@ -40,7 +40,7 @@ class Transaction (BaseTransaction):
     
     
     def __str__(self):
-        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} BTC, Size: {self.size} bytes, Gas Used: {self.gas_used}, Fee: {convert_eth_to_gwei(self.get_transaction_fee())} gwei)"
+        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} ETH, Size: {self.size} bytes, Gas Used: {self.gas_used}, Fee: {convert_eth_to_gwei(self.get_transaction_fee())} gwei)"
          
     
 def suggest_max_fee_per_gas():
