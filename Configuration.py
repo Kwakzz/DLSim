@@ -5,7 +5,7 @@ available_platforms = ["Bitcoin", "Ethereum"]
 
 class GeneralConfiguration:
         
-    no_of_runs = 1
+    no_of_runs = 5
     
     simulation_start_time = None
     simulation_end_time = None
@@ -22,7 +22,7 @@ class GeneralConfiguration:
     
     no_of_nodes = 10
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[1]
 
 
 class EthereumConfiguration:

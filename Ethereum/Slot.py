@@ -3,7 +3,7 @@ from time import sleep, time
 from Ethereum.Epoch import Epoch
 from Util import print_chain
 from Configuration import EthereumConfiguration, GeneralConfiguration
-from Ethereum.Statistics import record_ethereum_statistics, print_ethereum_statistics
+from Ethereum.Statistics import print_ethereum_statistics
 
 
 class Slot:

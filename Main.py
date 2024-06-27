@@ -49,6 +49,10 @@ def main():
             BitcoinNetwork.adjust_difficulty_target()
             
             
+    if GeneralConfiguration.selected_platform == "Ethereum":
+        # Wait for the slot thread to complete
+        Slot.slot_thread.join()
+        
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
     generate_statistics()
