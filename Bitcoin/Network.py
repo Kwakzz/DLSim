@@ -36,7 +36,7 @@ class Network (BaseNetwork):
             ratio = recent_block_time / BitcoinConfiguration.target_block_time
             BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
             BitcoinConfiguration.base_pow_time *= ratio
-            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty}.\n")
+            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty_target}.\n")
             print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")  
 
 
