@@ -29,7 +29,8 @@ class Node (BaseNode):
         from Network import Network
         
         if self.balance > 0:
-            transaction_value = random.randrange(0, self.balance//2.5)
+            transaction_value = random.randrange(0, self.balance//5.5)
+            
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
             transaction = EthereumTransaction(
@@ -66,6 +67,7 @@ class Node (BaseNode):
         
         block.parent_hash = self.blockchain[-1].hash
                 
+        print(f"{self.id} has created block {block.hash}")
         print(block)
         return block
     

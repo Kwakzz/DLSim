@@ -18,12 +18,12 @@ class GeneralConfiguration:
     transaction_propagation_delay = 2
     block_propagation_delay = 10
     
-    maximum_initial_balance = 500
-    minumum_initial_balance = 10
+    maximum_initial_balance = 1500
+    minumum_initial_balance = 100
     
     no_of_nodes = 10
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[0]
 
 
 class EthereumConfiguration:
@@ -57,10 +57,9 @@ class BitcoinConfiguration:
     base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
     target_block_time = 600 # average time it takes to create a block and add to the chain. set by the network to ensure consistency
     
-    difficulty_target = 1
+    difficulty_target = 2
     no_of_miners = 3
     miners = []
     
-    prev_total_block_time = 0 # time it takes to create all blocks in a mining round, verify and add them to the chain
-    current_total_block_time = 0
+    elapsed_time_for_mining_round = 0
     

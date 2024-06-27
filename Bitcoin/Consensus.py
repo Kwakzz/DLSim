@@ -1,6 +1,7 @@
 from Configuration import BitcoinConfiguration, GeneralConfiguration
 import threading
 from time import time
+from Util import convert_seconds_to_minutes
 
 class Consensus:
     
@@ -30,19 +31,19 @@ class Consensus:
             
             Consensus.hash_attempts += 1
             
-            block.hash = miner.scan_pow(block)
+            block.hash, block.nonce = miner.scan_pow(block)
             
             if block.is_pow_valid():                
                 
                 Consensus.latest_winners.append(miner)
                 Consensus.latest_blocks.append(block)
-                                
+                                                
                 end_time = time()
                 elapsed_time = end_time - start_time # block propagation time
                 
                 GeneralConfiguration.processed_transaction_count += len(block.transactions)
                 
-                print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds.\n")
+                print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds ({convert_seconds_to_minutes(elapsed_time)} minutes).\n")
         
                 miner.broadcast_block(block)
                 
@@ -50,13 +51,11 @@ class Consensus:
     
     @staticmethod   
     def competition(miners):
-        
+                
         Consensus.hash_attempts = 0
         
         start_time = time()
-        
-        BitcoinConfiguration.prev_total_block_time = BitcoinConfiguration.current_total_block_time
-        
+                
         threads = []
                 
         miner_ids = []
@@ -74,16 +73,5 @@ class Consensus:
         for thread in threads:
             thread.join()
         
-        end_time = time()
-        total_block_time = end_time - start_time 
-        BitcoinConfiguration.current_total_block_time = total_block_time
-        
-        GeneralConfiguration.transaction_batch_end_time = end_time
-        
-        from Bitcoin.Network import Network as BitcoinNetwork
-        BitcoinNetwork.adjust_difficulty_target()
-        
-        
-
-        
-        
+        end_time = time()    
+        BitcoinConfiguration.elapsed_time_for_mining_round = end_time - start_time         

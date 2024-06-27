@@ -3,7 +3,7 @@ class Epoch:
     current_epoch = 1
     
     @staticmethod
-    def update():
+    def update_number():
         
         from Ethereum.Slot import Slot
         

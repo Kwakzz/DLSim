@@ -1,7 +1,9 @@
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 from Ethereum.Epoch import Epoch
 from Util import print_chain
+from Configuration import GeneralConfiguration
+from Ethereum.Statistics import record_ethereum_statistics, print_ethereum_statistics
 
 
 class Slot:
@@ -27,7 +29,7 @@ class Slot:
     
             print(f"\nEntered Slot {Slot.current_slot_number} at {formatted_datetime}.")
             
-            Epoch.update()
+            Epoch.update_number()
 
             PoS.update_validators_list()
             PoS.print_validators()
@@ -38,10 +40,9 @@ class Slot:
             
             block_proposer = RANDAO.select_block_proposer()
             
-            Slot.block_proposers[Slot.current_slot_number] = block_proposer
+            Slot.set_slot_block_proposer(block_proposer, Slot.current_slot_number)
             
             sleep(4)
-            print("\nBlock created:")
             block = block_proposer.create_block(slot=Slot.current_slot_number)
             
             sleep(3)
@@ -53,16 +54,29 @@ class Slot:
             if is_block_valid:
                 block.add_to_chain()
                 block.finalize_transactions(block_proposer)
+                
+                # calculate throughput [transaction_count/(transaction_batch_end_time-transaction_batch_start_time)]
+                GeneralConfiguration.transaction_batch_end_time = time()
+                GeneralConfiguration.processed_transaction_count = len(block.transactions)
+                
             else:
                 SlashContract.slash(block_proposer)
             
             print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
             
             print_chain()
+            record_ethereum_statistics()
+            print_ethereum_statistics()
+            
+            
+            
+    @staticmethod
+    def set_slot_block_proposer(block_proposer, slot_number):
+        Slot.block_proposers[slot_number] = block_proposer
                         
     
     @staticmethod     
-    def get_block_proposer(slot_number):
+    def get_slot_block_proposer(slot_number):
         return Slot.block_proposers[slot_number]
     
     

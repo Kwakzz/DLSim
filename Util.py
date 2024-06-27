@@ -26,3 +26,7 @@ def print_chain():
     for block in random_node.blockchain:
         print(block.hash, end="->")
     print("]")
+    
+    
+def convert_seconds_to_minutes(time):
+    return time/60

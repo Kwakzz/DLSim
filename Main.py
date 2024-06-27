@@ -3,7 +3,6 @@ from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
 from Network import Network
 from Util import print_chain
-from Statistics import print_bitcoin_statistics, record_bitcoin_statistics
 
 
 def main():
@@ -18,6 +17,7 @@ def main():
         
         DepositContract.create()
         SlashContract.create()
+        print()
         
         nodes_stake()
         DepositContract.print_deposits()
@@ -33,15 +33,19 @@ def main():
         if GeneralConfiguration.selected_platform == "Bitcoin":
             from Bitcoin.Node import assign_miners, miners_create_blocks
             from Bitcoin.Consensus import Consensus as PoW
+            from Bitcoin.Network import Network as BitcoinNetwork
+            from Bitcoin.Statistics import print_bitcoin_statistics, record_bitcoin_statistics
+
             
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
-            Network.verify_broadcasted_blocks(PoW.latest_blocks, PoW.latest_winners)
+            BitcoinNetwork.verify_broadcasted_blocks(PoW.latest_blocks, PoW.latest_winners)
             PoW.reset_winners_and_blocks()
             print_chain()
             print_bitcoin_statistics()
             record_bitcoin_statistics()
+            BitcoinNetwork.adjust_difficulty_target()
 
 
 if __name__ == '__main__':

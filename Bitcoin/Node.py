@@ -79,7 +79,7 @@ class Node (BaseNode):
         nonce = generate_nonce()
         block_hash = sha256_hash(str(block.hash) + nonce)
         print(f"Hash produced by node {self.id} is {block_hash}.")
-        return block_hash
+        return block_hash, nonce
     
     
     def __str__(self):

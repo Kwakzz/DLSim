@@ -1,6 +1,8 @@
 import random
+from time import time
 from Network import Network as BaseNetwork
 from Configuration import BitcoinConfiguration, GeneralConfiguration
+from Statistics import get_average_block_time, get_recent_block_time
 
 class Network (BaseNetwork):
     
@@ -29,8 +31,9 @@ class Network (BaseNetwork):
     
     @staticmethod
     def adjust_difficulty_target():
-        if BitcoinConfiguration.prev_elapsed_time_for_mining_round > 0:
-            ratio = BitcoinConfiguration.current_total_block_time / BitcoinConfiguration.target_block_time
+        recent_block_time = get_recent_block_time()
+        if recent_block_time > 0:
+            ratio = recent_block_time / BitcoinConfiguration.target_block_time
             BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
             BitcoinConfiguration.base_pow_time *= ratio
             print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty}.\n")
@@ -58,7 +61,8 @@ class Network (BaseNetwork):
             block = broadcasted_blocks[i]
             miner = miners[i]
             
-            if Network.verify_block(block, miner):
+            if Network.verify_block(block):
                 block.add_to_chain()
                 block.finalize_transactions(miner)
+                GeneralConfiguration.transaction_batch_end_time = time()
                 break   

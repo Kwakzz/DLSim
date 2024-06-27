@@ -1,5 +1,4 @@
 from Configuration import GeneralConfiguration, BitcoinConfiguration
-from Statistics import hash_rates, throughputs
 import random
 
 class Network:
