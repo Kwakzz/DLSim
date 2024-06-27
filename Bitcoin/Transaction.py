@@ -1,3 +1,4 @@
+from datetime import datetime
 from Transaction import Transaction as BaseTransaction
 
 class Transaction (BaseTransaction):
@@ -28,6 +29,8 @@ class Transaction (BaseTransaction):
         
         self.transfer_funds(sender, recipient)
         PoW.reward_miner(miner, sender, self.fee)
+        
+        self.confirmation_time = datetime.now()
         
         for node in BitcoinNetwork.nodes.values():
             node.transactions_memory_pool.pop(self.id)

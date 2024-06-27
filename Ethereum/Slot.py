@@ -2,7 +2,7 @@ from datetime import datetime
 from time import sleep, time
 from Ethereum.Epoch import Epoch
 from Util import print_chain
-from Configuration import GeneralConfiguration
+from Configuration import EthereumConfiguration, GeneralConfiguration
 from Ethereum.Statistics import record_ethereum_statistics, print_ethereum_statistics
 
 
@@ -20,7 +20,7 @@ class Slot:
         from Ethereum.Consensus import RANDAO      
         from Ethereum.SlashContract import SlashContract
         
-        while True:
+        while Slot.current_slot_number < EthereumConfiguration.max_no_of_slots:
             
             slot_start_time = datetime.now()
             Slot.current_slot_number += 1
@@ -55,18 +55,12 @@ class Slot:
                 block.add_to_chain()
                 block.finalize_transactions(block_proposer)
                 
-                # calculate throughput [transaction_count/(transaction_batch_end_time-transaction_batch_start_time)]
-                GeneralConfiguration.transaction_batch_end_time = time()
-                GeneralConfiguration.processed_transaction_count = len(block.transactions)
-                
             else:
                 SlashContract.slash(block_proposer)
             
             print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
             
             print_chain()
-            record_ethereum_statistics()
-            print_ethereum_statistics()
             
             
             

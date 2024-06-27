@@ -7,13 +7,12 @@ class GeneralConfiguration:
         
     no_of_runs = 1
     
-    overall_start_time = 0
+    simulation_start_time = None
+    simulation_end_time = None
     
     processed_transaction_count = 0
-    transaction_batch_start_time = 0
-    transaction_batch_end_time = 0
     
-    transaction_count_per_run = 20
+    transaction_count_per_run = 5
     
     transaction_propagation_delay = 2
     block_propagation_delay = 10
@@ -21,7 +20,7 @@ class GeneralConfiguration:
     maximum_initial_balance = 1500
     minumum_initial_balance = 100
     
-    no_of_nodes = 50
+    no_of_nodes = 10
         
     selected_platform = available_platforms[0]
 
@@ -44,6 +43,7 @@ class EthereumConfiguration:
     
     slot_duration = 12 # 12 seconds
     epoch_duration = slot_duration * 32
+    max_no_of_slots = 5
         
 
 class BitcoinConfiguration:
@@ -57,9 +57,8 @@ class BitcoinConfiguration:
     base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
     target_block_time = 600 # average time it takes to create a block and add to the chain. set by the network to ensure consistency
     
-    difficulty_target = 3
+    difficulty_target = 1
     no_of_miners = 3
     miners = []
     
-    elapsed_time_for_mining_round = 0
     

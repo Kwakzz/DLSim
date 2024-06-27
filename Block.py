@@ -38,6 +38,10 @@ class Block:
         if not isinstance (other, Block):
             return False
         return self.hash == other.hash
+    
+    
+    def __str__(self):
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}\n)\n"
         
         
         

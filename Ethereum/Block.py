@@ -44,7 +44,7 @@ class Block (BaseBlock):
     #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce}\n)\n"
     
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())}, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
         
         
     

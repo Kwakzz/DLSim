@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 from Configuration import EthereumConfiguration, GeneralConfiguration
 from Transaction import Transaction as BaseTransaction
@@ -34,6 +35,8 @@ class Transaction (BaseTransaction):
         
         self.transfer_funds(sender, recipient)
         PoS.reward_validator(block_proposer, sender, self.tip)
+        
+        self.confirmation_time = datetime.now()
         
         for node in EthereumNetwork.nodes.values():
             node.transactions_memory_pool.pop(self.id)

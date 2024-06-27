@@ -1,23 +1,28 @@
+from datetime import datetime
 import threading
 from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_transactions
 from Network import Network
-from Util import print_chain
+from Util import print_chain, format_datetime
+from Statistics import generate_statistics
+from Block import genesis_block
 
 
 def main():
     
     Network.initialize_network()
-    create_random_transactions()
+    GeneralConfiguration.simulation_start_time = datetime.now()
+    print(f"Simulation begins at {format_datetime(GeneralConfiguration.simulation_start_time)}.\n")
     
     if GeneralConfiguration.selected_platform == "Ethereum":
         from Ethereum.DepositContract import DepositContract, nodes_stake
         from Ethereum.Slot import Slot
         from Ethereum.SlashContract import SlashContract
         
+        create_random_transactions()
+        
         DepositContract.create()
         SlashContract.create()
-        print()
         
         nodes_stake()
         DepositContract.print_deposits()
@@ -34,18 +39,20 @@ def main():
             from Bitcoin.Node import assign_miners, miners_create_blocks
             from Bitcoin.Consensus import Consensus as PoW
             from Bitcoin.Network import Network as BitcoinNetwork
-            from Bitcoin.Statistics import print_bitcoin_statistics, record_bitcoin_statistics
-
             
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
-            BitcoinNetwork.verify_broadcasted_blocks(PoW.latest_blocks, PoW.latest_winners)
             PoW.reset_winners_and_blocks()
+            BitcoinNetwork.clear_block_memory()
             print_chain()
-            print_bitcoin_statistics()
-            record_bitcoin_statistics()
             BitcoinNetwork.adjust_difficulty_target()
+            
+            
+    GeneralConfiguration.simulation_end_time = datetime.now()
+    print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
+    generate_statistics()
+    
 
 
 if __name__ == '__main__':

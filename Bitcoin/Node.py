@@ -99,7 +99,8 @@ def assign_miners():
     BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
             
     for miner in BitcoinConfiguration.miners:
-        print(f"{miner.id} is a miner\n")
+        print(f"{miner.id} is a miner.")
+    print("")
         
         
 def miners_create_blocks():

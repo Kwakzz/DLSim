@@ -32,6 +32,12 @@ class Network:
             
             for node_count in range(GeneralConfiguration.no_of_nodes):
                 EthereumNetwork.add_node()
+            
+                
+    @staticmethod    
+    def clear_block_memory():
+         for node in Network.nodes.values():
+            node.block_memory_pool.clear()
          
             
    

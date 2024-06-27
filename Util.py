@@ -29,4 +29,9 @@ def print_chain():
     
     
 def convert_seconds_to_minutes(time):
-    return time/60
+    return round(time/60, 2)
+
+
+# Convert to %Y-%m-%d %H:%M:%S  
+def format_datetime(datetime):
+    return datetime.strftime("%Y-%m-%d %H:%M:%S")

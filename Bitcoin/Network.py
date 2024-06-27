@@ -32,13 +32,13 @@ class Network (BaseNetwork):
     @staticmethod
     def adjust_difficulty_target():
         recent_block_time = get_recent_block_time()
+        print(f"Recent block time was {recent_block_time}. seconds")
         if recent_block_time > 0:
             ratio = recent_block_time / BitcoinConfiguration.target_block_time
             BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
             BitcoinConfiguration.base_pow_time *= ratio
             print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty_target}.\n")
             print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")  
-
 
 
     @staticmethod
@@ -52,17 +52,3 @@ class Network (BaseNetwork):
         
         return False
                 
-    
-    @staticmethod    
-    def verify_broadcasted_blocks(broadcasted_blocks, miners):
-        
-        for i in range (len(broadcasted_blocks)):
-            
-            block = broadcasted_blocks[i]
-            miner = miners[i]
-            
-            if Network.verify_block(block):
-                block.add_to_chain()
-                block.finalize_transactions(miner)
-                GeneralConfiguration.transaction_batch_end_time = time()
-                break   
