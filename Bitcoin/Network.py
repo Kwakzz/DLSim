@@ -3,6 +3,7 @@ from time import time
 from Network import Network as BaseNetwork
 from Configuration import BitcoinConfiguration, GeneralConfiguration
 from Statistics import get_average_block_time, get_recent_block_time
+from Util import convert_seconds_to_minutes
 
 class Network (BaseNetwork):
     
@@ -31,14 +32,29 @@ class Network (BaseNetwork):
     
     @staticmethod
     def adjust_difficulty_target():
+        
+        from Bitcoin.Consensus import Consensus as PoW
+        
         recent_block_time = get_recent_block_time()
-        print(f"Recent block time was {recent_block_time}. seconds")
-        if recent_block_time > 0:
-            ratio = recent_block_time / BitcoinConfiguration.target_block_time
-            BitcoinConfiguration.difficulty_target = BitcoinConfiguration.difficulty_target//ratio
-            BitcoinConfiguration.base_pow_time *= ratio
-            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty_target}.\n")
-            print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")  
+        print(f"Recent block time was {recent_block_time} seconds or {convert_seconds_to_minutes(recent_block_time)} minutes.")
+                
+        random_node_item = random.choice(list(Network.nodes.items()))
+        random_node = random_node_item[1]
+        
+        if PoW.solve_time > 0 and len(random_node.blockchain) > 2:
+            
+            ratio = PoW.solve_time/BitcoinConfiguration.target_block_time
+            if ratio > 1:
+                BitcoinConfiguration.difficulty_target = max(1, BitcoinConfiguration.difficulty_target-1)
+            else:
+                BitcoinConfiguration.difficulty_target+=1
+            
+            # BitcoinConfiguration.base_pow_time *= ratio
+            
+            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty_target}.")
+            # print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")
+        else:
+            print("Recent block time is zero or negative, or only one block has been appended to the chain difficulty adjustment skipped.")
 
 
     @staticmethod

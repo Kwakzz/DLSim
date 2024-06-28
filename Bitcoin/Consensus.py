@@ -10,7 +10,7 @@ class Consensus:
     latest_winners = []
     latest_blocks = []
     hash_attempts = 0 # attempts made in most recent competition
-    stop_event = threading.Event()  # Event to stop all threads when a valid hash is found
+    solve_time = None
 
 
     @staticmethod
@@ -23,14 +23,13 @@ class Consensus:
     def reset_winners_and_blocks():
         Consensus.latest_winners.clear()
         Consensus.latest_blocks.clear()
-        Consensus.stop_event.clear()  # Reset the stop event for the next round
     
     
     @staticmethod
     def pow(miner, block, max_no_of_winners=1):
         start_time = time()
     
-        while len(Consensus.latest_winners) < max_no_of_winners and not Consensus.stop_event.is_set():
+        while len(Consensus.latest_winners) < max_no_of_winners:
             Consensus.hash_attempts += 1
             
             block.hash, block.nonce = miner.scan_pow(block)
@@ -38,11 +37,11 @@ class Consensus:
             if block.is_pow_valid():
                 Consensus.latest_winners.append(miner)
                 Consensus.latest_blocks.append(block)
-                Consensus.stop_event.set()  # Signal that a valid hash has been found
                 
                 end_time = time()
                 elapsed_time = (end_time - start_time)
                 elapsed_time = round(elapsed_time, 2)
+                Consensus.solve_time = elapsed_time
                                 
                 print(f"\nNode {miner.id} has solved the PoW in {elapsed_time} seconds ({convert_seconds_to_minutes(elapsed_time)} minutes).\n")
                 
@@ -58,7 +57,6 @@ class Consensus:
     @staticmethod   
     def competition(miners):
         Consensus.hash_attempts = 0
-        Consensus.stop_event.clear()  # Ensure the stop event is cleared before starting a new competition
         
         start_time = time()
         threads = []

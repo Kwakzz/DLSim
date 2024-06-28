@@ -95,7 +95,6 @@ def assign_miners():
     from Network import Network
     from itertools import combinations
     
-    
     BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
             
     for miner in BitcoinConfiguration.miners:
@@ -104,12 +103,7 @@ def assign_miners():
         
         
 def miners_create_blocks():
-    
-    from Network import Network
-    from itertools import combinations
-    
-    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
-            
+                
     for miner in BitcoinConfiguration.miners:
         print(f"{miner.id} is creating a block.")
         miner.create_block()

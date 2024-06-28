@@ -22,7 +22,7 @@ class GeneralConfiguration:
     
     no_of_nodes = 10
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[0]
 
 
 class EthereumConfiguration:
@@ -52,7 +52,7 @@ class BitcoinConfiguration:
     
     low_power_hashpower = range(1, 6)
     medium_power_hashpower = range(6, 21)
-    high_power_hashpower = range(21, 101)
+    high_power_hashpower = range(21, 51)
         
     base_pow_time = 60 # average time it takes for a miner to perform a hash attempt
     target_block_time = 600 # average time it takes to create a block and add to the chain. set by the network to ensure consistency
