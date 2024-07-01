@@ -32,6 +32,10 @@ def convert_seconds_to_minutes(time):
     return round(time/60, 2)
 
 
+def convert_bytes_to_megabytes(size):
+    return size/2**20
+
+
 # Convert to %Y-%m-%d %H:%M:%S  
 def format_datetime(datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S")

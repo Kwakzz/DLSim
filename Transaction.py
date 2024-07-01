@@ -14,7 +14,7 @@ class Transaction:
         self.recipient_id = recipient_id
         self.sender_id = sender_id
         self.value = value
-        self.size = sys.getsizeof(self)
+        self.size = random.choice(GeneralConfiguration.transaction_size)
         self.confirmation_time = None
         
         
@@ -44,12 +44,21 @@ class Transaction:
         return self.is_external_transfer and self.within_sender_balance and self.sender_exists and self.recipient_exists
             
             
-def create_random_transactions():
+def create_random_initial_transactions():
     
     from Network import Network
         
     print("Nodes are conducting transactions...\n")
-    for i in range(GeneralConfiguration.transaction_count_per_run):
+    for i in range(GeneralConfiguration.initial_transaction_count):
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
-        sender.broadcast_transaction(transaction)
+        sender.broadcast_transaction_without_delay(transaction)
+        
+        
+def create_random_transaction():
+    
+    from Network import Network
+        
+    sender = random.choice(list(Network.nodes.values()))
+    transaction = sender.initiate_transaction()
+    sender.broadcast_transaction(transaction)

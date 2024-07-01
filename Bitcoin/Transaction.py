@@ -43,6 +43,7 @@ class Transaction (BaseTransaction):
     
     def set_fee(self):
         self.fee = self.size * 0.0005
+        self.fee = round(self.fee, 2)
         
         
     def within_sender_balance(self):

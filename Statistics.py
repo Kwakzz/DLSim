@@ -1,6 +1,7 @@
 import random
 from Configuration import BitcoinConfiguration, GeneralConfiguration
 from Network import Network
+from Util import convert_seconds_to_minutes
 
 transaction_latencies = []
 
@@ -25,11 +26,13 @@ def get_throughput():
     transaction_count = 0
     
     for block in random_node.blockchain:
-        transaction_count += len(block.transactions)
+        transaction_count += block.transaction_count
     
     simulation_time = (GeneralConfiguration.simulation_end_time - GeneralConfiguration.simulation_start_time).total_seconds()
+    simulation_time_in_minutes = convert_seconds_to_minutes(simulation_time)
     throughput = transaction_count/simulation_time
     throughput = round(throughput, 2)
+    print(f"{transaction_count} transactions processed in {simulation_time_in_minutes} minutes.")
     
     return throughput
     
@@ -50,7 +53,8 @@ def get_average_latency():
             record_latency(latency)
             
     average_latency = sum(transaction_latencies)/len(transaction_latencies)
-    average_latency = round(average_latency, 2)
+    average_latency_in_minutes = convert_seconds_to_minutes(average_latency)
+    average_latency = round(average_latency_in_minutes, 2)
     
     return average_latency
 
@@ -61,7 +65,7 @@ def record_latency(latency):
     
 def print_average_latency():
     latency = get_average_latency()
-    print (f"Network average latency is: {latency} seconds.")
+    print (f"Network average latency is: {latency} minutes.")
     
     
 def get_recent_block_time():
@@ -76,7 +80,8 @@ def get_recent_block_time():
     recent_block = random_node.blockchain[-1]
     second_recent_block = random_node.blockchain[-2]
     block_time = (recent_block.timestamp - second_recent_block.timestamp).total_seconds()
-    block_time = round(block_time, 2)
+    block_time_in_minutes = convert_seconds_to_minutes(block_time)
+    block_time = round(block_time_in_minutes, 2)
     
     return block_time
     
@@ -101,13 +106,14 @@ def get_average_block_time():
         cumulative_block_time += block_time
         
     average_block_time = cumulative_block_time/no_of_block_times
-    average_block_time = round(average_block_time, 4)
+    average_block_time_in_minutes = convert_seconds_to_minutes(average_block_time)
+    average_block_time = round(average_block_time_in_minutes, 4)
     return average_block_time
     
     
 def print_average_block_time():
     average_block_time = get_average_block_time()
-    print(f"Average block time is {average_block_time} seconds")
+    print(f"Average block time is {average_block_time} minutes")
         
         
 

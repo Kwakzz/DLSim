@@ -62,6 +62,7 @@ class Node (BaseNode):
         
         generate_block_hash(block)
         block.size=cumulative_transaction_size
+        block.transaction_count = len(block.transactions)
         
         block.parent_hash = self.blockchain[-1].hash
         
@@ -95,7 +96,8 @@ def assign_miners():
     from Network import Network
     from itertools import combinations
     
-    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), 3)))
+    no_of_miners = random.choice(BitcoinConfiguration.no_of_miners)
+    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), no_of_miners)))
             
     for miner in BitcoinConfiguration.miners:
         print(f"{miner.id} is a miner.")

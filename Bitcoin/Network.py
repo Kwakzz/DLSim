@@ -36,7 +36,7 @@ class Network (BaseNetwork):
         from Bitcoin.Consensus import Consensus as PoW
         
         recent_block_time = get_recent_block_time()
-        print(f"Recent block time was {recent_block_time} seconds or {convert_seconds_to_minutes(recent_block_time)} minutes.")
+        print(f"Recent block time was {recent_block_time} minutes.")
                 
         random_node_item = random.choice(list(Network.nodes.items()))
         random_node = random_node_item[1]

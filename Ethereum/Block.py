@@ -9,13 +9,15 @@ class Block (BaseBlock):
         self, 
         hash=0, 
         parent_hash = None, 
+        transaction_count = 0,
         transactions = None,
         gas_used = 0,
         target_gas_usage = EthereumConfiguration.target_gas_usage,
         base_fee = EthereumConfiguration.current_base_fee,
         slot = Slot.current_slot_number,
+        size =0
     ):
-        super().__init__(hash=0, parent_hash=None, transactions=None)
+        super().__init__(hash=0, size=0, transaction_count=0, parent_hash=None, transactions=None)
         self.gas_used = 0
         self.target_gas_usage = target_gas_usage
         self.base_fee = base_fee
@@ -43,8 +45,12 @@ class Block (BaseBlock):
     # def __str__(self):
     #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce}\n)\n"
     
+    # def __str__(self):
+    #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}, \nTransaction Count: {self.transaction_count}, \nSize: {self.size} MB, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+    
+    
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count}, \nSize: {self.size} MB, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
         
         
     

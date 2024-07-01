@@ -65,6 +65,13 @@ class Node (BaseNode):
         generate_block_hash(block)
         block.gas_used=cumulative_transaction_gas
         
+        cumulative_transaction_size = 0
+        for transaction in block.transactions.values():
+            cumulative_transaction_size += transaction.size    
+        block.size = cumulative_transaction_size
+        
+        block.transaction_count = len(block.transactions)
+        
         block.parent_hash = self.blockchain[-1].hash
                 
         print(f"{self.id} has created block {block.hash}")

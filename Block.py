@@ -2,11 +2,13 @@ from datetime import datetime
 
 class Block:
     
-    def __init__(self, hash=0, parent_hash = None, transactions = None):
+    def __init__(self, hash=0, size=0, transaction_count=0, parent_hash = None, transactions = None):
         self.hash = hash
         self.parent_hash = parent_hash
         self.timestamp = datetime.now()
         self.transactions = transactions if transactions is not None else {}
+        self.transaction_count = transaction_count
+        self.size = size
         
         
     def are_transactions_valid(self):
@@ -41,7 +43,7 @@ class Block:
     
     
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}\n)\n"
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {self.size} MB\n)\n"
         
         
         

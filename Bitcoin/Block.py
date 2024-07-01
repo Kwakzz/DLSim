@@ -7,15 +7,15 @@ class Block (BaseBlock):
         self, 
         hash=0,
         parent_hash=None,
+        transaction_count = 0,
         transactions=None,
         difficulty_target = BitcoinConfiguration.difficulty_target, 
         nonce=0, 
         size=0, 
     ):
-        super().__init__(hash=0, parent_hash = None, transactions = None)
+        super().__init__(hash=0, size=0, transaction_count=0, parent_hash = None, transactions = None)
         self.difficulty_target = BitcoinConfiguration.difficulty_target
         self.nonce = nonce
-        self.size = size
         
     
     def is_pow_valid(self):
@@ -38,9 +38,12 @@ class Block (BaseBlock):
         return self.is_pow_valid and self.are_transactions_valid and self.parent_exists
             
         
+    # def __str__(self):
+    #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {self.size} MB,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
+    
+    
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
-              
+        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count},\nSize: {self.size} MB,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n" 
     
     
 
