@@ -24,13 +24,13 @@ class Network:
         if GeneralConfiguration.selected_platform == "Bitcoin":
             from Bitcoin.Network import Network as BitcoinNetwork
             
-            for node_count in range(GeneralConfiguration.no_of_nodes):
+            for node_count in range(GeneralConfiguration.NO_OF_NODES):
                 BitcoinNetwork.add_node()
                 
         if GeneralConfiguration.selected_platform == "Ethereum":
             from Ethereum.Network import Network as EthereumNetwork
             
-            for node_count in range(GeneralConfiguration.no_of_nodes):
+            for node_count in range(GeneralConfiguration.NO_OF_NODES):
                 EthereumNetwork.add_node()
             
                 

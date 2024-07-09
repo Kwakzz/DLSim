@@ -49,7 +49,7 @@ def create_random_initial_transactions():
     from Network import Network
         
     print("Nodes are conducting transactions...\n")
-    for i in range(GeneralConfiguration.initial_transaction_count):
+    for i in range(GeneralConfiguration.INITIAL_TRANSACTION_COUNT):
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
         sender.broadcast_transaction_without_delay(transaction)
