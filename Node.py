@@ -30,19 +30,17 @@ class Node:
         
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction
-            
+        
         print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
         return transaction
     
     
     def broadcast_transaction_without_delay(self, transaction):
-        
-        from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
-                
+                        
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction
             
-        print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
+        # print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
         return transaction
     
     
@@ -59,6 +57,11 @@ class Node:
         return block
         
         
+    def buy_coins(self):
+        amount = random.randrange(10000, 100000)
+        self.balance += amount
+        
+        
     def __eq__(self, other):
         if not isinstance (other, Node):
             return False
@@ -73,7 +76,9 @@ def generate_node_id():
     random_bytes = os.urandom(6)
     node_id_in_hex = random_bytes.hex()
     return node_id_in_hex
-    
-    
-        
             
+            
+def update_balances():
+    
+    for node in Network.nodes.values():
+        node.buy_coins()

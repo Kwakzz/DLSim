@@ -1,6 +1,6 @@
 import random
-from Block import Block, generate_block_hash, genesis_block
-from Configuration import GeneralConfiguration, EthereumConfiguration
+from Ethereum.Block import genesis_block
+from Configuration import EthereumConfiguration
 from Ethereum.Block import Block as EthereumBlock
 from Ethereum.DepositContract import DepositContract
 from Node import Node as BaseNode
@@ -28,9 +28,14 @@ class Node (BaseNode):
         from Util import sha256_hash
         from Network import Network
         
+        transaction_value = 0
+        
         if self.balance > 0:
-            transaction_value = random.randrange(0, self.balance//5.5)
-            
+            if self.balance < 10:
+                transaction_value = random.randrange(1, self.balance//5.5)
+            else:
+                transaction_value = random.randrange(1, 10)
+                         
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
             transaction = EthereumTransaction(
@@ -41,7 +46,7 @@ class Node (BaseNode):
             
             transaction.id = sha256_hash(str(transaction))
             
-            print(transaction)
+            # print(transaction)
             return transaction
         
         
@@ -56,13 +61,12 @@ class Node (BaseNode):
         cumulative_transaction_gas = 0
         
         for transaction in self.transactions_memory_pool.values():
-            if cumulative_transaction_gas + transaction.gas_used > EthereumConfiguration.block_gas_limit:
+            if cumulative_transaction_gas + transaction.gas_used > EthereumConfiguration.BLOCK_GAS_LIMIT:
                 break
             if transaction.is_valid():
                 block.transactions[transaction.id] = transaction
                 cumulative_transaction_gas += transaction.gas_used
         
-        generate_block_hash(block)
         block.gas_used=cumulative_transaction_gas
         
         cumulative_transaction_size = 0
@@ -73,6 +77,9 @@ class Node (BaseNode):
         block.transaction_count = len(block.transactions)
         
         block.parent_hash = self.blockchain[-1].hash
+        
+        block.set_merkle_root()
+        block.set_hash()
                 
         print(f"{self.id} has created block {block.hash}")
         print(block)
@@ -80,8 +87,7 @@ class Node (BaseNode):
     
     
     def generate_secret_value(self):
-        import secrets
-        
+        import secrets  
         return secrets.token_bytes(32)
         
         

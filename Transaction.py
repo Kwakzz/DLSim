@@ -60,5 +60,8 @@ def create_random_transaction():
     from Network import Network
         
     sender = random.choice(list(Network.nodes.values()))
-    transaction = sender.initiate_transaction()
-    sender.broadcast_transaction(transaction)
+    
+    if sender.balance > 5:
+        transaction = sender.initiate_transaction()
+        sender.broadcast_transaction(transaction)
+        # print(f"Node {sender.id} has broadcasted transaction {transaction.id} to the network.\n")

@@ -1,25 +1,31 @@
 from Block import Block as BaseBlock
 from Configuration import BitcoinConfiguration
+from Util import convert_bytes_to_megabytes
+from Bitcoin.Network import Network as BitcoinNetwork
 
 class Block (BaseBlock):
 
     def __init__(
         self, 
-        hash=0,
+        hash='0'*64,
         parent_hash=None,
         transaction_count = 0,
         transactions=None,
-        difficulty_target = BitcoinConfiguration.difficulty_target, 
-        nonce=0, 
+        nonce='0'*64, 
         size=0, 
+        merkle_root = '0'*64,
+        difficulty_target = 0
     ):
-        super().__init__(hash=0, size=0, transaction_count=0, parent_hash = None, transactions = None)
-        self.difficulty_target = BitcoinConfiguration.difficulty_target
+        super().__init__(hash='0'*64, size=0, transaction_count=0, parent_hash = None, transactions = None, merkle_root='0'*64)
+        self.difficulty_target = BitcoinNetwork.current_difficulty
         self.nonce = nonce
         
     
     def is_pow_valid(self):
-        return self.hash.startswith("0"*self.difficulty_target)
+        # print("Hash: " + str(len(str(int(self.hash, 16)))))
+        # print("Difficulty: " + str(len(str(BitcoinNetwork.current_difficulty))))
+        # print("Nonce:" + str(self.nonce))
+        return int(self.hash, 16) < BitcoinNetwork.current_difficulty
     
     
     def parent_exists(self):
@@ -43,8 +49,12 @@ class Block (BaseBlock):
     
     
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count},\nSize: {self.size} MB,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n" 
+        size_in_bytes = round(self.size, 2)
+        return f"Block (\nHash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count},\nSize: {size_in_bytes} Bytes,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n" 
     
     
 
-        
+genesis_block = Block(
+    hash='0'* 64,
+    difficulty_target=BitcoinConfiguration.INITIAL_DIFFICULTY_LEVEL
+)

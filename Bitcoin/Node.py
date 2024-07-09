@@ -1,9 +1,10 @@
 import random
 import time
 from Bitcoin.Block import Block as BitcoinBlock
-from Configuration import BitcoinConfiguration, GeneralConfiguration
-from Util import sha256_hash, generate_nonce
-from Block import generate_block_hash, genesis_block
+from Configuration import BitcoinConfiguration
+from Util import double_256_hash, sha256_hash
+from Bitcoin.Nonce import Nonce
+from Bitcoin.Block import genesis_block
 from Node import Node as BaseNode
 
 
@@ -16,7 +17,7 @@ class Node (BaseNode):
         transactions_memory_pool=None, 
         block_memory_pool=None,
         created_blocks=None,
-        hashpower = 0
+        hashpower = 0,
     ):
         super().__init__(
             balance,
@@ -45,7 +46,7 @@ class Node (BaseNode):
             transaction.id = sha256_hash(str(transaction))
             transaction.set_fee()
             
-            print(transaction)
+            # print(transaction)
             return transaction
 
 
@@ -54,17 +55,19 @@ class Node (BaseNode):
         cumulative_transaction_size = 0
         
         for transaction in self.transactions_memory_pool.values():
-            if cumulative_transaction_size + transaction.size > BitcoinConfiguration.block_size_limit:
+            if cumulative_transaction_size + transaction.size > BitcoinConfiguration.BLOCK_SIZE_LIMIT:
                 break
             if transaction.is_valid():
                 block.transactions[transaction.id] = transaction
                 cumulative_transaction_size += transaction.size
         
-        generate_block_hash(block)
         block.size=cumulative_transaction_size
         block.transaction_count = len(block.transactions)
         
         block.parent_hash = self.blockchain[-1].hash
+        
+        block.set_merkle_root()
+        block.set_hash()
         
         self.created_blocks.append(block)
         
@@ -74,12 +77,16 @@ class Node (BaseNode):
     
     def scan_pow(self, block):
                 
-        sleep_time = BitcoinConfiguration.base_pow_time/self.hashpower 
+        sleep_time = 1/self.hashpower # time for single hash attempt
         time.sleep(sleep_time)
         
-        nonce = generate_nonce()
-        block_hash = sha256_hash(str(block.hash) + nonce)
-        print(f"Hash produced by node {self.id} is {block_hash}.")
+        nonce = Nonce.generate_nonce(self, block.nonce)
+
+        combined_data = str(nonce) + block.hash
+        
+        block_hash = double_256_hash(combined_data)
+        
+        # print(f"Hash produced by node {self.id} is {block_hash}.")
         return block_hash, nonce
     
     

@@ -67,13 +67,11 @@ class DepositContract:
 def nodes_stake():
     
     network_size = len(EthereumNetwork.nodes)
-    nodes_staking = random.choice(list(combinations(EthereumNetwork.nodes.values(), network_size//2)))
+    nodes_staking = random.choice(list(combinations(EthereumNetwork.nodes.values(), 2)))
             
     for node in nodes_staking:
         if node.balance > 5:
             amount = random.randrange(1, node.balance//2.5)
             node.stake(amount)
         else:
-            print(f"{node.id} doesn't have enough coins to stake.")
-            
-        
+            print(f"{node.id} doesn't have enough coins to stake.")   

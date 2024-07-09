@@ -3,9 +3,10 @@ from time import time
 from Network import Network as BaseNetwork
 from Configuration import BitcoinConfiguration, GeneralConfiguration
 from Statistics import get_average_block_time, get_recent_block_time
-from Util import convert_seconds_to_minutes
 
 class Network (BaseNetwork):
+    
+    current_difficulty = BitcoinConfiguration.INITIAL_DIFFICULTY_TARGET
     
     @staticmethod
     def add_node():
@@ -17,45 +18,18 @@ class Network (BaseNetwork):
         hashpower_class = None
         
         if hashpower_class_no == 1:
-            hashpower_class = random.choice(BitcoinConfiguration.low_power_hashpower)
+            hashpower_class = BitcoinConfiguration.low_power_hashpower
         elif hashpower_class_no == 2:
-            hashpower_class = random.choice(BitcoinConfiguration.medium_power_hashpower)
+            hashpower_class = BitcoinConfiguration.medium_power_hashpower
         elif hashpower_class_no == 3:
-            hashpower_class = random.choice(BitcoinConfiguration.high_power_hashpower)
+            hashpower_class = BitcoinConfiguration.high_power_hashpower
         
         hashpower = hashpower_class
         
         node = BitcoinNode(balance=initial_balance, hashpower=hashpower)
         Network.nodes[node.id] = node
         print(node)
-            
     
-    @staticmethod
-    def adjust_difficulty_target():
-        
-        from Bitcoin.Consensus import Consensus as PoW
-        
-        recent_block_time = get_recent_block_time()
-        print(f"Recent block time was {recent_block_time} minutes.")
-                
-        random_node_item = random.choice(list(Network.nodes.items()))
-        random_node = random_node_item[1]
-        
-        if PoW.solve_time > 0 and len(random_node.blockchain) > 2:
-            
-            ratio = PoW.solve_time/BitcoinConfiguration.target_block_time
-            if ratio > 1:
-                BitcoinConfiguration.difficulty_target = max(1, BitcoinConfiguration.difficulty_target-1)
-            else:
-                BitcoinConfiguration.difficulty_target+=1
-            
-            # BitcoinConfiguration.base_pow_time *= ratio
-            
-            print(f"Adjusted difficulty: {BitcoinConfiguration.difficulty_target}.")
-            # print(f"Adjusted base PoW time: {BitcoinConfiguration.base_pow_time} seconds.\n")
-        else:
-            print("Recent block time is zero or negative, or only one block has been appended to the chain difficulty adjustment skipped.")
-
 
     @staticmethod
     def verify_block(block):
@@ -67,4 +41,40 @@ class Network (BaseNetwork):
             return True
         
         return False
+    
+    
+    @staticmethod
+    def calculate_new_difficulty():
+        return Network.find_block_time_ratio * Network.current_difficulty
+    
+    
+    @staticmethod
+    def set_new_difficulty():
+        
+        recent_block_time = get_recent_block_time()
+        print(f"Recent block time was {recent_block_time} minutes.")
+                
+        random_node_item = random.choice(list(Network.nodes.items()))
+        random_node = random_node_item[1]
+        
+        blockchain_length = len(random_node.blockchain)
+        if blockchain_length % BitcoinConfiguration.DIFFICULTY_ADJUSTMENT_INTERVAL == 0:
+            Network.current_difficulty = Network.calculate_new_difficulty()
+
+
+    @staticmethod
+    def calculate_target(difficulty):
+        return BitcoinConfiguration.INITIAL_TARGET / difficulty
+    
+    
+    # expected block time/actual block time
+    @staticmethod
+    def find_block_time_ratio(): 
+        cumulative_expected_block_time = BitcoinConfiguration.DIFFICULTY_ADJUSTMENT_INTERVAL * BitcoinConfiguration.TARGET_BLOCK_TIME
+        unit_actual_block_time = get_average_block_time()
+        cumulative_actual_block_time = BitcoinConfiguration.DIFFICULTY_ADJUSTMENT_INTERVAL * unit_actual_block_time
+        ratio = cumulative_expected_block_time/cumulative_actual_block_time
+        return ratio
+    
+    
                 

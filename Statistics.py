@@ -86,7 +86,6 @@ def get_recent_block_time():
     return block_time
     
     
-    
 def get_average_block_time():
     
     random_node_item = random.choice(list(Network.nodes.items()))
@@ -114,7 +113,3 @@ def get_average_block_time():
 def print_average_block_time():
     average_block_time = get_average_block_time()
     print(f"Average block time is {average_block_time} minutes")
-        
-        
-
-

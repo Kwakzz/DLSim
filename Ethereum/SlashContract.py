@@ -30,6 +30,7 @@ class SlashContract:
         from Ethereum.DepositContract import DepositContract
         
         SlashContract.slashes[validator.id] += 1
+        validator.balance -= 1
         event = f"Validator {validator.id} slashed.\nTotal slashes: {SlashContract.slashes[validator.id]}\nNew Deposit: {DepositContract.deposits[validator.id]}"
         SlashContract.events.append(event)
         print(event)

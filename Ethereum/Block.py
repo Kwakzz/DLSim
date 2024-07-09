@@ -2,6 +2,7 @@ from Block import Block as BaseBlock
 from Configuration import EthereumConfiguration
 from Ethereum.Slot import Slot
 from Ethereum.Transaction import convert_eth_to_gwei
+from Util import convert_bytes_to_megabytes
 
 class Block (BaseBlock):
     
@@ -15,9 +16,10 @@ class Block (BaseBlock):
         target_gas_usage = EthereumConfiguration.target_gas_usage,
         base_fee = EthereumConfiguration.current_base_fee,
         slot = Slot.current_slot_number,
-        size =0
+        size = 0,
+        merkle_root = 0
     ):
-        super().__init__(hash=0, size=0, transaction_count=0, parent_hash=None, transactions=None)
+        super().__init__(hash=0, size=0, transaction_count=0, parent_hash=None, transactions=None, merkle_root=0)
         self.gas_used = 0
         self.target_gas_usage = target_gas_usage
         self.base_fee = base_fee
@@ -50,10 +52,13 @@ class Block (BaseBlock):
     
     
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count}, \nSize: {self.size} MB, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+        size_in_mb = convert_bytes_to_megabytes(self.size)
+        return f"Block (\nHash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count}, \nSize: {size_in_mb} MB, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
         
         
     
-        
+genesis_block = Block(
+    hash='0' * 64
+)         
         
     

@@ -38,6 +38,3 @@ class Network:
     def clear_block_memory():
          for node in Network.nodes.values():
             node.block_memory_pool.clear()
-         
-            
-   

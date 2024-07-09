@@ -1,11 +1,13 @@
 from datetime import datetime
+from Util import convert_bytes_to_megabytes, double_256_hash, sha256_hash
 
 class Block:
     
-    def __init__(self, hash=0, size=0, transaction_count=0, parent_hash = None, transactions = None):
+    def __init__(self, hash='0'*64, size=0, transaction_count=0, parent_hash = None, transactions = None, merkle_root = '0'*64):
         self.hash = hash
         self.parent_hash = parent_hash
         self.timestamp = datetime.now()
+        self.merkle_root = merkle_root
         self.transactions = transactions if transactions is not None else {}
         self.transaction_count = transaction_count
         self.size = size
@@ -17,7 +19,7 @@ class Block:
                 return False      
         return True
     
-    
+
     def add_to_chain(self):
         
         from Network import Network
@@ -33,9 +35,64 @@ class Block:
         for transaction in self.transactions.values():
             transaction.finalize(creator)
         print(f"Block {self.hash} transactions have been finalized.")
-        
-
     
+    
+    def generate_merkle_root(self):
+        number_of_transactions = len(self.transactions)
+        transaction_hashes = []
+
+        for transaction in self.transactions.values():
+            transaction_hashes.append(bytes.fromhex(transaction.id))
+            
+        if number_of_transactions % 2 == 1:
+            transaction_hashes.append(transaction_hashes[-1])  # duplicate final hash if list is odd-numbered
+        
+        while len(transaction_hashes) > 1:
+            new_hashes = []
+            
+            for i in range(0, len(transaction_hashes), 2):
+                combined = transaction_hashes[i] + transaction_hashes[i + 1]
+                new_hash = bytes.fromhex(double_256_hash(combined))
+                new_hashes.append(new_hash)
+            
+            if len(new_hashes) % 2 == 1:
+                new_hashes.append(new_hashes[-1])
+                                
+            transaction_hashes = new_hashes
+            
+            if len(transaction_hashes) == 2:
+                combined = transaction_hashes[0] + transaction_hashes[1]
+                new_hash = bytes.fromhex(double_256_hash(combined))
+                transaction_hashes = [new_hash]
+                
+            # print(len(transaction_hashes))            
+
+        merkle_root = transaction_hashes[0]  
+        return merkle_root  
+    
+    
+    def set_merkle_root(self):
+        self.merkle_root = self.generate_merkle_root()
+    
+    
+    def generate_hash(self):
+        
+        timestamp_int = int(self.timestamp.timestamp())
+        nonce_int = int(self.nonce)
+        
+        header = (
+        bytes.fromhex(self.parent_hash)[::-1] +  
+        self.merkle_root[::-1] +  
+        timestamp_int.to_bytes(4, byteorder='little') +
+        nonce_int.to_bytes(4, byteorder='little')
+        )
+        return sha256_hash(header)
+        
+        
+    def set_hash(self):
+        self.hash = self.generate_hash()
+        
+        
     def __eq__(self, other):
         if not isinstance (other, Block):
             return False
@@ -43,34 +100,6 @@ class Block:
     
     
     def __str__(self):
-        return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {self.size} MB\n)\n"
-        
-        
-        
-def generate_block_hash(block):
-    
-    from Util import sha256_hash
-    
-    number_of_transactions = len(block.transactions)
-    transaction_hashes = []
-    paired_transaction_hashes = []
-    
-    for transaction in block.transactions.values():
-        transaction_hashes.append(transaction.id)
-        
-    if (number_of_transactions % 2 == 1):
-        transaction_hashes.append(transaction_hashes[-1]) # duplicate final hash if list is odd-numbered
-        
-    for i in range (0, len(transaction_hashes)-1, 2):
-        paired_transaction_hash = sha256_hash(transaction_hashes[i] + transaction_hashes[i+1])
-        paired_transaction_hashes.append(paired_transaction_hash)
-        
-    separator = ""
-    block.hash = separator.join([str(transaction_hash) for transaction_hash in paired_transaction_hashes])
-    return block.hash
-    
-    
-    
-genesis_block = Block(
-    hash=0
-) 
+        size_in_mb = convert_bytes_to_megabytes(self.size)
+        return f"Block (\Hash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {size_in_mb} MB\n)\n"
+            

@@ -9,7 +9,7 @@ class Transaction (BaseTransaction):
         super().__init__(recipient_id, sender_id, value, id=0)
         self.max_fee_per_gas = suggest_max_fee_per_gas()
         self.tip = suggest_tip() * 10**-9 # 1 gwei = 1*10^-9 ETH
-        self.gas_used = EthereumConfiguration.transaction_gas
+        self.gas_used = EthereumConfiguration.TRANSACTION_GAS
         
         
     def get_effective_gas_price(self):
@@ -43,7 +43,8 @@ class Transaction (BaseTransaction):
     
     
     def __str__(self):
-        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} ETH, Size: {self.size} bytes, Gas Used: {self.gas_used}, Fee: {convert_eth_to_gwei(self.get_transaction_fee())} gwei)"
+        fee_in_gwei = convert_eth_to_gwei(self.get_transaction_fee())
+        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} ETH, Size: {self.size} bytes, Gas Used: {self.gas_used} units, \nFee: {fee_in_gwei} gwei)"
          
     
 def suggest_max_fee_per_gas():

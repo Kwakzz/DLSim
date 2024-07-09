@@ -4,6 +4,7 @@ from time import time
 from Util import convert_seconds_to_minutes
 from Bitcoin.Statistics import get_hash_rate, record_hash_rate
 from Bitcoin.Network import Network as BitcoinNetwork
+from Bitcoin.Nonce import Nonce
 
 class Consensus:
     
@@ -28,7 +29,7 @@ class Consensus:
     @staticmethod
     def pow(miner, block, max_no_of_winners=1):
         start_time = time()
-    
+            
         while len(Consensus.latest_winners) < max_no_of_winners:
             Consensus.hash_attempts += 1
             
@@ -57,6 +58,9 @@ class Consensus:
     @staticmethod   
     def competition(miners):
         Consensus.hash_attempts = 0
+        
+        Nonce.clear_nonce_attempts_map()
+        Nonce.initialize_nonce_attempts_map(miners)
         
         start_time = time()
         threads = []
