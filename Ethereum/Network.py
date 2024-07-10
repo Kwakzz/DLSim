@@ -13,7 +13,7 @@ class Network (BaseNetwork):
         initial_balance = random.randrange(GeneralConfiguration.MINIMUM_INITIAL_BALANCE, GeneralConfiguration.MAXIMUM_INITIAL_BALANCE)
         node = EthereumNode(balance=initial_balance)
         Network.nodes[node.id] = node
-        print(node)
+        # print(node)
 
 
     @staticmethod

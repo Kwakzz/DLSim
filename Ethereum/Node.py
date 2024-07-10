@@ -60,7 +60,8 @@ class Node (BaseNode):
         block = EthereumBlock(slot=slot)
         cumulative_transaction_gas = 0
         
-        for transaction in self.transactions_memory_pool.values():
+        transactions_memory_pool = self.transactions_memory_pool.values()
+        for transaction in transactions_memory_pool:
             if cumulative_transaction_gas + transaction.gas_used > EthereumConfiguration.BLOCK_GAS_LIMIT:
                 break
             if transaction.is_valid():

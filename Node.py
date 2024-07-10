@@ -31,7 +31,7 @@ class Node:
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction
         
-        print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
+        # print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
         return transaction
     
     

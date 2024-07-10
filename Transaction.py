@@ -63,5 +63,5 @@ def create_random_transaction():
     
     if sender.balance > 5:
         transaction = sender.initiate_transaction()
-        sender.broadcast_transaction(transaction)
+        sender.broadcast_transaction_without_delay(transaction)
         # print(f"Node {sender.id} has broadcasted transaction {transaction.id} to the network.\n")

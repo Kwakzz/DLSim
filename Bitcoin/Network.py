@@ -28,7 +28,7 @@ class Network (BaseNetwork):
         
         node = BitcoinNode(balance=initial_balance, hashpower=hashpower)
         Network.nodes[node.id] = node
-        print(node)
+        # print(node)
     
 
     @staticmethod
