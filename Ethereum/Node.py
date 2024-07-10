@@ -28,7 +28,7 @@ class Node (BaseNode):
         from Util import sha256_hash
         from Network import Network
         
-        transaction_value = 0b
+        transaction_value = 0
         
         if self.balance > 0:
             transaction_value = random.randrange(1, 5)
