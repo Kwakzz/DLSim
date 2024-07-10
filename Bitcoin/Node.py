@@ -35,7 +35,7 @@ class Node (BaseNode):
         from Network import Network
         
         if self.balance > 0:
-            transaction_value = random.randrange(0, self.balance//5.5)
+            transaction_value = random.randrange(1, 5)
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
             transaction = BitcoinTransaction(
@@ -54,7 +54,8 @@ class Node (BaseNode):
         block = BitcoinBlock()
         cumulative_transaction_size = 0
         
-        for transaction in self.transactions_memory_pool.values():
+        transactions_memory_pool = self.transactions_memory_pool.values()
+        for transaction in transactions_memory_pool:
             if cumulative_transaction_size + transaction.size > BitcoinConfiguration.BLOCK_SIZE_LIMIT:
                 break
             if transaction.is_valid():
@@ -86,7 +87,7 @@ class Node (BaseNode):
         
         block_hash = double_256_hash(combined_data)
         
-        # print(f"Hash produced by node {self.id} is {block_hash}.")
+        print(f"Hash produced by node {self.id} is {block_hash}.")
         return block_hash, nonce
     
     

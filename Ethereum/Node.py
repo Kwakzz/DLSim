@@ -31,10 +31,7 @@ class Node (BaseNode):
         transaction_value = 0
         
         if self.balance > 0:
-            if self.balance < 10:
-                transaction_value = random.randrange(1, self.balance//5.5)
-            else:
-                transaction_value = random.randrange(1, 10)
+            transaction_value = random.randrange(1, 5)
                          
             other_nodes = random.sample(list(Network.nodes.values()), len(Network.nodes) - 1)  # Exclude sender
             recipient = random.choice(other_nodes)
