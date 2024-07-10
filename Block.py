@@ -1,4 +1,5 @@
 from datetime import datetime
+from Configuration import GeneralConfiguration
 from Util import convert_bytes_to_megabytes, double_256_hash, sha256_hash
 
 class Block:
@@ -78,14 +79,28 @@ class Block:
     def generate_hash(self):
         
         timestamp_int = int(self.timestamp.timestamp())
-        nonce_int = int(self.nonce)
+        nonce_int = 0
         
-        header = (
-        bytes.fromhex(self.parent_hash)[::-1] +  
-        self.merkle_root[::-1] +  
-        timestamp_int.to_bytes(4, byteorder='little') +
-        nonce_int.to_bytes(4, byteorder='little')
-        )
+        header = ""
+        
+        if GeneralConfiguration.selected_platform == "Bitcoin":
+            
+            nonce_int = int(self.nonce)
+            
+            header = (
+                bytes.fromhex(self.parent_hash)[::-1] +  
+                self.merkle_root[::-1] +  
+                timestamp_int.to_bytes(4, byteorder='little') +
+                nonce_int.to_bytes(4, byteorder='little')
+            )
+            
+        else:
+            header = (
+                bytes.fromhex(self.parent_hash)[::-1] +  
+                self.merkle_root[::-1] +  
+                timestamp_int.to_bytes(4, byteorder='little')
+            )
+            
         return sha256_hash(header)
         
         

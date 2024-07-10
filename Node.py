@@ -52,8 +52,9 @@ class Node:
         
         for node in Network.nodes.values():
             node.block_memory_pool[block.hash] = block
-            
+        
         print(f"\nNode {self.id} has broadcasted block {block.hash} to the network. It contains {len(block.transactions)} transactions.\n")
+        print(f"There was a propagation delay of {propagation_delay} seconds.")
         return block
         
         

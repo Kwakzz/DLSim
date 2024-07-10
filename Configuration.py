@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 
 
-available_platforms = ["Bitcoin", "Ethereum", ""]
+available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
 
 class GeneralConfiguration:
         
@@ -11,7 +11,7 @@ class GeneralConfiguration:
     simulation_start_time = None
     simulation_end_time = None
         
-    INITIAL_TRANSACTION_COUNT = 20000
+    INITIAL_TRANSACTION_COUNT = 200000000000000000000
     transaction_size = range(250, 1000) # in bytes
     
     block_propagation_delay = 10
@@ -25,13 +25,13 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[1]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
         block_size_in_kb = block_size/1024
         delay = GeneralConfiguration.BASE_BLOCK_PROPAGATION_DELAY + (GeneralConfiguration.NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE * network_size) + (GeneralConfiguration.BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE * block_size_in_kb)
-        print(f"Propagation Delay of {delay} seconds.")
+        delay = round(delay, 2)
         return delay
 
 
@@ -54,7 +54,7 @@ class EthereumConfiguration:
     
     slot_duration = 12 # 12 seconds
     epoch_duration = slot_duration * 32
-    max_no_of_slots = 5
+    max_no_of_slots = 20
         
 
 class BitcoinConfiguration:
