@@ -68,6 +68,9 @@ def main():
             create_random_transactions(1700)
             # BitcoinNetwork.set_new_difficulty()
         
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        pass
 
     # Stop the transaction thread and wait for it to finish
     stop_simulation.set()

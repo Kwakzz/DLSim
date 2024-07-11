@@ -70,8 +70,8 @@ def nodes_stake():
     nodes_staking = random.choice(list(combinations(EthereumNetwork.nodes.values(), 2)))
             
     for node in nodes_staking:
-        if node.balance > 5:
-            amount = random.randrange(1, node.balance//2.5)
+        if node.balance > 32:
+            amount = random.randrange(EthereumConfiguration.MINIMUM_STAKE, EthereumConfiguration.MAXIMUM_STAKE)
             node.stake(amount)
         else:
             print(f"{node.id} doesn't have enough coins to stake.")   

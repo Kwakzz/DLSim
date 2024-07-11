@@ -25,7 +25,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[2]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -56,6 +56,8 @@ class EthereumConfiguration:
     epoch_duration = slot_duration * 32
     max_no_of_slots = 20
         
+    MINIMUM_STAKE = 32
+    MAXIMUM_STAKE = 90
 
 class BitcoinConfiguration:
     

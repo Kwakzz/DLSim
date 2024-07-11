@@ -41,19 +41,23 @@ class Block (BaseBlock):
         
         
     def is_valid(self):
-        return self.are_transactions_valid and self.parent_exists and self.is_slot_number_accurate
-    
-    
-    # def __str__(self):
-    #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash},\nTransactions: {list(self.transactions.keys())},\nSize: {self.size},\nNonce: {self.nonce}\n)\n"
-    
-    # def __str__(self):
-    #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())}, \nTransaction Count: {self.transaction_count}, \nSize: {self.size} MB, \nGas Used: {self.gas_used}, \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+        return self.are_transactions_valid and self.parent_exists and self.is_slot_number_accurat
     
     
     def __str__(self):
         size_in_bytes = round(self.size, 2)
-        return f"Block (\nHash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count}, \nSize: {size_in_bytes} Bytes, \nGas Used: {self.gas_used}, units \nBase Fee: {convert_eth_to_gwei(self.base_fee)} gwei, \nSlot: {self.slot},"
+        return f"""
+            Block (\n
+                Hash: {self.hash}, \n
+                Parent: {self.parent_hash}, \n
+                Timestamp: {self.timestamp}, \n
+                Transaction Count: {self.transaction_count}, \n
+                Gas Used: {self.gas_used} units, \n
+                Size: {size_in_bytes} bytes, \n
+                Base Fee Used: {convert_eth_to_gwei(self.base_fee)} gwei, \n
+                Slot: {self.slot} \n
+            )
+            """
         
         
     

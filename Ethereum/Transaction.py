@@ -44,7 +44,19 @@ class Transaction (BaseTransaction):
     
     def __str__(self):
         fee_in_gwei = convert_eth_to_gwei(self.get_transaction_fee())
-        return f"Transaction (ID: {self.id}, Sender: {self.sender_id}, Recipient: {self.recipient_id}, Timestamp: {self.timestamp}, Value: {self.value} ETH, Size: {self.size} bytes, Gas Used: {self.gas_used} units, \nFee: {fee_in_gwei} gwei)"
+        fee_in_gwei = round(fee_in_gwei, 2)
+        return f"""
+        Transaction (\n
+            ID: {self.id}, \n
+            Sender: {self.sender_id}, \n
+            Recipient: {self.recipient_id}, \n
+            Timestamp: {self.timestamp}, \n
+            Value: {self.value} ETH, \n
+            Size: {self.size} bytes, \n
+            Gas Used: {self.gas_used} units, \n
+            Fee: {fee_in_gwei} gwei \n
+        )
+        """
          
     
 def suggest_max_fee_per_gas():
