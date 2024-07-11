@@ -56,6 +56,7 @@ class Node (BaseNode):
     def create_block(self, slot):
         block = EthereumBlock(slot=slot)
         cumulative_transaction_gas = 0
+        cumulative_transaction_size = 0
         
         transactions_memory_pool_copy = list(self.transactions_memory_pool.values())
         for transaction in transactions_memory_pool_copy:
@@ -64,12 +65,9 @@ class Node (BaseNode):
             if transaction.is_valid():
                 block.transactions[transaction.id] = transaction
                 cumulative_transaction_gas += transaction.gas_used
+                cumulative_transaction_size = transaction.size
         
         block.gas_used=cumulative_transaction_gas
-        
-        cumulative_transaction_size = 0
-        for transaction in block.transactions.values():
-            cumulative_transaction_size += transaction.size    
         block.size = cumulative_transaction_size
         
         block.transaction_count = len(block.transactions)
