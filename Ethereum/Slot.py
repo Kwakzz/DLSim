@@ -4,6 +4,7 @@ from Ethereum.Epoch import Epoch
 from Util import print_chain
 from Configuration import EthereumConfiguration, GeneralConfiguration
 from Ethereum.Statistics import print_ethereum_statistics
+from Transaction import create_random_transactions
 
 
 class Slot:
@@ -61,6 +62,8 @@ class Slot:
             print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
             
             print_chain()
+            
+            create_random_transactions(1700)
             
             
             

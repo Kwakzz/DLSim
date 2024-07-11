@@ -65,3 +65,14 @@ def create_random_transaction():
         transaction = sender.initiate_transaction()
         sender.broadcast_transaction_without_delay(transaction)
         # print(f"Node {sender.id} has broadcasted transaction {transaction.id} to the network.\n")
+        
+        
+def create_random_transactions(number_of_transactions):
+    
+    from Network import Network
+        
+    print("Nodes are conducting transactions...\n")
+    for i in range(number_of_transactions):
+        sender = random.choice(list(Network.nodes.values()))
+        transaction = sender.initiate_transaction()
+        sender.broadcast_transaction_without_delay(transaction)
