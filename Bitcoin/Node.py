@@ -54,8 +54,8 @@ class Node (BaseNode):
         block = BitcoinBlock()
         cumulative_transaction_size = 0
         
-        transactions_memory_pool = self.transactions_memory_pool.values()
-        for transaction in transactions_memory_pool:
+        transactions_memory_pool_copy = list(self.transactions_memory_pool.values())
+        for transaction in transactions_memory_pool_copy:
             if cumulative_transaction_size + transaction.size > BitcoinConfiguration.BLOCK_SIZE_LIMIT:
                 break
             if transaction.is_valid():
@@ -87,7 +87,7 @@ class Node (BaseNode):
         
         block_hash = double_256_hash(combined_data)
         
-        print(f"Hash produced by node {self.id} is {block_hash}.")
+        # print(f"Hash produced by node {self.id} is {block_hash}.")
         return block_hash, nonce
     
     

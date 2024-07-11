@@ -6,7 +6,7 @@ available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
 
 class GeneralConfiguration:
         
-    no_of_runs = 4
+    no_of_runs = 5
     
     simulation_start_time = None
     simulation_end_time = None
