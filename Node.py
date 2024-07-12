@@ -1,6 +1,7 @@
 import random
 from time import sleep
 from Network import Network
+from Util import generate_id
 
 
 class Node:
@@ -10,7 +11,7 @@ class Node:
         transactions_memory_pool=None, 
         block_memory_pool=None,
     ):
-        self.id = generate_node_id()
+        self.id = generate_id()
         self.balance = balance
         self.transactions_memory_pool = transactions_memory_pool if transactions_memory_pool is not None else {}
         self.block_memory_pool = block_memory_pool if block_memory_pool is not None else {}
@@ -67,16 +68,7 @@ class Node:
         if not isinstance (other, Node):
             return False
         return self.id == other.id 
-    
-    
-    
-def generate_node_id():
-    
-    import os
 
-    random_bytes = os.urandom(6)
-    node_id_in_hex = random_bytes.hex()
-    return node_id_in_hex
             
             
 def update_balances():

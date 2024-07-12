@@ -24,7 +24,6 @@ stop_simulation = threading.Event()
 def main():
     
     Network.initialize_network()
-    create_random_initial_transactions()
     GeneralConfiguration.simulation_start_time = datetime.now()
     print(f"Simulation begins at {format_datetime(GeneralConfiguration.simulation_start_time)}.\n")
 
@@ -39,7 +38,9 @@ def main():
         from Ethereum.DepositContract import DepositContract, nodes_stake
         from Ethereum.Slot import Slot
         from Ethereum.SlashContract import SlashContract
-
+        
+        create_random_initial_transactions()
+        
         DepositContract.create()
         SlashContract.create()
 
@@ -56,6 +57,8 @@ def main():
         from Bitcoin.Node import assign_miners, miners_create_blocks
         from Bitcoin.Consensus import Consensus as PoW
         from Bitcoin.Network import Network as BitcoinNetwork
+        
+        create_random_initial_transactions()
 
         for run_count in range(GeneralConfiguration.no_of_runs):
 
@@ -72,7 +75,7 @@ def main():
     if GeneralConfiguration.selected_platform == "Fabric":
         pass
 
-    # Stop the transaction thread and wait for it to finish
+
     stop_simulation.set()
     # transaction_thread_obj.join()
     # buy_coins_thread_obj.join()

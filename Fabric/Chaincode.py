@@ -1,29 +1,24 @@
+import random
 from Fabric.Asset import Asset
+from Util import generate_id
+from Fabric.EndorsementPolicy import EndorsementPolicy
 
 
 class Chaincode:
     
     def __init__(self):
+        self.id = generate_id
         self.endorsers = {}
         self.contract = None
         self.events = []
-
-
-def generate_asset_id():
-    
-    import os
-
-    random_bytes = os.urandom(6)
-    node_id_in_hex = random_bytes.hex()
-    return node_id_in_hex
+        
 
   
-def create_asset(type, owner):
-    asset_id = generate_asset_id()
-    asset = Asset(id=asset_id, type=type, owner_id=owner.id)   
-    return asset
+def create_asset(asset):
+    asset.id = generate_id()
+    event = f"{asset.id} has been created by {asset.owner_id}. It is a {asset.type}"
+    create_asset_chaincode.events.append(event)
        
-        
         
 def transfer_asset(asset, recipient, sender):
     asset.owner_id = recipient.id
@@ -37,6 +32,19 @@ def read_asset(asset):
     
 def delete_asset(asset):
     del asset
+    
+    
+def select_endorsers():
+    
+    from Fabric.Network import Network as FabricNetwork
+    
+    organization_one = FabricNetwork.organizations["1"]
+    organization_two = FabricNetwork.organizations["2"]
+    
+    organization_one_endorser = random.choice(list(organization_one))
+    organization_two_endorser = random.choice(list(organization_two))
+    
+    
         
     
 transfer_asset_chaincode = Chaincode()
@@ -51,4 +59,12 @@ create_asset_chaincode.contract = create_asset
 delete_asset_chaincode = Chaincode()
 delete_asset_chaincode.contract = delete_asset
 
+endorsement_policy = Chaincode()
 
+
+chaincodes = [
+    create_asset_chaincode,
+    read_asset_chaincode,
+    transfer_asset_chaincode,
+    delete_asset_chaincode
+]

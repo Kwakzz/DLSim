@@ -59,6 +59,7 @@ class EthereumConfiguration:
     MINIMUM_STAKE = 32
     MAXIMUM_STAKE = 90
 
+
 class BitcoinConfiguration:
     
     BLOCK_SIZE_LIMIT = 2**20 # actual block size limit for Bitcoin is 1MB. 2^20 bytes = 1MB
@@ -82,3 +83,16 @@ class BitcoinConfiguration:
     
     # 0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     # 00000000ffff0000000000000000000000000000000000000000000000000000
+    
+    
+class FabricConfiguration:
+    
+    NO_OF_ORGANIZATIONS = 2
+    NO_OF_CLIENTS = 10
+    NO_OF_PEERS_PER_ORGANIZATION = 2
+    NO_OF_ORDERERS = 3
+    TRANSACTION_TYPES = ["create", "read", "transfer", "delete"]
+    
+    proposal_counter = 0
+    
+    

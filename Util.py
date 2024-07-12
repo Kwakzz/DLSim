@@ -1,6 +1,15 @@
 import hashlib
 
 
+def generate_id():
+    
+    import os
+
+    random_bytes = os.urandom(6)
+    id_in_hex = random_bytes.hex()
+    return id_in_hex
+
+
 def sha256_hash(data):    
     if isinstance(data, str):
         data = data.encode('utf-8')
