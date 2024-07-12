@@ -44,6 +44,8 @@ def select_endorsers():
     organization_one_endorser = random.choice(list(organization_one))
     organization_two_endorser = random.choice(list(organization_two))
     
+    return [organization_one_endorser, organization_two_endorser]
+    
     
         
     
