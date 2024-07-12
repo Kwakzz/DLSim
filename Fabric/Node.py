@@ -68,6 +68,7 @@ class Node:
         
     
     def submit_proposal(self, proposal):
-        pass
+        
+        from Fabric.Chaincode import Chaincode, select_endorsers
     
     

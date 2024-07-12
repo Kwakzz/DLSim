@@ -31,21 +31,7 @@ def read_asset(asset):
     
     
 def delete_asset(asset):
-    del asset
-    
-    
-def select_endorsers():
-    
-    from Fabric.Network import Network as FabricNetwork
-    
-    organization_one = FabricNetwork.organizations["1"]
-    organization_two = FabricNetwork.organizations["2"]
-    
-    organization_one_endorser = random.choice(list(organization_one))
-    organization_two_endorser = random.choice(list(organization_two))
-    
-    return [organization_one_endorser, organization_two_endorser]
-    
+    del asset 
     
         
     
