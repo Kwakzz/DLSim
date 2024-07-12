@@ -19,12 +19,40 @@ class Node:
         
         return transaction
         
+    
+    def generate_read_transaction(asset):
+        
+        from Fabric.Transaction import ReadTransaction
+
+        transaction = ReadTransaction(asset=asset)
+        
+        return transaction
+    
+    
+    def generate_delete_transaction(asset):
+        
+        from Fabric.Transaction import DeleteTransaction
+
+        transaction = DeleteTransaction(asset=asset)
+        
+        return transaction
+    
+    
+    def generate_transfer_transaction(asset):
+        
+        from Fabric.Transaction import TransferTransaction
+
+        transaction = TransferTransaction(asset=asset)
+        
+        return transaction
+    
+    
         
     def generate_proposal(self, transaction):
         
         from Configuration import FabricConfiguration
         
-        chaincode = transaction.determine_appropriate_chaincode()
+        chaincode = transaction.chaincode
         chaincode_id = chaincode.id
         
         proposal = Proposal(
