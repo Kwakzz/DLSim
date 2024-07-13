@@ -51,16 +51,16 @@ class Block (BaseBlock):
     def __str__(self):
         size_in_bytes = round(self.size, 2)
         return f"""
-                Block (\n
-                    Hash: {self.hash}, \n
-                    Parent: {self.parent_hash}, \n
-                    Timestamp: {self.timestamp}, \n
-                    Transaction Count: {self.transaction_count}, \n
-                    Nonce: {self.nonce} units, \n
-                    Size: {size_in_bytes} bytes, \n
-                    Difficulty Target: {self.difficulty_target} \n
-                )
-                """ 
+        Block (\n
+            Hash: {self.hash}, \n
+            Parent: {self.parent_hash}, \n
+            Timestamp: {self.timestamp}, \n
+            Transaction Count: {self.transaction_count}, \n
+            Nonce: {self.nonce} units, \n
+            Size: {size_in_bytes} bytes, \n
+            Difficulty Target: {self.difficulty_target} \n
+        )
+        """ 
     
     
 

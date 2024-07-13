@@ -9,6 +9,7 @@ def print_bitcoin_statistics():
     print_throughput()
     print_average_latency()
     print_average_block_time()
+    print()
     
     
 def get_total_hashpower():

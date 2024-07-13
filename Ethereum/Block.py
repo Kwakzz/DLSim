@@ -41,23 +41,23 @@ class Block (BaseBlock):
         
         
     def is_valid(self):
-        return self.are_transactions_valid and self.parent_exists and self.is_slot_number_accurat
+        return self.are_transactions_valid and self.parent_exists and self.is_slot_number_accurate
     
     
     def __str__(self):
         size_in_bytes = round(self.size, 2)
         return f"""
-            Block (\n
-                Hash: {self.hash}, \n
-                Parent: {self.parent_hash}, \n
-                Timestamp: {self.timestamp}, \n
-                Transaction Count: {self.transaction_count}, \n
-                Gas Used: {self.gas_used} units, \n
-                Size: {size_in_bytes} bytes, \n
-                Base Fee Used: {convert_eth_to_gwei(self.base_fee)} gwei, \n
-                Slot: {self.slot} \n
-            )
-            """
+        Block (\n
+            Hash: {self.hash}, \n
+            Parent: {self.parent_hash}, \n
+            Timestamp: {self.timestamp}, \n
+            Transaction Count: {self.transaction_count}, \n
+            Gas Used: {self.gas_used} units, \n
+            Size: {size_in_bytes} bytes, \n
+            Base Fee Used: {convert_eth_to_gwei(self.base_fee)} gwei, \n
+            Slot: {self.slot} \n
+        )
+        """
         
         
     

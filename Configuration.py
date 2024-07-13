@@ -11,7 +11,7 @@ class GeneralConfiguration:
     simulation_start_time = None
     simulation_end_time = None
         
-    INITIAL_TRANSACTION_COUNT = 100000
+    INITIAL_TRANSACTION_COUNT = 2000
     transaction_size = range(250, 1000) # in bytes
     
     block_propagation_delay = 10
@@ -25,7 +25,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[1]
     
     
     def calculate_block_propagation_delay(network_size, block_size):

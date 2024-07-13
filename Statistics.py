@@ -19,11 +19,11 @@ def generate_overall_statistics():
         print_bitcoin_statistics()
         
         
-def generate_run_statistics():
+def generate_current_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
     from Bitcoin.Statistics import print_bitcoin_statistics
     
-    print("\nRUN STATISTICS:\n")
+    print("\CURRENT STATISTICS:\n")
 
     if GeneralConfiguration.selected_platform == "Ethereum":
         print_ethereum_statistics()
