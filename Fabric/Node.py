@@ -85,19 +85,7 @@ class Node:
         for endorsing_peer in endorsing_peers:
             endorsing_peer.transaction_memory_pool[proposal.transaction.id] = proposal
             
-            
-
-def generate_initial_create_transaction_proposals():
     
-    from Fabric.Network import Network as FabricNetwork
-    
-    for i in range(FabricConfiguration.INITIAL_PROPOSAL_COUNT):
-        
-        node = random.choice(FabricNetwork.clients)
-                
-        asset_type = random.choice(FabricConfiguration.ASSET_TYPES)
-        transaction = node.generate_create_transaction(asset_type)
-        proposal = node.generate_proposal(transaction)
         
                    
             

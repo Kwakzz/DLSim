@@ -1,14 +1,10 @@
 from datetime import datetime
-import threading
 from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
-from Transaction import create_random_initial_transactions, create_random_transactions
+from Transaction import create_random_transactions
 from Network import Network
 from Node import update_balances
 from Util import print_chain, format_datetime
 from Statistics import generate_overall_statistics, generate_current_statistics
-
-# Flag to indicate when the simulation should stop
-stop_simulation = threading.Event()
 
 
 def main():
@@ -60,8 +56,6 @@ def main():
         
         generate_initial_create_transaction_proposals()
 
-
-    stop_simulation.set()
 
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")

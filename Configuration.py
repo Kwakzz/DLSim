@@ -11,7 +11,6 @@ class GeneralConfiguration:
     simulation_start_time = None
     simulation_end_time = None
         
-    INITIAL_TRANSACTION_COUNT = 2000
     TRANSACTION_COUNT_PER_ROUND = 2000
     transaction_size = range(250, 1000) # in bytes
     
@@ -88,7 +87,7 @@ class BitcoinConfiguration:
     
 class FabricConfiguration:
     
-    INITIAL_PROPOSAL_COUNT = 900000
+    PROPOSAL_COUNT_PER_ROUND = 2000
     
     NO_OF_ORGANIZATIONS = 2
     NO_OF_CLIENTS = 10
