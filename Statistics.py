@@ -23,7 +23,7 @@ def generate_current_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
     from Bitcoin.Statistics import print_bitcoin_statistics
     
-    print("\CURRENT STATISTICS:\n")
+    print("\nCURRENT STATISTICS:\n")
 
     if GeneralConfiguration.selected_platform == "Ethereum":
         print_ethereum_statistics()

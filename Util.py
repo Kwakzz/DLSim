@@ -29,7 +29,7 @@ def print_chain():
     
     random_node = next(iter(Network.nodes.values()))
     
-    print ("Blockchain:", end=" ")
+    print ("\nBlockchain:", end=" ")
     
     print ("[", end="")
     for block in random_node.blockchain:

@@ -12,6 +12,7 @@ class GeneralConfiguration:
     simulation_end_time = None
         
     INITIAL_TRANSACTION_COUNT = 2000
+    TRANSACTION_COUNT_PER_ROUND = 2000
     transaction_size = range(250, 1000) # in bytes
     
     block_propagation_delay = 10

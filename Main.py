@@ -22,19 +22,17 @@ def main():
         from Ethereum.DepositContract import DepositContract, nodes_stake
         from Ethereum.Slot import Slot
         from Ethereum.SlashContract import SlashContract
-        
-        create_random_initial_transactions()
-        
+                
         DepositContract.create()
         SlashContract.create()
 
         for slot in range(EthereumConfiguration.max_no_of_slots):
+            create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
             nodes_stake()
             DepositContract.print_deposits()
             Slot.run_slot()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
-            create_random_transactions(2000)
             update_balances()
 
         
@@ -43,10 +41,8 @@ def main():
         from Bitcoin.Consensus import Consensus as PoW
         from Bitcoin.Network import Network as BitcoinNetwork
         
-        create_random_initial_transactions()
-
         for run_count in range(GeneralConfiguration.no_of_runs):
-
+            create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
             assign_miners()
             miners_create_blocks()
             PoW.competition(BitcoinConfiguration.miners)
@@ -56,7 +52,6 @@ def main():
             # BitcoinNetwork.set_new_difficulty()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
-            create_random_transactions(2000)
             update_balances()
             
         

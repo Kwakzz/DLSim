@@ -98,7 +98,7 @@ def generate_initial_create_transaction_proposals():
         asset_type = random.choice(FabricConfiguration.ASSET_TYPES)
         transaction = node.generate_create_transaction(asset_type)
         proposal = node.generate_proposal(transaction)
-        node.submit_proposal(proposal) 
+        
                    
             
             

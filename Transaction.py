@@ -43,28 +43,6 @@ class Transaction:
     def is_valid (self):
         return self.is_external_transfer and self.within_sender_balance and self.sender_exists and self.recipient_exists
             
-            
-def create_random_initial_transactions():
-    
-    from Network import Network
-        
-    print("Nodes are conducting transactions...\n")
-    for i in range(GeneralConfiguration.INITIAL_TRANSACTION_COUNT):
-        sender = random.choice(list(Network.nodes.values()))
-        transaction = sender.initiate_transaction()
-        sender.broadcast_transaction_without_delay(transaction)
-        
-        
-def create_random_transaction():
-    
-    from Network import Network
-        
-    sender = random.choice(list(Network.nodes.values()))
-    
-    if sender.balance > 5:
-        transaction = sender.initiate_transaction()
-        sender.broadcast_transaction_without_delay(transaction)
-        # print(f"Node {sender.id} has broadcasted transaction {transaction.id} to the network.\n")
         
         
 def create_random_transactions(number_of_transactions):
