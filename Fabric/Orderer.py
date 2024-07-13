@@ -1,4 +1,4 @@
-from Fabric import Node as BaseNode
+from Fabric.Node import Node as BaseNode
 
 class Orderer (BaseNode):
     

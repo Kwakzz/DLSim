@@ -11,6 +11,15 @@ class Proposal:
         self.nonce = nonce
         self.endorsements = {}
         
+    def __str__(self):
+        return f"""
+        Proposal (
+           client: {self.client_id},
+           transaction: {self.transaction.id}, 
+           nonce: {self.nonce}
+        )
+        """
+        
         
     def generate_transaction_id(self):
         id = self.nonce.to_bytes(4, byteorder='little') + bytes.fromhex(self.client_id)
@@ -28,9 +37,7 @@ def generate_create_transaction_proposals():
     proposals = []
     
     for i in range(FabricConfiguration.PROPOSAL_COUNT_PER_ROUND):
-        
-        node = random.choice(FabricNetwork.clients)
-                
+        node = random.choice(list(FabricNetwork.clients.values()))
         asset_type = random.choice(FabricConfiguration.ASSET_TYPES)
         transaction = node.generate_create_transaction(asset_type)
         proposal = node.generate_proposal(transaction)  

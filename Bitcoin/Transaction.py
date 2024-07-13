@@ -39,14 +39,14 @@ class Transaction (BaseTransaction):
     def __str__(self):
         fee = round(self.fee, 2)
         return f"""
-        Transaction (\n
-            ID: {self.id}, \n
-            Sender: {self.sender_id}, \n
-            Recipient: {self.recipient_id}, \n
-            Timestamp: {self.timestamp}, \n
-            Value: {self.value} ETH, \n
-            Size: {self.size} bytes, \n
-            Fee: {fee} BTC \n
+        Transaction (
+            ID: {self.id}, 
+            Sender: {self.sender_id}, 
+            Recipient: {self.recipient_id}, 
+            Timestamp: {self.timestamp}, 
+            Value: {self.value} ETH, 
+            Size: {self.size} bytes, 
+            Fee: {fee} BTC 
         )
         """
     

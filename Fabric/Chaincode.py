@@ -20,9 +20,9 @@ def create_asset(asset):
     create_asset_chaincode.events.append(event)
        
         
-def transfer_asset(asset, recipient, sender):
+def transfer_asset(asset, recipient):
+    event = f"{asset.id} has been transferred from {asset.owner_id} to {recipient.id}"
     asset.owner_id = recipient.id
-    event = f"{asset.id} has been transferred from {sender.id} to {recipient.id}"
     transfer_asset_chaincode.events.append(event)
     
 
@@ -56,3 +56,11 @@ chaincodes = [
     transfer_asset_chaincode,
     delete_asset_chaincode
 ]
+
+
+def initialize_all_chaincodes_on_peers():
+    
+    from Fabric.Network import Network as FabricNetwork
+    
+    for peer in FabricNetwork.peers:
+        peer.initialize_chaincodes()

@@ -7,7 +7,7 @@ from Configuration import FabricConfiguration
 class Node:
     
     def __init__(self, id, blockchain = []):
-        self.id = id,
+        self.id = id
         self.blockchain = blockchain
         
         
@@ -53,34 +53,32 @@ class Node:
         other_nodes = random.sample(list(FabricNetwork.nodes.values()), len(FabricNetwork.nodes) - 1)  # Exclude sender
         recipient = random.choice(other_nodes)
 
-        transaction = TransferTransaction(asset=asset, recipient=recipient, sender=self)
+        transaction = TransferTransaction(asset=asset, recipient=recipient)
         
         return transaction
-    
+        
     
         
     def generate_proposal(self, transaction):
-                
-        chaincode = transaction.chaincode
-        chaincode_id = chaincode.id
-        
+                        
         proposal = Proposal(
             client_id=self.id,
-            chaincode_id=chaincode_id,
             nonce=FabricConfiguration.proposal_counter,
             transaction=transaction
         )
         
-        FabricConfiguration.proposal_counter += 1
+        proposal.set_transaction_id()
         
+        FabricConfiguration.proposal_counter += 1
+        print(proposal)
         return proposal
         
     
     def submit_proposal(self, proposal):
         
-        from Fabric.Chaincode import select_endorsers
+        from Fabric.EndorsementPolicy import EndorsementPolicy
         
-        endorsing_peers = select_endorsers()
+        endorsing_peers = EndorsementPolicy.select_endorsers()
         
         for endorsing_peer in endorsing_peers:
             endorsing_peer.transaction_memory_pool[proposal.transaction.id] = proposal

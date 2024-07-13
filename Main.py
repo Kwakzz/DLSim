@@ -1,7 +1,6 @@
 from datetime import datetime
 from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
 from Transaction import create_random_transactions
-from Network import Network
 from Node import update_balances
 from Util import print_chain, format_datetime
 from Statistics import generate_overall_statistics, generate_current_statistics
@@ -9,7 +8,6 @@ from Statistics import generate_overall_statistics, generate_current_statistics
 
 def main():
     
-    Network.initialize_network()
     GeneralConfiguration.simulation_start_time = datetime.now()
     print(f"Simulation begins at {format_datetime(GeneralConfiguration.simulation_start_time)}.\n")
 
@@ -18,6 +16,9 @@ def main():
         from Ethereum.DepositContract import DepositContract, nodes_stake
         from Ethereum.Slot import Slot
         from Ethereum.SlashContract import SlashContract
+        from Ethereum.Network import Network as EthereumNetwork
+        
+        EthereumNetwork.initialize_network()
                 
         DepositContract.create()
         SlashContract.create()
@@ -37,7 +38,9 @@ def main():
         from Bitcoin.Consensus import Consensus as PoW
         from Bitcoin.Network import Network as BitcoinNetwork
         
-        for run_count in range(GeneralConfiguration.no_of_runs):
+        BitcoinNetwork.initialize_network()
+        
+        for round_count in range(GeneralConfiguration.no_of_rounds):
             create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
             assign_miners()
             miners_create_blocks()
@@ -52,10 +55,18 @@ def main():
             
         
     if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Node import generate_initial_create_transaction_proposals
         
-        generate_initial_create_transaction_proposals()
-
+        from Fabric.Network import Network as FabricNetwork
+        from Fabric.Proposal import generate_create_transaction_proposals, submit_proposals
+        from Fabric.Chaincode import initialize_all_chaincodes_on_peers
+        
+        FabricNetwork.initialize_network()
+        initialize_all_chaincodes_on_peers()
+        
+        for round_count in range(GeneralConfiguration.no_of_rounds):
+            proposals = generate_create_transaction_proposals()
+            submit_proposals(proposals)
+        
 
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")

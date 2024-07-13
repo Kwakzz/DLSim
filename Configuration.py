@@ -6,7 +6,7 @@ available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
 
 class GeneralConfiguration:
         
-    no_of_runs = 20
+    no_of_rounds = 1
     
     simulation_start_time = None
     simulation_end_time = None
@@ -25,7 +25,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[2]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -76,7 +76,7 @@ class BitcoinConfiguration:
     no_of_miners = range(3, 6)
     miners = []
     
-    INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_DIFFICULTY_TARGET_HEX = '0000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5
@@ -87,7 +87,7 @@ class BitcoinConfiguration:
     
 class FabricConfiguration:
     
-    PROPOSAL_COUNT_PER_ROUND = 2000
+    PROPOSAL_COUNT_PER_ROUND = 3
     
     NO_OF_ORGANIZATIONS = 2
     NO_OF_CLIENTS = 10

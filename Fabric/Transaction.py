@@ -15,20 +15,18 @@ class CreateTransaction(Transaction):
     def __init__(self, owner, asset, id=0, chaincode=create_asset_chaincode):
         super().__init__(asset=asset, id=id, chaincode=chaincode)
         self.owner = owner
-        
-        
+         
         
 class TransferTransaction(Transaction):
     
-    def __init__(self, sender, recipient, asset, id=0, chaincode=transfer_asset_chaincode):
+    def __init__(self, recipient, asset, id=0, chaincode=transfer_asset_chaincode):
         super().__init__(asset=asset, id=id, chaincode=chaincode)
-        self.sender = sender
         self.recipient = recipient
     
     
 class ReadTransaction(Transaction):
     
-    def __init__(self, owner, asset, id=0, chaincode=read_asset_chaincode):
+    def __init__(self, asset, id=0, chaincode=read_asset_chaincode):
         super().__init__(asset=asset, id=id, chaincode=chaincode)
     
     
