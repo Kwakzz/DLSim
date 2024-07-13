@@ -17,7 +17,7 @@ class Block (BaseBlock):
         difficulty_target = 0
     ):
         super().__init__(hash='0'*64, size=0, transaction_count=0, parent_hash = None, transactions = None, merkle_root='0'*64)
-        self.difficulty_target = BitcoinNetwork.current_difficulty
+        self.difficulty_target = hex(BitcoinNetwork.current_difficulty)
         self.nonce = nonce
         
     
@@ -50,7 +50,6 @@ class Block (BaseBlock):
     
     def __str__(self):
         size_in_bytes = round(self.size, 2)
-        return f"Block (\nHash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransaction Count: {self.transaction_count},\nSize: {size_in_bytes} Bytes,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
         return f"""
                 Block (\n
                     Hash: {self.hash}, \n

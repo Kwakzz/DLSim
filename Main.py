@@ -4,7 +4,7 @@ from Configuration import GeneralConfiguration, BitcoinConfiguration
 from Transaction import create_random_initial_transactions, create_random_transactions
 from Network import Network
 from Util import print_chain, format_datetime
-from Statistics import generate_statistics
+from Statistics import generate_overall_statistics, generate_run_statistics
 from Node import update_balances
 
 # Flag to indicate when the simulation should stop
@@ -70,9 +70,12 @@ def main():
             print_chain()
             create_random_transactions(1700)
             # BitcoinNetwork.set_new_difficulty()
-        
+            GeneralConfiguration.simulation_end_time = datetime.now()
+            generate_run_statistics()
+            
         
     if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Node import generate_initial_create_transaction_proposals
         pass
 
 
@@ -82,7 +85,7 @@ def main():
 
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
-    generate_statistics()
+    generate_overall_statistics()
     
     
 if __name__ == '__main__':

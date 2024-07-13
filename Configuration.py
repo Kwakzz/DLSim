@@ -6,12 +6,12 @@ available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
 
 class GeneralConfiguration:
         
-    no_of_runs = 5
+    no_of_runs = 20
     
     simulation_start_time = None
     simulation_end_time = None
         
-    INITIAL_TRANSACTION_COUNT = 90000
+    INITIAL_TRANSACTION_COUNT = 100000
     transaction_size = range(250, 1000) # in bytes
     
     block_propagation_delay = 10
@@ -25,7 +25,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[2]
+    selected_platform = available_platforms[0]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -76,7 +76,7 @@ class BitcoinConfiguration:
     no_of_miners = range(3, 6)
     miners = []
     
-    INITIAL_DIFFICULTY_TARGET_HEX = '0000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5
@@ -87,11 +87,15 @@ class BitcoinConfiguration:
     
 class FabricConfiguration:
     
+    INITIAL_PROPOSAL_COUNT = 900000
+    
     NO_OF_ORGANIZATIONS = 2
     NO_OF_CLIENTS = 10
     NO_OF_PEERS_PER_ORGANIZATION = 2
     NO_OF_ORDERERS = 3
+    
     TRANSACTION_TYPES = ["create", "read", "transfer", "delete"]
+    ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     
     proposal_counter = 0
     

@@ -4,7 +4,6 @@ hash_rates = []
 
 
 def print_bitcoin_statistics():
-    print("\nSTATISTICS:\n")
     print_total_hashpower()
     print_average_hash_rate()
     print_throughput()

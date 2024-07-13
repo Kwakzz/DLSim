@@ -37,3 +37,7 @@ class DeleteTransaction(Transaction):
     def __init__(self, asset, id=0, chaincode=delete_asset_chaincode):
         super().__init__(asset=asset, id=id, chaincode=chaincode)
     
+
+
+def generate_initial_transactions():
+    pass

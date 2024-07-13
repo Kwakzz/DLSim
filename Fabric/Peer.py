@@ -7,12 +7,18 @@ class Peer (FabricNode):
         self, 
         id,
         blockchain=[],
-        transaction_memory = {},
+        transaction_memory_pool = {},
         chaincodes = {}
     ):
         super().__init__ (id, blockchain = [])
-        self.transaction_memory = transaction_memory
+        self.transaction_memory = transaction_memory_pool
         self.chaincodes = chaincodes
+        
+        
+    def __str__(self):
+        return f"""
+        Peer {self.id}
+        """
         
         
     def execute_transaction():

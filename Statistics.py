@@ -6,9 +6,11 @@ from Util import convert_seconds_to_minutes
 transaction_latencies = []
 
 
-def generate_statistics():
+def generate_overall_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
     from Bitcoin.Statistics import print_bitcoin_statistics
+    
+    print("\nOVERALL STATISTICS:\n")
 
     if GeneralConfiguration.selected_platform == "Ethereum":
         print_ethereum_statistics()
@@ -16,6 +18,19 @@ def generate_statistics():
     if GeneralConfiguration.selected_platform == "Bitcoin":
         print_bitcoin_statistics()
         
+        
+def generate_run_statistics():
+    from Ethereum.Statistics import print_ethereum_statistics
+    from Bitcoin.Statistics import print_bitcoin_statistics
+    
+    print("\nRUN STATISTICS:\n")
+
+    if GeneralConfiguration.selected_platform == "Ethereum":
+        print_ethereum_statistics()
+        
+    if GeneralConfiguration.selected_platform == "Bitcoin":
+        print_bitcoin_statistics()
+
 
 # GENERAL
     

@@ -10,4 +10,9 @@ class Orderer (BaseNode):
         super().__init__ (id, blockchain = [])
 
 
+    def __str__(self):
+        return f"""
+        Orderer {self.id}
+        """
+
     

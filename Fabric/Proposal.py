@@ -2,10 +2,10 @@ from Util import sha256_hash
 
 class Proposal:
     
-    def __init__(self, client_id, chaincode_id, nonce, transaction):
+    def __init__(self, client_id, nonce, transaction):
         self.client_id = client_id
         self.transaction = transaction
-        self.chaincode_id = chaincode_id
+        self.chaincode_id = transaction.chaincode.id
         self.nonce = nonce
         self.endorsements = {}
         
