@@ -7,10 +7,14 @@ from Fabric.EndorsementPolicy import EndorsementPolicy
 class Chaincode:
     
     def __init__(self):
-        self.id = generate_id
+        self.id = generate_id()
         self.endorsers = {}
         self.contract = None
         self.events = []
+        
+        
+    def print_events(self):
+        print(self.events)
         
 
   
@@ -62,5 +66,5 @@ def initialize_all_chaincodes_on_peers():
     
     from Fabric.Network import Network as FabricNetwork
     
-    for peer in FabricNetwork.peers:
+    for peer in FabricNetwork.peers.values():
         peer.initialize_chaincodes()

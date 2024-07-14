@@ -1,3 +1,4 @@
+import random
 from Fabric.Node import Node
 from Fabric.Orderer import Orderer
 from Fabric.Peer import Peer
@@ -11,14 +12,23 @@ class Network:
     peers = {}
     orderers = {}
     organizations = {}
+    leader = None
     
     
     @staticmethod
     def initialize_network():
+        print("Authorized nodes are joining the network...")
         Network.initialize_clients()
         Network.initialize_organizations()
         Network.initialize_orderers()
-    
+        Network.select_leader()
+        print(f""" 
+            Clients: {len(Network.clients)}
+            Organizations: {len(Network.organizations)}
+            Peers: {len(Network.peers)}
+            Orderers: {len(Network.orderers)}
+            Leader: {Network.leader.id}
+            """)
     
     @staticmethod
     def initialize_clients():
@@ -27,16 +37,27 @@ class Network:
             Network.clients[client.id] = client
             
     
+    @staticmethod
     def initialize_organizations():
         for i in range(FabricConfiguration.NO_OF_ORGANIZATIONS):
-            organization_number = i+1
-            Network.organizations[str(organization_number)] = [create_peer() for j in range(FabricConfiguration.NO_OF_PEERS_PER_ORGANIZATION)]
+            organization_number = i + 1
+            peers = [create_peer() for j in range(FabricConfiguration.NO_OF_PEERS_PER_ORGANIZATION)]
+            Network.organizations[str(organization_number)] = peers
+            for peer in peers:
+                Network.peers[peer.id] = peer
     
-            
+    
+    @staticmethod
     def initialize_orderers():
         for i in range(FabricConfiguration.NO_OF_ORDERERS):
             orderer = create_orderer()
             Network.orderers[orderer.id] = orderer
+            
+            
+    @staticmethod
+    def select_leader():
+        Network.leader = random.choice(list(Network.orderers.values()))
+        return Network.leader
     
     
 def create_client():
@@ -48,6 +69,7 @@ def create_client():
 def create_peer():
     id = generate_id()
     peer = Peer(id=id)
+    peer.initialize_chaincodes()
     return peer
 
 

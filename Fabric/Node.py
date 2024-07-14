@@ -6,15 +6,23 @@ from Configuration import FabricConfiguration
 
 class Node:
     
-    def __init__(self, id, blockchain = []):
+    def __init__(self, id):
         self.id = id
-        self.blockchain = blockchain
+        self.blockchain = []
+        self.transactions_log = {}
+        
         
         
     def __str__(self):
         return f"""
         Client {self.id}
         """
+        
+        
+    def __eq__(self, other):
+        if not isinstance (other, Node):
+            return False
+        return self.id == other.id 
         
         
     def generate_create_transaction(self, asset_type):
@@ -70,18 +78,20 @@ class Node:
         proposal.set_transaction_id()
         
         FabricConfiguration.proposal_counter += 1
-        print(proposal)
         return proposal
         
     
-    def submit_proposal(self, proposal):
-        
-        from Fabric.EndorsementPolicy import EndorsementPolicy
-        
-        endorsing_peers = EndorsementPolicy.select_endorsers()
-        
+    def submit_proposal_to_peers(self, proposal, endorsing_peers):
+                        
         for endorsing_peer in endorsing_peers:
-            endorsing_peer.transaction_memory_pool[proposal.transaction.id] = proposal
+            endorsing_peer.transactions_log[proposal.transaction.id] = proposal
+            
+            
+    def submit_transaction_to_leader(self, transaction):
+        
+        from Fabric.Network import Network as FabricNetwork
+        
+        FabricNetwork.leader.transactions_log[transaction.id] = transaction
             
     
         

@@ -57,15 +57,26 @@ def main():
     if GeneralConfiguration.selected_platform == "Fabric":
         
         from Fabric.Network import Network as FabricNetwork
-        from Fabric.Proposal import generate_create_transaction_proposals, submit_proposals
+        from Fabric.Proposal import generate_create_transaction_proposals, submit_proposals_to_peers
         from Fabric.Chaincode import initialize_all_chaincodes_on_peers
+        from Fabric.EndorsementPolicy import EndorsementPolicy
+        from Fabric.Transaction import peers_execute_transactions, submit_transactions_to_leader
+        from Fabric.Orderer import has_leader_received_majority_acknowledgment
+
         
         FabricNetwork.initialize_network()
         initialize_all_chaincodes_on_peers()
         
         for round_count in range(GeneralConfiguration.no_of_rounds):
+            EndorsementPolicy.print()
             proposals = generate_create_transaction_proposals()
-            submit_proposals(proposals)
+            endorsing_peers = EndorsementPolicy.select_endorsers()
+            submit_proposals_to_peers(proposals, endorsing_peers)
+            proposals_with_majority_endorsement = peers_execute_transactions(endorsing_peers, proposals)
+            submit_transactions_to_leader(proposals_with_majority_endorsement)
+            FabricNetwork.leader.print_transactions_log()
+            FabricNetwork.leader.append_entries()
+            has_leader_received_majority_acknowledgment()
         
 
     GeneralConfiguration.simulation_end_time = datetime.now()

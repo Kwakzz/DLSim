@@ -9,11 +9,14 @@ class EndorsementPolicy:
     
     @staticmethod
     def print():
+        print()
         print("""
-              No of Endorsers: 2 \n
-              One Endorser from each organization: True \n
-              Majority endorsement: True \n
+              No of Endorsers: 2 
+              One Endorser from each organization: True 
+              Majority endorsement: True
+              Number of leader nodes: 1
         """)
+        print()
         
         
     def select_endorsers():
@@ -25,5 +28,7 @@ class EndorsementPolicy:
         
         organization_one_endorser = random.choice(list(organization_one))
         organization_two_endorser = random.choice(list(organization_two))
+        
+        print(f"{organization_one_endorser.id} and {organization_two_endorser.id} have been selected as endorsers.")
         
         return [organization_one_endorser, organization_two_endorser]

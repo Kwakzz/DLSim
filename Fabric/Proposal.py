@@ -36,23 +36,28 @@ def generate_create_transaction_proposals():
     
     proposals = []
     
-    for i in range(FabricConfiguration.PROPOSAL_COUNT_PER_ROUND):
+    print("Clients are generating transaction proposals...")
+    
+    for i in range(FabricConfiguration.NO_OF_CLIENTS):
         node = random.choice(list(FabricNetwork.clients.values()))
         asset_type = random.choice(FabricConfiguration.ASSET_TYPES)
         transaction = node.generate_create_transaction(asset_type)
         proposal = node.generate_proposal(transaction)  
         proposals.append(proposal)
-        
+            
+    print(f"{len(proposals)} proposals have been generated.")    
     return proposals 
     
         
-def submit_proposals(proposals):
+def submit_proposals_to_peers(proposals, endorsing_peers):
+    
+    print("Clients are submitting their transaction proposals to endorsing peers...")
     
     from Fabric.Network import Network as FabricNetwork
     for proposal in proposals:
         client_id = proposal.client_id
         client = FabricNetwork.clients[client_id]
-        client.submit_proposal(proposal)
+        client.submit_proposal_to_peers(proposal, endorsing_peers)
         
         
         

@@ -76,7 +76,7 @@ class BitcoinConfiguration:
     no_of_miners = range(3, 6)
     miners = []
     
-    INITIAL_DIFFICULTY_TARGET_HEX = '0000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5
@@ -93,6 +93,8 @@ class FabricConfiguration:
     NO_OF_CLIENTS = 10
     NO_OF_PEERS_PER_ORGANIZATION = 2
     NO_OF_ORDERERS = 3
+    
+    BLOCK_LIMIT = 1024 * 99 #99 MB
     
     TRANSACTION_TYPES = ["create", "read", "transfer", "delete"]
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
