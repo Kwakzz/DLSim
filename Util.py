@@ -1,5 +1,7 @@
 import hashlib
 
+from Configuration import GeneralConfiguration
+
 
 def generate_id():
     
@@ -25,9 +27,15 @@ def double_256_hash(data):
             
 def print_chain():
     
-    from Network import Network
+    random_node = None
     
-    random_node = next(iter(Network.nodes.values()))
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = next(iter(Network.nodes.values()))
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network
+        random_node = next(iter(Network.peers.values()))
     
     print ("\nBlockchain:", end=" ")
     
@@ -36,6 +44,7 @@ def print_chain():
         print(block.hash, end="->")
     print("]")
     
+
     
 def convert_seconds_to_minutes(time):
     return round(time/60, 2)

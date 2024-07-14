@@ -8,10 +8,8 @@ class Node:
     
     def __init__(self, id):
         self.id = id
-        self.blockchain = []
         self.transactions_log = {}
-        
-        
+                
         
     def __str__(self):
         return f"""
@@ -23,6 +21,10 @@ class Node:
         if not isinstance (other, Node):
             return False
         return self.id == other.id 
+        
+        
+    def clear_transactions_log(self):
+        self.transactions_log.clear()
         
         
     def generate_create_transaction(self, asset_type):
@@ -65,8 +67,7 @@ class Node:
         
         return transaction
         
-    
-        
+         
     def generate_proposal(self, transaction):
                         
         proposal = Proposal(
@@ -92,9 +93,4 @@ class Node:
         from Fabric.Network import Network as FabricNetwork
         
         FabricNetwork.leader.transactions_log[transaction.id] = transaction
-            
-    
-        
-                   
-            
             

@@ -2,6 +2,7 @@ from Fabric.Asset import Asset
 from Fabric.Node import Node as FabricNode
 from Fabric.Chaincode import chaincodes
 from Fabric.Transaction import CreateTransaction, ReadTransaction, DeleteTransaction, TransferTransaction
+from Fabric.Block import genesis_block
 
 class Peer (FabricNode):
     
@@ -10,6 +11,7 @@ class Peer (FabricNode):
         id,
     ):
         super().__init__ (id)
+        self.blockchain = [genesis_block]
         self.chaincodes = {}
         
         
@@ -18,6 +20,7 @@ class Peer (FabricNode):
         Peer {self.id}
         """
         
+    
         
     def execute_transaction(self, transaction, test_mode=True):
         if test_mode:
@@ -70,6 +73,10 @@ class Peer (FabricNode):
             self.chaincodes[chaincode.id] = chaincode
             
             
+def peers_clear_logs():
     
-
-
+    from Fabric.Network import Network as FabricNetwork
+    
+    for peer in FabricNetwork.peers.values():
+        peer.clear_transactions_log()
+        

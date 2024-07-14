@@ -1,3 +1,5 @@
+from Configuration import GeneralConfiguration
+from datetime import datetime
 from Fabric.Chaincode import *
 
 class Transaction:
@@ -5,9 +7,12 @@ class Transaction:
     def __init__(self, asset, id=0, chaincode=None):
         self.id = id
         self.asset = asset
+        self.timestamp = datetime.now()
         self.chaincode = chaincode
         self.endorsements = {}
+        self.size = random.choice(GeneralConfiguration.transaction_size)
         self.is_commited = False
+        self.confirmation_time = None
         
         
     def __str__(self):
@@ -16,6 +21,7 @@ class Transaction:
             id: {self.id},
             asset_id: {self.asset.id},
             chaincode_id: {self.chaincode.id},
+            size: {self.size} bytes,
             no_of_endorsement: {len(self.endorsements)}
         )
         """
@@ -93,3 +99,5 @@ def submit_transactions_to_leader(proposals):
         client_id = proposal.client_id
         client = FabricNetwork.clients[client_id]
         client.submit_transaction_to_leader(transaction)
+        
+    

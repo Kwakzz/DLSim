@@ -61,7 +61,8 @@ def main():
         from Fabric.Chaincode import initialize_all_chaincodes_on_peers
         from Fabric.EndorsementPolicy import EndorsementPolicy
         from Fabric.Transaction import peers_execute_transactions, submit_transactions_to_leader
-        from Fabric.Orderer import has_leader_received_majority_acknowledgment
+        from Fabric.Orderer import has_leader_received_majority_acknowledgment, commit_transactions_with_majority_acknowledgment
+        from Fabric.Peer import peers_clear_logs
 
         
         FabricNetwork.initialize_network()
@@ -71,12 +72,22 @@ def main():
             EndorsementPolicy.print()
             proposals = generate_create_transaction_proposals()
             endorsing_peers = EndorsementPolicy.select_endorsers()
+            
             submit_proposals_to_peers(proposals, endorsing_peers)
             proposals_with_majority_endorsement = peers_execute_transactions(endorsing_peers, proposals)
-            submit_transactions_to_leader(proposals_with_majority_endorsement)
+            peers_clear_logs()
+            
+            submit_transactions_to_leader(proposals_with_majority_endorsement) # clients submit transactions to leader
+            
             FabricNetwork.leader.print_transactions_log()
             FabricNetwork.leader.append_entries()
-            has_leader_received_majority_acknowledgment()
+            
+            if has_leader_received_majority_acknowledgment():
+                commit_transactions_with_majority_acknowledgment(proposals_with_majority_endorsement)
+                block = FabricNetwork.leader.create_block()
+                FabricNetwork.leader.broadcast_block(block)
+                print_chain()
+            
         
 
     GeneralConfiguration.simulation_end_time = datetime.now()

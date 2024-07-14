@@ -23,12 +23,12 @@ class Network:
         Network.initialize_orderers()
         Network.select_leader()
         print(f""" 
-            Clients: {len(Network.clients)}
-            Organizations: {len(Network.organizations)}
-            Peers: {len(Network.peers)}
-            Orderers: {len(Network.orderers)}
-            Leader: {Network.leader.id}
-            """)
+        Clients: {len(Network.clients)}
+        Organizations: {len(Network.organizations)}
+        Peers: {len(Network.peers)}
+        Orderers: {len(Network.orderers)}
+        Leader: {Network.leader.id}
+        """)
     
     @staticmethod
     def initialize_clients():

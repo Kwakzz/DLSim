@@ -9,12 +9,12 @@ class EndorsementPolicy:
     
     @staticmethod
     def print():
-        print()
+        print("Endorsement Policy:")
         print("""
-              No of Endorsers: 2 
-              One Endorser from each organization: True 
-              Majority endorsement: True
-              Number of leader nodes: 1
+        No of Endorsers: 2 
+        One Endorser from each organization: True 
+        Majority endorsement: True
+        Number of leader nodes: 1
         """)
         print()
         

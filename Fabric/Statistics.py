@@ -1,51 +1,21 @@
 import random
 from Configuration import GeneralConfiguration
-from Network import Network
+from Fabric.Network import Network as FabricNetwork
 from Util import convert_seconds_to_minutes
 
 transaction_latencies = []
 
+def print_fabric_statistics():
+    print_throughput()
+    print_average_latency()
+    print_average_block_time()
+    print()
 
-def generate_overall_statistics():
-    from Ethereum.Statistics import print_ethereum_statistics
-    from Bitcoin.Statistics import print_bitcoin_statistics
-    from Fabric.Statistics import print_fabric_statistics
-    
-    print("\nOVERALL STATISTICS:\n")
-
-    if GeneralConfiguration.selected_platform == "Ethereum":
-        print_ethereum_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Bitcoin":
-        print_bitcoin_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        print_fabric_statistics()
-        
-        
-def generate_current_statistics():
-    from Ethereum.Statistics import print_ethereum_statistics
-    from Bitcoin.Statistics import print_bitcoin_statistics
-    from Fabric.Statistics import print_fabric_statistics
-    
-    print("\nCURRENT STATISTICS:\n")
-
-    if GeneralConfiguration.selected_platform == "Ethereum":
-        print_ethereum_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Bitcoin":
-        print_bitcoin_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        print_fabric_statistics()
-
-
-# GENERAL
     
 def get_throughput():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_peer_item = random.choice(list(FabricNetwork.peers.items()))
+    random_node = random_peer_item[1]
     transaction_count = 0
     
     for block in random_node.blockchain:
@@ -67,8 +37,8 @@ def print_throughput():
     
 def get_average_latency():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_peer_item = random.choice(list(FabricNetwork.peers.items()))
+    random_node = random_peer_item[1]
     
     for block in random_node.blockchain:
         for transaction in block.transactions.values():
@@ -93,8 +63,8 @@ def print_average_latency():
     
 def get_recent_block_time():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_peer_item = random.choice(list(FabricNetwork.peers.items()))
+    random_node = random_peer_item[1]
     
     if len(random_node.blockchain) < 2:
         print("Blockchain must contain at least two blocks to calculate average block time.")
@@ -111,8 +81,8 @@ def get_recent_block_time():
     
 def get_average_block_time():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_peer_item = random.choice(list(FabricNetwork.peers.items()))
+    random_node = random_peer_item[1]
     
     no_of_block_times = len(random_node.blockchain) - 1
     cumulative_block_time = 0

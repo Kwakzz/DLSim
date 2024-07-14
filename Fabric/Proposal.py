@@ -59,6 +59,8 @@ def submit_proposals_to_peers(proposals, endorsing_peers):
         client = FabricNetwork.clients[client_id]
         client.submit_proposal_to_peers(proposal, endorsing_peers)
         
+    
+        
         
         
         

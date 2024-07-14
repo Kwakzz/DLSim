@@ -1,4 +1,6 @@
 from Fabric.Node import Node as BaseNode
+from datetime import datetime
+
 
 class Orderer (BaseNode):
     
@@ -28,6 +30,10 @@ class Orderer (BaseNode):
                 orderer.transactions_log = self.transactions_log
                 
                 
+    def commit_transaction(self, transaction):
+        transaction.is_committed = True
+                
+                
     def print_transactions_log(self):
         
         print(f"\n{self.id}'s Transactions Log:")
@@ -52,12 +58,12 @@ class Orderer (BaseNode):
         
         cumulative_transaction_size = 0
         
-        transactions_log_copy = list(self.transactions_log.values())
+        transactions_log_copy = list(self.transactions_log.values()) 
         for transaction in transactions_log_copy:
             if cumulative_transaction_size + transaction.size > FabricConfiguration.BLOCK_LIMIT:
                 break
             else:
-                transaction_batch.append
+                transaction_batch.append(self.transactions_log.pop(transaction.id))
                 cumulative_transaction_size = transaction.size
         
         return transaction_batch
@@ -66,14 +72,35 @@ class Orderer (BaseNode):
     def create_block(self):
         
         from Fabric.Block import Block as FabricBlock
+        from Fabric.Network import Network as FabricNetwork
         
         block = FabricBlock()
         transaction_batch = self.create_transaction_batch()
         
         for transaction in transaction_batch:
-            block.transactions.append(transaction)
+            block.transactions[transaction.id] = transaction
+            transaction.confirmation_time = datetime.now()
             
+        block.transaction_count = len(block.transactions)
+        
+        random_peer = next(iter(FabricNetwork.peers.values()))
+        block.parent_hash = random_peer.blockchain[-1].hash
+        
+        block.set_merkle_root()
+        block.set_hash()
+                
+        print(f"{self.id} has created block {block.hash}")
+        print(block)
+        
         return block
+    
+    
+    def broadcast_block(self, block):
+        
+        from Fabric.Network import Network as FabricNetwork
+        
+        for peer in FabricNetwork.peers.values():
+            peer.blockchain.append(block)
 
         
     
@@ -97,7 +124,17 @@ def is_majority_acknowledgment(acknowledgment_count):
     
     from Fabric.Network import Network as FabricNetwork
     
-    count_of_half_of_orderers = len(FabricNetwork.peers) // 2
+    count_of_half_of_orderers = len(FabricNetwork.orderers) // 2
     
     return acknowledgment_count > count_of_half_of_orderers
     
+    
+def commit_transactions_with_majority_acknowledgment(proposals):
+    
+    from Fabric.Network import Network as FabricNetwork
+    
+    for proposal in proposals:
+        transaction = proposal.transaction
+        FabricNetwork.leader.commit_transaction(transaction)
+        
+    print("\nTransactions with majority acknowledgment have been committed.")
