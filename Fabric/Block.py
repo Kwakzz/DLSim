@@ -1,17 +1,18 @@
 from datetime import datetime
-
 from Configuration import GeneralConfiguration
 from Util import double_256_hash, sha256_hash
 
 
 class Block:
     
-    def __init__(self, hash=0, parent_hash=None, transactions={}):
+    def __init__(self, sequence_number, hash=0, parent_hash=None, transactions={}):
         self.hash = hash
         self.parent_hash = parent_hash
         self.timestamp = datetime.now()
         self.transactions = transactions
         self.transaction_count = 0
+        self.sequence_number = sequence_number
+        self.size = 0
         
     
     def generate_merkle_root(self):
@@ -83,9 +84,22 @@ class Block:
     def set_hash(self):
         self.hash = self.generate_hash()
         
+        
+    def __str__(self):
+        size = round(self.size, 2)
+        return f"""
+        Block (
+            Hash: {self.hash},
+            Parent: {self.parent_hash},
+            Timestamp: {self.timestamp},
+            Transaction Count: {self.transaction_count},
+            Sequence Number: {self.sequence_number}
+        )"""
+        
  
 genesis_block = Block(
-    hash='0' * 64
+    hash='0' * 64,
+    sequence_number=0
 )       
         
     

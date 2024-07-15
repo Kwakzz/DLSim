@@ -57,36 +57,28 @@ def main():
     if GeneralConfiguration.selected_platform == "Fabric":
         
         from Fabric.Network import Network as FabricNetwork
-        from Fabric.Proposal import generate_create_transaction_proposals, submit_proposals_to_peers
-        from Fabric.Chaincode import initialize_all_chaincodes_on_peers
         from Fabric.EndorsementPolicy import EndorsementPolicy
-        from Fabric.Transaction import peers_execute_transactions, submit_transactions_to_leader
-        from Fabric.Orderer import has_leader_received_majority_acknowledgment, commit_transactions_with_majority_acknowledgment
-        from Fabric.Peer import peers_clear_logs
+        from Fabric.Node import clients_generate_proposals, clients_submit_proposals_to_endorsing_peers, clients_assemble_endorsements_into_proposals, clients_create_transactions_from_proposals, clients_submit_transactions_to_ordering_service
+        from Fabric.Peer import endorsing_peers_execute_transactions, endorsing_peers_return_proposal_responses_to_clients
+
 
         
         FabricNetwork.initialize_network()
-        initialize_all_chaincodes_on_peers()
         
         for round_count in range(GeneralConfiguration.no_of_rounds):
             EndorsementPolicy.print()
-            proposals = generate_create_transaction_proposals()
-            endorsing_peers = EndorsementPolicy.select_endorsers()
+            EndorsementPolicy.set_endorsers()
+            clients_generate_proposals()
+            clients_submit_proposals_to_endorsing_peers()
+            endorsing_peers_execute_transactions()
+            endorsing_peers_return_proposal_responses_to_clients()
+            clients_assemble_endorsements_into_proposals()
+            clients_create_transactions_from_proposals()
+            clients_submit_transactions_to_ordering_service()
+            block = FabricNetwork.leader.create_block()
+            FabricNetwork.leader.broadcast_block_to_peers(block)
+            print_chain()
             
-            submit_proposals_to_peers(proposals, endorsing_peers)
-            proposals_with_majority_endorsement = peers_execute_transactions(endorsing_peers, proposals)
-            peers_clear_logs()
-            
-            submit_transactions_to_leader(proposals_with_majority_endorsement) # clients submit transactions to leader
-            
-            FabricNetwork.leader.print_transactions_log()
-            FabricNetwork.leader.append_entries()
-            
-            if has_leader_received_majority_acknowledgment():
-                commit_transactions_with_majority_acknowledgment(proposals_with_majority_endorsement)
-                block = FabricNetwork.leader.create_block()
-                FabricNetwork.leader.broadcast_block(block)
-                print_chain()
             
         
 

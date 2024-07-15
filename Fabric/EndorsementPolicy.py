@@ -6,9 +6,11 @@ class EndorsementPolicy:
     no_of_endorsers = 2
     one_from_each_organization = True
     majority_endorsement = True
+    endorsing_peers = []
     
     @staticmethod
     def print():
+        print()
         print("Endorsement Policy:")
         print("""
         No of Endorsers: 2 
@@ -19,7 +21,7 @@ class EndorsementPolicy:
         print()
         
         
-    def select_endorsers():
+    def set_endorsers():
         
         from Fabric.Network import Network as FabricNetwork
         
@@ -29,6 +31,6 @@ class EndorsementPolicy:
         organization_one_endorser = random.choice(list(organization_one))
         organization_two_endorser = random.choice(list(organization_two))
         
-        print(f"{organization_one_endorser.id} and {organization_two_endorser.id} have been selected as endorsers.")
+        print(f"{organization_one_endorser.id} and {organization_two_endorser.id} have been selected as endorsers.\n")
         
-        return [organization_one_endorser, organization_two_endorser]
+        EndorsementPolicy.endorsing_peers = [organization_one_endorser, organization_two_endorser]

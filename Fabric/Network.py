@@ -22,6 +22,10 @@ class Network:
         Network.initialize_organizations()
         Network.initialize_orderers()
         Network.select_leader()
+        
+        
+    @staticmethod
+    def print_network():
         print(f""" 
         Clients: {len(Network.clients)}
         Organizations: {len(Network.organizations)}
@@ -29,6 +33,7 @@ class Network:
         Orderers: {len(Network.orderers)}
         Leader: {Network.leader.id}
         """)
+    
     
     @staticmethod
     def initialize_clients():
@@ -69,7 +74,6 @@ def create_client():
 def create_peer():
     id = generate_id()
     peer = Peer(id=id)
-    peer.initialize_chaincodes()
     return peer
 
 

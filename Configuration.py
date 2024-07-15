@@ -94,11 +94,14 @@ class FabricConfiguration:
     NO_OF_PEERS_PER_ORGANIZATION = 2
     NO_OF_ORDERERS = 3
     
-    BLOCK_LIMIT = 1024 *2 #2MB
+    BATCH_TIMEOUT = 2
+    MAX_TRANSACTION_COUNT_PER_BLOCK = 500
+    ABSOLUTE_MAX_BYTES = 1024 *10 #10 MB
+    PREFFERED_MAX_BYTES = 1024*2 #2MB
     
-    TRANSACTION_TYPES = ["create", "read", "transfer", "delete"]
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     
     proposal_counter = 0
+    block_sequence_number = 1
     
     

@@ -115,6 +115,13 @@ class Block:
     
     
     def __str__(self):
-        size_in_mb = convert_bytes_to_megabytes(self.size)
-        return f"Block (\Hash: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {size_in_mb} MB\n)\n"
+        size = round(self.size, 2)
+        return f"""
+        Block (
+            Hash: {self.hash},
+            Parent: {self.parent_hash},
+            Timestamp: {self.timestamp},
+            Transaction Count: {self.transaction_count},
+            Size: {size} bytes\n
+        )"""
             

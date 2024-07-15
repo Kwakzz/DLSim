@@ -1,10 +1,11 @@
 from datetime import datetime
+from Util import generate_id
 
 
 class Asset:
     
-    def __init__(self, id=None, type=None, owner_id=None):
-        self.id = id
+    def __init__(self, type, owner_id):
+        self.id = generate_id()
         self.type = type
         self.owner_id = owner_id
         self.time_created = datetime.now()

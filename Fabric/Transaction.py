@@ -1,17 +1,18 @@
+import random
 from Configuration import GeneralConfiguration
 from datetime import datetime
-from Fabric.Chaincode import *
+
+from Util import sha256_hash
 
 class Transaction:
     
-    def __init__(self, asset, id=0, chaincode=None):
+    def __init__(self, asset, client_id, nonce, id=0):
         self.id = id
+        self.client_id = client_id
+        self.nonce = nonce
         self.asset = asset
         self.timestamp = datetime.now()
-        self.chaincode = chaincode
-        self.endorsements = {}
         self.size = random.choice(GeneralConfiguration.transaction_size)
-        self.is_commited = False
         self.confirmation_time = None
         
         
@@ -20,47 +21,23 @@ class Transaction:
         Transaction(
             id: {self.id},
             asset_id: {self.asset.id},
-            chaincode_id: {self.chaincode.id},
+            client_id: {self.client_id},
+            nonce: {self.nonce},
+            timestamp: {self.timestamp},
             size: {self.size} bytes,
-            no_of_endorsement: {len(self.endorsements)}
         )
         """
         
         
-    def has_majority_endorsement(self):
-        from Fabric.Network import Network as FabricNetwork
-        
-        no_of_endorsements = len(self.endorsements)
-        count_of_half_of_peers = len(FabricNetwork.peers) // 2
-        
-        return no_of_endorsements > count_of_half_of_peers
+    def generate_transaction_id(self):
+        id = self.nonce.to_bytes(4, byteorder='little') + bytes.fromhex(self.client_id)
+        return (sha256_hash(id))
+    
+    
+    def set_transaction_id(self):
+        self.id = self.generate_transaction_id()
 
         
-        
-class CreateTransaction(Transaction):
-    
-    def __init__(self, owner, asset, id=0, chaincode=create_asset_chaincode):
-        super().__init__(asset=asset, id=id, chaincode=chaincode)
-        self.owner = owner
-         
-        
-class TransferTransaction(Transaction):
-    
-    def __init__(self, recipient, asset, id=0, chaincode=transfer_asset_chaincode):
-        super().__init__(asset=asset, id=id, chaincode=chaincode)
-        self.recipient = recipient
-    
-    
-class ReadTransaction(Transaction):
-    
-    def __init__(self, asset, id=0, chaincode=read_asset_chaincode):
-        super().__init__(asset=asset, id=id, chaincode=chaincode)
-    
-    
-class DeleteTransaction(Transaction):
-    
-    def __init__(self, asset, id=0, chaincode=delete_asset_chaincode):
-        super().__init__(asset=asset, id=id, chaincode=chaincode)
     
 
 

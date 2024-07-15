@@ -1,6 +1,5 @@
 import random
 from Configuration import GeneralConfiguration
-from Network import Network
 from Util import convert_seconds_to_minutes
 
 transaction_latencies = []
@@ -44,8 +43,16 @@ def generate_current_statistics():
     
 def get_throughput():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_node = None
+    
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = random.choice(list(Network.nodes.values()))
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network as FabricNetwork
+        random_node = random.choice(list(FabricNetwork.peers.values()))
+        
     transaction_count = 0
     
     for block in random_node.blockchain:
@@ -67,9 +74,16 @@ def print_throughput():
     
 def get_average_latency():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_node = None
     
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = random.choice(list(Network.nodes.values()))
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network as FabricNetwork
+        random_node = random.choice(list(FabricNetwork.peers.values()))
+            
     for block in random_node.blockchain:
         for transaction in block.transactions.values():
             latency = (transaction.confirmation_time - transaction.timestamp).total_seconds()
@@ -93,8 +107,15 @@ def print_average_latency():
     
 def get_recent_block_time():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_node = None
+    
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = random.choice(list(Network.nodes.values()))
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network as FabricNetwork
+        random_node = random.choice(list(FabricNetwork.peers.values()))
     
     if len(random_node.blockchain) < 2:
         print("Blockchain must contain at least two blocks to calculate average block time.")
@@ -111,9 +132,16 @@ def get_recent_block_time():
     
 def get_average_block_time():
     
-    random_node_item = random.choice(list(Network.nodes.items()))
-    random_node = random_node_item[1]
+    random_node = None
     
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = random.choice(list(Network.nodes.values()))
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network as FabricNetwork
+        random_node = random.choice(list(FabricNetwork.peers.values()))
+            
     no_of_block_times = len(random_node.blockchain) - 1
     cumulative_block_time = 0
     

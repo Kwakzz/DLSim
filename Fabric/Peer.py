@@ -1,7 +1,6 @@
 from Fabric.Asset import Asset
+from Fabric.EndorsementPolicy import EndorsementPolicy
 from Fabric.Node import Node as FabricNode
-from Fabric.Chaincode import chaincodes
-from Fabric.Transaction import CreateTransaction, ReadTransaction, DeleteTransaction, TransferTransaction
 from Fabric.Block import genesis_block
 
 class Peer (FabricNode):
@@ -11,8 +10,9 @@ class Peer (FabricNode):
         id,
     ):
         super().__init__ (id)
+        self.proposals_log = []
+        self.simulated_proposals = []
         self.blockchain = [genesis_block]
-        self.chaincodes = {}
         
         
     def __str__(self):
@@ -21,62 +21,67 @@ class Peer (FabricNode):
         """
         
     
+    def execute_transaction(self, proposal):
         
-    def execute_transaction(self, transaction, test_mode=True):
-        if test_mode:
+        from Fabric.Transaction import Transaction
+        
+        try:
+            asset = Asset(type=proposal.asset_type, owner_id=proposal.client_id)
+            transaction = Transaction(asset=asset, client_id=proposal.client_id, nonce=proposal.nonce)
             
-            if transaction.chaincode:
-                
-                try:
-                    contract = transaction.chaincode.contract
-                    
-                    if isinstance(transaction, CreateTransaction):
-                        asset = Asset(type=transaction.asset.type, owner_id=transaction.owner.id)
-                        contract(asset)
-                        transaction.endorsements[self.id] = True
-                        return True
-                    
-                    elif isinstance(transaction, ReadTransaction) or isinstance(transaction, DeleteTransaction):
-                        asset = transaction.asset 
-                        contract(asset)
-                        transaction.endorsements[self.id] = True
-                        return True
-                    
-                    elif isinstance(transaction, TransferTransaction):
-                        asset = transaction.asset
-                        recipient = transaction.recipient
-                        contract(asset, recipient)
-                        transaction.endorsements[self.id] = True
-                        return True
-                    
-                    else:
-                        print("Unsupported transaction type for test mode.")
-                        return False
-                    
-                except Exception as e:
-                    print(f"Transaction execution failed: {e}")
-                    return False
+            if transaction:
+                proposal.endorsements[self.id] = True
+                # print(transaction)
                 
             else:
-                print("No contract found for this transaction.")
-                transaction.is_endorsed = False
-                return False
+                print("Transaction creation failed. Proposal was not endorsed.")
+                
+        except Exception as e:
+            print(f"Transaction execution failed: {e}")
             
-        else:
-            # Actual execution: Implement the actual transaction execution logic here
-            pass
-
+        self.simulated_proposals.append(proposal)
+        return proposal
     
     
-    def initialize_chaincodes(self):
-        for chaincode in chaincodes:
-            self.chaincodes[chaincode.id] = chaincode
-            
-            
-def peers_clear_logs():
-    
-    from Fabric.Network import Network as FabricNetwork
-    
-    for peer in FabricNetwork.peers.values():
-        peer.clear_transactions_log()
+    def return_proposal_response_to_client(self, proposal_response):
         
+        from Fabric.Network import Network as FabricNetwork
+        
+        client = FabricNetwork.clients[proposal_response.client_id]
+        client.proposal_responses.append(proposal_response)
+            
+            
+    def proposals_log_is_empty(self):
+        return len(self.proposals_log) == 0
+    
+    
+    def simulated_proposals_is_empty(self):
+        return len(self.simulated_proposals) == 0
+
+
+
+
+def endorsing_peers_execute_transactions():
+    
+    print("Proposals received from clients.")
+    print("\nEndorsing peers are executing transactions...")
+    
+    # print("\nProposal Responses:")
+        
+    for endorsing_peer in EndorsementPolicy.endorsing_peers:
+        while not endorsing_peer.proposals_log_is_empty():
+            proposal = endorsing_peer.proposals_log.pop()
+            simulated_proposal = endorsing_peer.execute_transaction(proposal)
+            # print(simulated_proposal)
+            
+    print("Transactions have been executed.")
+            
+            
+def endorsing_peers_return_proposal_responses_to_clients():
+    
+    print("\nEndorsing peers are returning proposal responses to clients...")
+    
+    for endorsing_peer in EndorsementPolicy.endorsing_peers:
+        while not endorsing_peer.simulated_proposals_is_empty():
+            proposal_response = endorsing_peer.simulated_proposals.pop()
+            endorsing_peer.return_proposal_response_to_client(proposal_response)
