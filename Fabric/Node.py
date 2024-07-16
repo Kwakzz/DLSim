@@ -74,6 +74,13 @@ class Node:
         FabricNetwork.leader.transactions_log.append(transaction)
         
         
+    def deliver(self, sequence_number):
+        from Fabric.Network import Network as FabricNetwork
+        random_peer = FabricNetwork.get_random_peer()
+        
+        return random_peer.blockchain[sequence_number-1]
+        
+        
     def generated_proposals_is_empty(self):
         return len(self.generated_proposals) == 0
         

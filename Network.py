@@ -15,7 +15,12 @@ class Network:
         for node in Network.nodes.values():
             print(node)
 
-        
+
+    @staticmethod
+    def get_random_node():
+        random_node = random.choice(list(Network.nodes.values()))
+        return random_node
+    
         
     @staticmethod
     def initialize_network():

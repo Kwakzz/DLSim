@@ -68,6 +68,14 @@ class Network:
     
     
     @staticmethod
+    def get_random_peer():
+        random_peer = random.choice(list(Network.peers.values()))
+        return random_peer
+    
+    
+        
+    
+    @staticmethod
     def get_followers():
         followers = {}
         for orderer in Network.orderers.values():
