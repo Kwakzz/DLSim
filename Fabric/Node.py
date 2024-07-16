@@ -94,7 +94,7 @@ def clients_generate_proposals():
     print("Clients are generating proposals...")
     proposal_count = 0
     
-    for i in range(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND):
+    for i in range(FabricConfiguration.PROPOSAL_COUNT_PER_ROUND):
         client = random.choice(list(FabricNetwork.clients.values()))
         proposal = client.generate_proposal()
         proposal_count += 1

@@ -16,6 +16,7 @@ class Orderer (BaseNode):
         self.transactions_log = []
         self.status = status
 
+
     def __str__(self):
         return f"""
         Orderer {self.id},
@@ -66,60 +67,52 @@ class Orderer (BaseNode):
         
         if self.transactions_log == FabricNetwork.leader.transactions_log:
             return True
-        
-        
-    def create_transaction_batch(self):
-        
-        from Configuration import FabricConfiguration
-        
-        transaction_batch = []
-        
-        cumulative_transaction_size = 0
-        
-        transactions_log_copy = self.transactions_log
-        
-        sleep(FabricConfiguration.BATCH_TIMEOUT)
-         
-        for transaction in transactions_log_copy:
-            if (cumulative_transaction_size + transaction.size > FabricConfiguration.PREFFERED_MAX_BYTES) or (len(transaction_batch) == FabricConfiguration.MAX_TRANSACTION_COUNT_PER_BLOCK):
-                break
-            else:
-                transaction_batch.append(transaction)
-                self.transactions_log.remove(transaction)
-                cumulative_transaction_size = transaction.size
-        
-        return transaction_batch
-    
+
     
     def create_block(self):
-        
         from Fabric.Block import Block as FabricBlock
         from Fabric.Network import Network as FabricNetwork
         from Configuration import FabricConfiguration
-        
+        from time import sleep
+        from datetime import datetime
+
         block = FabricBlock(
             sequence_number=FabricConfiguration.block_sequence_number
         )
         FabricConfiguration.block_sequence_number += 1
-        transaction_batch = self.create_transaction_batch()
-        
-        for transaction in transaction_batch:
-            block.transactions[transaction.id] = transaction
-            block.size += transaction.size
-            transaction.confirmation_time = datetime.now()
-            
+
+        cumulative_transaction_size = 0
+
+        sleep(FabricConfiguration.BATCH_TIMEOUT)
+
+        transactions_to_remove = []
+
+        for transaction in self.transactions_log:
+            # if (cumulative_transaction_size + transaction.size > FabricConfiguration.PREFFERED_MAX_BYTES) or (len(block.transactions) == FabricConfiguration.MAX_TRANSACTION_COUNT_PER_BLOCK):
+            if len(block.transactions) == FabricConfiguration.MAX_TRANSACTION_COUNT_PER_BLOCK:
+                break
+            else:
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_size += transaction.size
+                transaction.confirmation_time = datetime.now()
+                transactions_to_remove.append(transaction)
+
+        for transaction in transactions_to_remove:
+            self.transactions_log.remove(transaction)
+
         block.transaction_count = len(block.transactions)
-        
+
         random_peer = next(iter(FabricNetwork.peers.values()))
         block.parent_hash = random_peer.blockchain[-1].hash
-        
+
         block.set_merkle_root()
         block.set_hash()
-                
+
         print(f"\n{self.id} has created block {block.hash}")
         print(block)
-        
+
         return block
+
     
     
     def broadcast_block_to_peers(self, block):

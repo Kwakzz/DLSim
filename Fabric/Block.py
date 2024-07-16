@@ -5,11 +5,11 @@ from Util import double_256_hash, sha256_hash
 
 class Block:
     
-    def __init__(self, sequence_number, hash=0, parent_hash=None, transactions={}):
+    def __init__(self, sequence_number, hash=0, parent_hash=None, transactions=None):
         self.hash = hash
         self.parent_hash = parent_hash
         self.timestamp = datetime.now()
-        self.transactions = transactions
+        self.transactions = transactions if transactions is not None else {}
         self.transaction_count = 0
         self.sequence_number = sequence_number
         self.size = 0

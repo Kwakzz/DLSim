@@ -6,7 +6,7 @@ available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 5
+    no_of_rounds = 25
     
     simulation_start_time = None
     simulation_end_time = None
@@ -87,17 +87,17 @@ class BitcoinConfiguration:
     
 class FabricConfiguration:
     
-    PROPOSAL_COUNT_PER_ROUND = 3500
+    PROPOSAL_COUNT_PER_ROUND = 6500
     
     NO_OF_ORGANIZATIONS = 2
-    NO_OF_CLIENTS = 10
-    NO_OF_PEERS_PER_ORGANIZATION = 2
-    NO_OF_ORDERERS = 3
+    NO_OF_CLIENTS = 30
+    NO_OF_PEERS_PER_ORGANIZATION = 6
+    NO_OF_ORDERERS = 5
     
     BATCH_TIMEOUT = 2
-    MAX_TRANSACTION_COUNT_PER_BLOCK = 500
-    ABSOLUTE_MAX_BYTES = 1024 *10 #10 MB
-    PREFFERED_MAX_BYTES = 1024*2 #2MB
+    MAX_TRANSACTION_COUNT_PER_BLOCK = 5000
+    ABSOLUTE_MAX_BYTES = 1024*1024 *99 #99 MB
+    PREFFERED_MAX_BYTES = 1024*1024*2 #2MB
     
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     

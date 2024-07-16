@@ -67,12 +67,12 @@ def main():
         
         FabricNetwork.initialize_network()
         FabricNetwork.select_leader()
+        EndorsementPolicy.print()
         
         election_thread = threading.Thread(target=Raft.start_election)
         election_thread.start()
         
         for round_count in range(GeneralConfiguration.no_of_rounds):
-            EndorsementPolicy.print()
             EndorsementPolicy.set_endorsers()
             clients_generate_proposals()
             clients_submit_proposals_to_endorsing_peers()
