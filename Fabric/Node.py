@@ -70,7 +70,7 @@ class Node:
     def submit_transaction_to_ordering_service(self, transaction):
         
         from Fabric.Network import Network as FabricNetwork
-        
+                
         FabricNetwork.leader.transactions_log.append(transaction)
         
         
@@ -134,7 +134,7 @@ def clients_create_transactions_from_proposals():
     for client in FabricNetwork.clients.values():
         while not client.generated_proposals_is_empty():
             proposal = client.generated_proposals.pop()
-            if proposal.has_majority_endorsement():
+            if proposal.has_reached_endorsement_quorum():
                 majority_endorsement_count += 1
                 transaction = client.create_transaction(proposal)
                 # print(transaction)

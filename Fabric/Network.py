@@ -61,8 +61,56 @@ class Network:
             
     @staticmethod
     def select_leader():
-        Network.leader = random.choice(list(Network.orderers.values()))
+        leader = random.choice(list(Network.orderers.values()))
+        leader.status = FabricConfiguration.ORDERER_TYPES[2]
+        Network.leader = leader
         return Network.leader
+    
+    
+    @staticmethod
+    def get_followers():
+        followers = {}
+        for orderer in Network.orderers.values():
+            if orderer.status == FabricConfiguration.ORDERER_TYPES[0]:
+                followers[orderer.id] = orderer
+        return followers
+                
+                
+    @staticmethod
+    def get_candidates():
+        candidates = {}
+        for orderer in Network.orderers.values():
+            if orderer.status == FabricConfiguration.ORDERER_TYPES[1]:
+                candidates[orderer.id] = orderer
+        return candidates
+    
+    
+    @staticmethod
+    def get_peers():
+        peers = {}
+        for peer in Network.peers.values():
+            peers[peer.id] = peer
+        return peers
+            
+    
+    @staticmethod
+    def get_no_of_followers():
+        return len(Network.get_followers())
+    
+    
+    @staticmethod
+    def get_no_of_candidates():
+        return len(Network.get_candidates())
+    
+    
+    @staticmethod
+    def get_no_of_peers():
+        return len(Network.get_peers())
+    
+    
+    @staticmethod
+    def get_follower_quorum():
+        return (Network.get_no_of_followers()//2) + 1
     
     
 def create_client():

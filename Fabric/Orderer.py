@@ -1,6 +1,8 @@
+import random
 from time import sleep
 from Fabric.Node import Node as BaseNode
 from datetime import datetime
+from Configuration import FabricConfiguration, GeneralConfiguration
 
 
 class Orderer (BaseNode):
@@ -8,14 +10,31 @@ class Orderer (BaseNode):
     def __init__(
         self, 
         id,
+        status=FabricConfiguration.ORDERER_TYPES[0]
     ):
         super().__init__ (id)
         self.transactions_log = []
+        self.status = status
 
     def __str__(self):
         return f"""
-        Orderer {self.id}
+        Orderer {self.id},
+        Status: {self.status}
         """
+    
+    
+    def request_votes(self):
+        
+        votes = 1 # candidate votes for himself
+        
+        from Fabric.Network import Network as FabricNetwork  
+        
+        for follower in FabricNetwork.get_followers().values():
+            vote = random.choice([True, False])
+            if vote:
+                votes+=1
+                
+        return votes 
         
         
     def append_entries(self): 
@@ -25,10 +44,13 @@ class Orderer (BaseNode):
         
         from Fabric.Network import Network as FabricNetwork
         
+        print("Leader is replicating its log in follower nodes...")
         for orderer in FabricNetwork.orderers.values():
             if orderer is not self:
                 orderer.transactions_log = self.transactions_log
-                
+        
+        print("Followers have written to their logs.")
+        
                 
     def print_transactions_log(self):
         
@@ -103,6 +125,9 @@ class Orderer (BaseNode):
     def broadcast_block_to_peers(self, block):
         
         from Fabric.Network import Network as FabricNetwork
+        
+        propagation_delay = GeneralConfiguration.calculate_block_propagation_delay(FabricNetwork.get_no_of_peers(), block.size)
+        sleep(propagation_delay)
         
         for peer in FabricNetwork.peers.values():
             peer.blockchain.append(block)

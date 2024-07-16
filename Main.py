@@ -1,4 +1,5 @@
 from datetime import datetime
+import threading
 from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
 from Transaction import create_random_transactions
 from Node import update_balances
@@ -60,10 +61,15 @@ def main():
         from Fabric.EndorsementPolicy import EndorsementPolicy
         from Fabric.Node import clients_generate_proposals, clients_submit_proposals_to_endorsing_peers, clients_assemble_endorsements_into_proposals, clients_create_transactions_from_proposals, clients_submit_transactions_to_ordering_service
         from Fabric.Peer import endorsing_peers_execute_transactions, endorsing_peers_return_proposal_responses_to_clients
+        from Fabric.Consensus import Consensus as Raft
 
 
         
         FabricNetwork.initialize_network()
+        FabricNetwork.select_leader()
+        
+        election_thread = threading.Thread(target=Raft.start_election)
+        election_thread.start()
         
         for round_count in range(GeneralConfiguration.no_of_rounds):
             EndorsementPolicy.print()
@@ -74,10 +80,20 @@ def main():
             endorsing_peers_return_proposal_responses_to_clients()
             clients_assemble_endorsements_into_proposals()
             clients_create_transactions_from_proposals()
-            clients_submit_transactions_to_ordering_service()
-            block = FabricNetwork.leader.create_block()
-            FabricNetwork.leader.broadcast_block_to_peers(block)
-            print_chain()
+            if FabricNetwork.leader:
+                clients_submit_transactions_to_ordering_service()
+                FabricNetwork.leader.append_entries()
+                # FabricNetwork.leader.print_transactions_log()
+                block = FabricNetwork.leader.create_block()
+                FabricNetwork.leader.broadcast_block_to_peers(block)
+                print_chain()
+                GeneralConfiguration.simulation_end_time = datetime.now()
+                generate_current_statistics()
+            else: 
+                print("There's currently no leader.")
+                
+        Raft.stop_election = True
+        election_thread.join()
             
             
         

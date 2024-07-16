@@ -101,6 +101,14 @@ class FabricConfiguration:
     
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     
+    ORDERER_TYPES = ["Follower", "Candidate", "Leader"]
+    
+    election_timeout = random.choice([150, 300]) # milliseconds
+    
+    HEARTBEAT_TIMEOUT = 0
+    
+    LEADER_TIMEOUT = 40 # 10 seconds
+    
     proposal_counter = 0
     block_sequence_number = 1
     

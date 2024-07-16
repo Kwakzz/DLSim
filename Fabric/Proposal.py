@@ -22,10 +22,10 @@ class Proposal:
         """
         
         
-    def has_majority_endorsement(self):
+    def has_reached_endorsement_quorum(self):
         
         no_of_endorsements = len(self.endorsements)
-        endorsement_threshold = len(EndorsementPolicy.endorsing_peers) // 2 # more than half of endorsing peers must endorse a transaction for it to be valid.
+        endorsement_quorum = (len(EndorsementPolicy.endorsing_peers) // 2) + 1 # more than half of endorsing peers must endorse a transaction for it to be valid.
         
-        return no_of_endorsements > endorsement_threshold
+        return no_of_endorsements > endorsement_quorum or no_of_endorsements == endorsement_quorum
         
