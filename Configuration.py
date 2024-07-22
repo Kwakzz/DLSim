@@ -25,7 +25,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[2]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -87,7 +87,9 @@ class BitcoinConfiguration:
     
 class FabricConfiguration:
     
-    PROPOSAL_COUNT_PER_ROUND = 6500
+    transaction_size = range(3000, 4000)
+    
+    PROPOSAL_COUNT_PER_ROUND = 7500
     
     NO_OF_ORGANIZATIONS = 2
     NO_OF_CLIENTS = 30
@@ -95,9 +97,9 @@ class FabricConfiguration:
     NO_OF_ORDERERS = 5
     
     BATCH_TIMEOUT = 2
-    MAX_TRANSACTION_COUNT_PER_BLOCK = 5000
-    ABSOLUTE_MAX_BYTES = 1024*1024 *99 #99 MB
-    PREFERRED_MAX_BYTES = 1024*1024*2 #2MB
+    MAX_TRANSACTION_COUNT_PER_BLOCK = 500
+    ABSOLUTE_MAX_BYTES = 1024*1024 *49 #99 MB
+    PREFERRED_MAX_BYTES = MAX_TRANSACTION_COUNT_PER_BLOCK * 3500 # 3500 bytes is average transaction size
     
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     

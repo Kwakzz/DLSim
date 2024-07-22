@@ -1,5 +1,5 @@
 import random
-from Configuration import GeneralConfiguration
+from Configuration import FabricConfiguration
 from datetime import datetime
 
 from Util import sha256_hash
@@ -12,7 +12,7 @@ class Transaction:
         self.nonce = nonce
         self.asset = asset
         self.timestamp = datetime.now()
-        self.size = random.choice(GeneralConfiguration.transaction_size)
+        self.size = random.choice(FabricConfiguration.transaction_size)
         self.confirmation_time = None
         
         

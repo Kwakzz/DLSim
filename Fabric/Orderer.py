@@ -91,6 +91,15 @@ class Orderer (BaseNode):
         for transaction in self.transactions_log:
             # if (cumulative_transaction_size + transaction.size > FabricConfiguration.PREFFERED_MAX_BYTES) or (len(block.transactions) == FabricConfiguration.MAX_TRANSACTION_COUNT_PER_BLOCK):
             if len(block.transactions) == FabricConfiguration.MAX_TRANSACTION_COUNT_PER_BLOCK:
+                if (cumulative_transaction_size + transaction.size) > FabricConfiguration.PREFERRED_MAX_BYTES:
+                    break
+            if transaction.size > FabricConfiguration.ABSOLUTE_MAX_BYTES:
+                continue
+            if transaction.size > FabricConfiguration.PREFERRED_MAX_BYTES and transaction.size < FabricConfiguration.ABSOLUTE_MAX_BYTES:
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_size += transaction.size
+                transaction.confirmation_time = datetime.now()
+                transactions_to_remove.append(transaction)
                 break
             else:
                 block.transactions[transaction.id] = transaction

@@ -19,7 +19,7 @@ class Network (BaseNetwork):
     @staticmethod
     def adjust_base_fee(latest_block):
         target_gas_usage = latest_block.target_gas_usage
-        gas_deviation = latest_block.gas_used = latest_block.target_gas_usage
+        gas_deviation = abs(latest_block.gas_used - latest_block.target_gas_usage)
         base_fee_change_rate = EthereumConfiguration.base_fee_change_rate
         current_base_fee = EthereumConfiguration.current_base_fee
         new_base_fee = current_base_fee * (1+ (gas_deviation/target_gas_usage) * base_fee_change_rate)

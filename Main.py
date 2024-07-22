@@ -31,6 +31,7 @@ def main():
             Slot.run_slot()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
+            EthereumNetwork.adjust_base_fee()
             update_balances()
 
         
