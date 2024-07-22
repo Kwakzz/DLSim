@@ -48,14 +48,15 @@ class Block (BaseBlock):
         size_in_bytes = round(self.size, 2)
         return f"""
         Block (\n
-            Hash: {self.hash}, \n
-            Parent: {self.parent_hash}, \n
-            Timestamp: {self.timestamp}, \n
-            Transaction Count: {self.transaction_count}, \n
-            Gas Used: {self.gas_used} units, \n
-            Size: {size_in_bytes} bytes, \n
-            Base Fee Used: {convert_eth_to_gwei(self.base_fee)} gwei, \n
-            Slot: {self.slot} \n
+            Hash: {self.hash}, 
+            Parent: {self.parent_hash}, 
+            Timestamp: {self.timestamp},
+            Block Height: {self.height},
+            Transaction Count: {self.transaction_count}, 
+            Gas Used: {self.gas_used} units, 
+            Size: {size_in_bytes} bytes, 
+            Base Fee Used: {convert_eth_to_gwei(self.base_fee)} gwei, 
+            Slot: {self.slot} 
         )
         """
         

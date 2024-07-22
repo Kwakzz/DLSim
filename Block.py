@@ -11,6 +11,7 @@ class Block:
         self.merkle_root = merkle_root
         self.transactions = transactions if transactions is not None else {}
         self.transaction_count = transaction_count
+        self.height = 0
         self.size = size
         
         
@@ -32,9 +33,9 @@ class Block:
         print(f"{self.hash} has been added to the chain.\n")
         
         
-    def finalize_transactions(self, creator):
+    def finalize_transactions(self, block_creator):
         for transaction in self.transactions.values():
-            transaction.finalize(creator)
+            transaction.finalize(block_creator)
         print(f"Block {self.hash} transactions have been finalized.")
     
     

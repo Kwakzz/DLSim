@@ -55,6 +55,7 @@ class Block (BaseBlock):
             Hash: {self.hash}, 
             Parent: {self.parent_hash}, 
             Timestamp: {self.timestamp}, 
+            Block Height: {self.height},
             Transaction Count: {self.transaction_count}, 
             Nonce: {self.nonce} units, 
             Size: {size_in_bytes} bytes, 

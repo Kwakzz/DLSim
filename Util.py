@@ -31,11 +31,11 @@ def print_chain():
     
     if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
         from Network import Network
-        random_node = next(iter(Network.nodes.values()))
+        random_node = Network.get_random_node()
         
     if GeneralConfiguration.selected_platform == "Fabric":
         from Fabric.Network import Network
-        random_node = next(iter(Network.peers.values()))
+        random_node = Network.get_random_peer()
     
     print ("\nBlockchain:", end=" ")
     
@@ -43,6 +43,22 @@ def print_chain():
     for block in random_node.blockchain:
         print(block.hash, end="->")
     print("]")
+    
+    
+def get_chain_length():
+    
+    random_node = None
+    
+    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+        from Network import Network
+        random_node = Network.get_random_node()
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network
+        random_node = Network.get_random_peer()
+        
+    blockchain_length = len(random_node.blockchain)
+    return blockchain_length
     
 
     

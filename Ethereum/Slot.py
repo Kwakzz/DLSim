@@ -8,7 +8,6 @@ from Transaction import create_random_transactions
 class Slot:
     
     current_slot_number = 0
-    slot_thread = None
     block_proposers = {}
     
     

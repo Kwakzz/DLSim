@@ -4,6 +4,7 @@ from Configuration import EthereumConfiguration
 from Ethereum.Block import Block as EthereumBlock
 from Ethereum.DepositContract import DepositContract
 from Node import Node as BaseNode
+from Util import get_chain_length
 
 class Node (BaseNode):
     
@@ -69,6 +70,7 @@ class Node (BaseNode):
         
         block.gas_used=cumulative_transaction_gas
         block.size = cumulative_transaction_size
+        block.height = get_chain_length()
         
         block.transaction_count = len(block.transactions)
         
@@ -85,8 +87,7 @@ class Node (BaseNode):
     def generate_secret_value(self):
         import secrets  
         return secrets.token_bytes(32)
-        
-        
+            
         
     def __str__(self):
         return f"Node(ID: {self.id}, Balance: {self.balance} ETH)\n"

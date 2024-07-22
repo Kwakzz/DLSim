@@ -2,8 +2,6 @@ import random
 from Configuration import GeneralConfiguration
 from Util import convert_seconds_to_minutes
 
-transaction_latencies = []
-
 
 def generate_overall_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
@@ -83,21 +81,26 @@ def get_average_latency():
     if GeneralConfiguration.selected_platform == "Fabric":
         from Fabric.Network import Network as FabricNetwork
         random_node = FabricNetwork.get_random_peer()
+        
+    sum_of_latencies = 0
+    transaction_count = 0
             
-    for block in random_node.blockchain:
-        for transaction in block.transactions.values():
-            latency = (transaction.confirmation_time - transaction.timestamp).total_seconds()
-            record_latency(latency)
+    if len(random_node.blockchain) > 1:
+        for block in random_node.blockchain:
+            if len(list(block.transactions.values())) != 0:
+                for transaction in block.transactions.values():
+                    transaction_count += 1
+                    latency = (transaction.confirmation_time - transaction.timestamp).total_seconds()
+                    sum_of_latencies += latency
+                
+    average_latency = 0
+       
+    if transaction_count != 0:     
+        average_latency = sum_of_latencies/transaction_count
+        average_latency_in_minutes = convert_seconds_to_minutes(average_latency)
+        average_latency = round(average_latency_in_minutes, 2)
             
-    average_latency = sum(transaction_latencies)/len(transaction_latencies)
-    average_latency_in_minutes = convert_seconds_to_minutes(average_latency)
-    average_latency = round(average_latency_in_minutes, 2)
-    
     return average_latency
-
-
-def record_latency(latency):
-    transaction_latencies.append(latency)
     
     
 def print_average_latency():

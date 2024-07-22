@@ -2,7 +2,7 @@ import random
 import time
 from Bitcoin.Block import Block as BitcoinBlock
 from Configuration import BitcoinConfiguration
-from Util import double_256_hash, sha256_hash
+from Util import double_256_hash, get_chain_length, sha256_hash
 from Bitcoin.Nonce import Nonce
 from Bitcoin.Block import genesis_block
 from Node import Node as BaseNode
@@ -64,6 +64,7 @@ class Node (BaseNode):
         
         block.size=cumulative_transaction_size
         block.transaction_count = len(block.transactions)
+        block.height = get_chain_length()
         
         block.parent_hash = self.blockchain[-1].hash
         

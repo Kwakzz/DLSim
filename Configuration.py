@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 
 
-available_platforms = ["Bitcoin", "Ethereum", "Fabric"]
+available_platforms = ["Bitcoin", "Ethereum", "Fabric", "Slimcoin"]
 
 class GeneralConfiguration:
         
@@ -12,20 +12,20 @@ class GeneralConfiguration:
     simulation_end_time = None
         
     TRANSACTION_COUNT_PER_ROUND = 2000
-    transaction_size = range(250, 1000) # in bytes
+    transaction_size = range(100, 1200) # in bytes
     
-    block_propagation_delay = 10
+    # block_propagation_delay = 10
     
     MAXIMUM_INITIAL_BALANCE = 10000000000
     MINIMUM_INITIAL_BALANCE = 100000000
     
-    NO_OF_NODES = 60
+    no_of_nodes = 60
     
     BASE_BLOCK_PROPAGATION_DELAY = 1  
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[2]
+    selected_platform = available_platforms[0]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -97,7 +97,7 @@ class FabricConfiguration:
     BATCH_TIMEOUT = 2
     MAX_TRANSACTION_COUNT_PER_BLOCK = 5000
     ABSOLUTE_MAX_BYTES = 1024*1024 *99 #99 MB
-    PREFFERED_MAX_BYTES = 1024*1024*2 #2MB
+    PREFERRED_MAX_BYTES = 1024*1024*2 #2MB
     
     ASSET_TYPES = ["vehicle", "house", "phone", "television"]
     
@@ -107,7 +107,7 @@ class FabricConfiguration:
     
     HEARTBEAT_TIMEOUT = 0
     
-    LEADER_TIMEOUT = 40 # 10 seconds
+    LEADER_TIMEOUT = 40 # 10 seco nds
     
     proposal_counter = 0
     block_sequence_number = 1

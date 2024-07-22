@@ -28,9 +28,13 @@ class Consensus:
             candidate = Consensus.get_random_candidate()
             no_of_votes = candidate.request_votes()
             if Consensus.votes_reached_quorum(no_of_votes):
+                
                 print(f"{candidate.id} received {no_of_votes} votes.")
                 FabricNetwork.leader = candidate
                 candidate.status = FabricConfiguration.ORDERER_TYPES[2]
+                
+                Consensus.elections[Consensus.term_number] = candidate
+                
                 Consensus.term_number += 1
                 print(f"\n{candidate.id} is the new leader. Term {Consensus.term_number} has begun.\n")
         

@@ -3,6 +3,7 @@ from time import sleep
 from Fabric.Node import Node as BaseNode
 from datetime import datetime
 from Configuration import FabricConfiguration, GeneralConfiguration
+from Util import get_chain_length
 
 
 class Orderer (BaseNode):
@@ -104,6 +105,7 @@ class Orderer (BaseNode):
 
         random_peer = next(iter(FabricNetwork.peers.values()))
         block.parent_hash = random_peer.blockchain[-1].hash
+        block.height = get_chain_length()
 
         block.set_merkle_root()
         block.set_hash()
