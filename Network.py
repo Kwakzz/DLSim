@@ -37,6 +37,12 @@ class Network:
             
             for node_count in range(GeneralConfiguration.no_of_nodes):
                 EthereumNetwork.add_node()
+                
+        if GeneralConfiguration.selected_platform == "Slimcoin":
+            from Slimcoin.Network import Network as SlimcoinNetwork
+            
+            for node_count in range(GeneralConfiguration.no_of_nodes):
+                SlimcoinNetwork.add_node()
             
                 
     @staticmethod    

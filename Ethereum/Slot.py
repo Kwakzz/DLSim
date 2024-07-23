@@ -17,6 +17,7 @@ class Slot:
         from Ethereum.Consensus import Consensus as PoS
         from Ethereum.Consensus import RANDAO      
         from Ethereum.SlashContract import SlashContract
+        from Ethereum.Network import Network as EthereumNetwork
                     
         slot_start_time = datetime.now()
         Slot.current_slot_number += 1
@@ -39,7 +40,7 @@ class Slot:
         Slot.set_slot_block_proposer(block_proposer, Slot.current_slot_number)
         
         sleep(4)
-        block = block_proposer.create_block(slot=Slot.current_slot_number)
+        block = block_proposer.create_block()
         
         sleep(3)
         block_proposer.broadcast_block(block)
@@ -57,6 +58,8 @@ class Slot:
         print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
         
         print_chain()
+        
+        EthereumNetwork.adjust_base_fee(block)
                     
             
     @staticmethod

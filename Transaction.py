@@ -53,4 +53,5 @@ def create_random_transactions(number_of_transactions):
     for i in range(number_of_transactions):
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
+        # print(transaction)
         sender.broadcast_transaction_without_delay(transaction)

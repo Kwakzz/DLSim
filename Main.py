@@ -31,7 +31,6 @@ def main():
             Slot.run_slot()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
-            EthereumNetwork.adjust_base_fee()
             update_balances()
 
         
@@ -96,7 +95,17 @@ def main():
         Raft.stop_election = True
         election_thread.join()
             
+    
+    if GeneralConfiguration.selected_platform == "Slimcoin":
+        
+        from Slimcoin.Network import Network as SlimcoinNetwork
+        
+        SlimcoinNetwork.initialize_network()  
+        
+        for round_count in range(GeneralConfiguration.no_of_rounds):
+            create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
             
+        
         
 
     GeneralConfiguration.simulation_end_time = datetime.now()
@@ -106,3 +115,6 @@ def main():
     
 if __name__ == '__main__':
     main()
+
+
+    

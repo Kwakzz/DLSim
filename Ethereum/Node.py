@@ -11,16 +11,11 @@ class Node (BaseNode):
     def __init__(
         self, 
         balance, 
-        blockchain=[genesis_block], 
-        transactions_memory_pool=None, 
-        block_memory_pool=None,
     ):
         super().__init__(
-            balance,
-            transactions_memory_pool=None,
-            block_memory_pool=None,
+            balance
         )
-        self.blockchain = blockchain
+        self.blockchain = [genesis_block]
         
         
     def initiate_transaction(self):
@@ -54,8 +49,8 @@ class Node (BaseNode):
         return amount
         
         
-    def create_block(self, slot):
-        block = EthereumBlock(slot=slot)
+    def create_block(self):
+        block = EthereumBlock()
         cumulative_transaction_gas = 0
         cumulative_transaction_size = 0
         

@@ -7,14 +7,12 @@ from Util import generate_id
 class Node:
     def __init__(
         self, 
-        balance, 
-        transactions_memory_pool=None, 
-        block_memory_pool=None,
+        balance
     ):
         self.id = generate_id()
         self.balance = balance
-        self.transactions_memory_pool = transactions_memory_pool if transactions_memory_pool is not None else {}
-        self.block_memory_pool = block_memory_pool if block_memory_pool is not None else {}
+        self.transactions_memory_pool = {}
+        self.block_memory_pool = {}
     
     
     def broadcast_transaction(self, transaction):

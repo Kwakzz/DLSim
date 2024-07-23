@@ -44,7 +44,7 @@ class Transaction (BaseTransaction):
             Sender: {self.sender_id}, 
             Recipient: {self.recipient_id}, 
             Timestamp: {self.timestamp}, 
-            Value: {self.value} ETH, 
+            Value: {self.value} BTC, 
             Size: {self.size} bytes, 
             Fee: {fee} BTC 
         )

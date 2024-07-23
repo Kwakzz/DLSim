@@ -9,16 +9,11 @@ class Block (BaseBlock):
         self, 
         hash='0'*64,
         parent_hash=None,
-        transaction_count = 0,
-        transactions=None,
-        nonce='0'*64, 
-        size=0, 
-        merkle_root = '0'*64,
-        difficulty_target = 0
+        difficulty_target = hex(BitcoinNetwork.current_difficulty)
     ):
-        super().__init__(hash='0'*64, size=0, transaction_count=0, parent_hash = None, transactions = None, merkle_root='0'*64)
-        self.difficulty_target = hex(BitcoinNetwork.current_difficulty)
-        self.nonce = nonce
+        super().__init__(hash='0'*64, parent_hash = None)
+        self.difficulty_target = difficulty_target
+        self.nonce = '0'*64
         
     
     def is_pow_valid(self):
@@ -57,7 +52,7 @@ class Block (BaseBlock):
             Timestamp: {self.timestamp}, 
             Block Height: {self.height},
             Transaction Count: {self.transaction_count}, 
-            Nonce: {self.nonce} units, 
+            Nonce: {self.nonce}, 
             Size: {size_in_bytes} bytes, 
             Difficulty Target: {self.difficulty_target} 
         )
@@ -67,5 +62,5 @@ class Block (BaseBlock):
 
 genesis_block = Block(
     hash='0'* 64,
-    difficulty_target=BitcoinConfiguration.INITIAL_DIFFICULTY_LEVEL
+    difficulty_target='0'*64
 )

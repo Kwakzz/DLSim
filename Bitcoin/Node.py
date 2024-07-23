@@ -13,20 +13,14 @@ class Node (BaseNode):
     def __init__(
         self, 
         balance, 
-        blockchain=[genesis_block], 
-        transactions_memory_pool=None, 
-        block_memory_pool=None,
-        created_blocks=None,
-        hashpower = 0,
+        hashpower,
     ):
         super().__init__(
             balance,
-            transactions_memory_pool=None,
-            block_memory_pool=None,
         )
-        self.blockchain = blockchain
+        self.blockchain = [genesis_block]
         self.hashpower = hashpower
-        self.created_blocks = created_blocks if created_blocks is not None else []
+        self.created_blocks = []
 
 
     def initiate_transaction(self):

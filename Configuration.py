@@ -6,7 +6,7 @@ available_platforms = ["Bitcoin", "Ethereum", "Fabric", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 25
+    no_of_rounds = 6
     
     simulation_start_time = None
     simulation_end_time = None
@@ -115,3 +115,6 @@ class FabricConfiguration:
     block_sequence_number = 1
     
     
+class SlimcoinConfiguration:
+    
+    current_burn_hash_target = 0

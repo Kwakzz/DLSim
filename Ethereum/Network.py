@@ -1,4 +1,5 @@
 import random
+from Ethereum.Transaction import convert_eth_to_gwei
 from Network import Network as BaseNetwork
 from Configuration import EthereumConfiguration, GeneralConfiguration
 
@@ -24,7 +25,11 @@ class Network (BaseNetwork):
         current_base_fee = EthereumConfiguration.current_base_fee
         new_base_fee = current_base_fee * (1+ (gas_deviation/target_gas_usage) * base_fee_change_rate)
         EthereumConfiguration.current_base_fee = new_base_fee
-        print(f"Adjusted Base Fee: {new_base_fee} ETH")
+        
+        fee_in_gwei = convert_eth_to_gwei(new_base_fee)
+        fee_in_gwei = round(fee_in_gwei, 2)
+        
+        print(f"Adjusted Base Fee: {fee_in_gwei} gwei")
         return new_base_fee
     
     
