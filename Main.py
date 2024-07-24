@@ -139,7 +139,7 @@ def main():
             update_balances()
             
         
-    # plot_graphs()
+    plot_graphs()
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
     generate_overall_statistics()

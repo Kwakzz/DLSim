@@ -2,7 +2,6 @@ from datetime import datetime
 import random
 from Configuration import GeneralConfiguration
 from Configuration import coin_based_blockchains
-from Slimcoin.Statistics import print_slimcoin_statistics
 from Util import convert_seconds_to_minutes
 import matplotlib.pyplot as plt
 
@@ -17,6 +16,8 @@ def generate_overall_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
     from Bitcoin.Statistics import print_bitcoin_statistics
     from Fabric.Statistics import print_fabric_statistics
+    from Slimcoin.Statistics import print_slimcoin_statistics
+
     
     print("\nOVERALL STATISTICS:\n")
 
@@ -37,6 +38,8 @@ def generate_current_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
     from Bitcoin.Statistics import print_bitcoin_statistics
     from Fabric.Statistics import print_fabric_statistics
+    from Slimcoin.Statistics import print_slimcoin_statistics
+
     
     print("\nCURRENT STATISTICS:\n")
 
