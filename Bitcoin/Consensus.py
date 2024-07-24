@@ -3,7 +3,7 @@ import threading
 from time import time
 from Util import convert_seconds_to_minutes
 from Bitcoin.Statistics import get_hash_rate, record_hash_rate
-from Bitcoin.Network import Network as BitcoinNetwork
+from Network import Network as BitcoinNetwork
 from Bitcoin.Nonce import Nonce
 
 class Consensus:
@@ -56,7 +56,7 @@ class Consensus:
     
     
     @staticmethod   
-    def competition(miners):
+    def competition_and_block_processing(miners):
         Consensus.hash_attempts = 0
         
         Nonce.clear_nonce_attempts_map()

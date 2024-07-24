@@ -1,6 +1,6 @@
 from datetime import datetime
 import threading
-from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
+from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration, SlimcoinConfiguration
 from Transaction import create_random_transactions
 from Node import update_balances
 from Util import print_chain, format_datetime
@@ -47,7 +47,7 @@ def main():
             create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
             assign_miners()
             miners_create_blocks()
-            PoW.competition(BitcoinConfiguration.miners)
+            PoW.competition_and_block_processing(BitcoinConfiguration.miners)
             PoW.reset_winners_and_blocks()
             BitcoinNetwork.clear_block_memory()
             print_chain()
@@ -105,8 +105,9 @@ def main():
     if GeneralConfiguration.selected_platform == "Slimcoin":
         
         from Slimcoin.Network import Network as SlimcoinNetwork
-        from Slimcoin.Node import Node as SlimcoinNode
-        from Slimcoin.Node import assign_miners, miners_burn_coins
+        from Slimcoin.Node import assign_miners, miners_burn_coins, miners_create_pow_blocks
+        from Slimcoin.Consensus import Consensus as PoB
+        
         
         SlimcoinNetwork.initialize_network()  
         
@@ -115,8 +116,30 @@ def main():
             assign_miners()
             miners_burn_coins()
             
+            if PoB.select_block_proposer():
+                block_proposer, burn_transaction = PoB.select_block_proposer()
+                block = block_proposer.create_pob_block(burn_transaction)
+                block_proposer.broadcast_block(block)
+                if SlimcoinNetwork.verify_block(block):
+                    block.finalize_transactions(block_proposer)
+                    block.add_to_chain()
+                    PoB.adjust_burn_hash_target()
+            
+            else:
+                miners_create_pow_blocks()
+                PoW.competition_and_block_processing(SlimcoinConfiguration.miners)
+                PoW.reset_winners_and_blocks()
+                SlimcoinNetwork.clear_block_memory()      
+                
+            print_chain()
+            GeneralConfiguration.simulation_end_time = datetime.now()
+            generate_current_statistics()
+            record_statistics()
+            record_time_values()
+            update_balances()
+            
         
-    plot_graphs()
+    # plot_graphs()
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
     generate_overall_statistics()

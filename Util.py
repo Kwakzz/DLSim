@@ -1,6 +1,5 @@
 import hashlib
-
-from Configuration import GeneralConfiguration
+from Configuration import GeneralConfiguration, coin_based_blockchains
 
 
 def generate_id():
@@ -29,7 +28,7 @@ def print_chain():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         
@@ -49,7 +48,7 @@ def get_chain_length():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         

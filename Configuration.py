@@ -3,10 +3,11 @@ import random
 
 
 available_platforms = ["Bitcoin", "Ethereum", "Fabric", "Slimcoin"]
+coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 20
+    no_of_rounds = 3
     
     simulation_start_time = None
     simulation_end_time = None
@@ -25,7 +26,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[3]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -116,8 +117,13 @@ class FabricConfiguration:
     
     
 class SlimcoinConfiguration:
-    
-    current_burn_hash_target = 0
-        
+            
     no_of_miners = range(3, 6)
     miners = []
+    
+    TARGET_BLOCK_TIME = 60 * 1.5 # 1.5 minutes
+    
+    INITIAL_BURN_HASH_TARGET_HEX = 'fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_BURN_HASH_TARGET = int(INITIAL_BURN_HASH_TARGET_HEX, 16)
+    
+    REFERENCE_TOTAL_EFFECTIVE_BURNT_COINS = 100

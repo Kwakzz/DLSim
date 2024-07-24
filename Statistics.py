@@ -1,6 +1,8 @@
 from datetime import datetime
 import random
 from Configuration import GeneralConfiguration
+from Configuration import coin_based_blockchains
+from Slimcoin.Statistics import print_slimcoin_statistics
 from Util import convert_seconds_to_minutes
 import matplotlib.pyplot as plt
 
@@ -27,6 +29,9 @@ def generate_overall_statistics():
     if GeneralConfiguration.selected_platform == "Fabric":
         print_fabric_statistics()
         
+    if GeneralConfiguration.selected_platform == "Slimcoin":
+        print_slimcoin_statistics()
+        
         
 def generate_current_statistics():
     from Ethereum.Statistics import print_ethereum_statistics
@@ -43,6 +48,9 @@ def generate_current_statistics():
         
     if GeneralConfiguration.selected_platform == "Fabric":
         print_fabric_statistics()
+        
+    if GeneralConfiguration.selected_platform == "Slimcoin":
+        print_slimcoin_statistics()
 
 
 def record_statistics():
@@ -57,7 +65,7 @@ def get_throughput():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         
@@ -92,7 +100,7 @@ def get_average_latency():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         
@@ -134,7 +142,7 @@ def get_recent_block_time():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         
@@ -159,7 +167,7 @@ def get_average_block_time():
     
     random_node = None
     
-    if GeneralConfiguration.selected_platform == "Ethereum" or GeneralConfiguration.selected_platform == "Bitcoin":
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
         from Network import Network
         random_node = Network.get_random_node()
         
@@ -210,7 +218,7 @@ def plot_graphs():
 def plot_throughput_graph():
     plt.figure()
     plt.plot(time_values, throughput_values, color="b", marker="o")
-    # Add title and labels
+    
     plt.title('Throughput throughout Simulation')
     plt.xlabel('Time in minutes')
     plt.ylabel('Throughput')

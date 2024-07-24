@@ -1,5 +1,6 @@
 from datetime import datetime
-from Configuration import GeneralConfiguration
+from time import sleep
+from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration, SlimcoinConfiguration
 from Network import Network 
 import random
 import sys
@@ -68,9 +69,15 @@ def create_random_transactions(number_of_transactions):
     
     from Network import Network
         
+        
     print("Nodes are conducting transactions...\n")
     for i in range(number_of_transactions):
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
         # print(transaction)
         sender.broadcast_transaction_without_delay(transaction)
+        
+    if GeneralConfiguration.selected_platform == "Bitcoin" or GeneralConfiguration.selected_platform == "Slimcoin":
+        sleep(random.choice(BitcoinConfiguration.transaction_propagation_delay))
+    if GeneralConfiguration.selected_platform == "Ethereum":
+        sleep(random.choice(EthereumConfiguration.transaction_propagation_delay))

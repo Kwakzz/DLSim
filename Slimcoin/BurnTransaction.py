@@ -17,7 +17,6 @@ class BurnTransaction(SlimcoinTransaction):
         value,
         recipient_id = burn_address,
         fee=0,
-        multiplier = 0
     ):
         super().__init__(
             recipient_id,
@@ -25,18 +24,25 @@ class BurnTransaction(SlimcoinTransaction):
             value,
             fee=0
         )
-        self.multiplier = multiplier
-        self.effective_power = 0
-    
+        self.burn_hash = 0
+        
+    def finalize(self):
+        
+        self.confirmation_time = datetime.now()
+        self.remove_from_mempool()
+        
     
     def set_internal_hash(self):
         self.id = self.get_internal_hash()
         
         
     def get_burn_hash(self):
-        return hex(int(self.multiplier * int(self.id, 16)))
-
+        return hex(int(self.get_multiplier() * int(self.id, 16)))
     
+    
+    def set_burn_hash(self):
+        self.burn_hash = self.get_burn_hash()
+        
     
     def get_age_in_minutes(self):
         current_time = datetime.now()
@@ -46,27 +52,33 @@ class BurnTransaction(SlimcoinTransaction):
     
     def get_multiplier(self):
         return 1 + PoB.decay_rate * self.get_age_in_minutes()
-        
     
-    def set_multiplier(self):
-        self.multiplier = self.get_multiplier()
+        
+    def get_effective_burnt_coins(self):
+        return self.get_multiplier() * self.value
         
         
     def meets_burn_hash_target(self):
-        burn_hash_int = int(self.get_burn_hash())
-        return burn_hash_int < int(SlimcoinConfiguration.current_burn_hash_target) or burn_hash_int == SlimcoinConfiguration.current_burn_hash_target
+        burn_hash_int = int(self.get_burn_hash(), 16)
+        return burn_hash_int < int(PoB.burn_hash_target_in_hex, 16) or burn_hash_int == int(PoB.burn_hash_target_in_hex, 16)
     
     
-    def is_valid(self):
-        return self.recipient_id == burn_address
+    def remove_from_mempool(self):
+        
+        from Slimcoin.Network import Network as SlimcoinNetwork
+        
+        for node in SlimcoinNetwork.nodes.values():
+            node.burn_transactions_memory_pool.pop(self.id)
+        
+        
     
     
     def __str__(self):
         return f"""
         Burn Transaction (
             Internal Hash: {self.id},
-            Multiplier: {self.multiplier}
-            Burn Hash: {self.get_burn_hash()}, 
+            Multiplier: {self.get_multiplier()}
+            Burn Hash: {self.burn_hash}, 
             Burn Address: {burn_address}
             Sender: {self.sender_id}, 
             Timestamp: {self.timestamp}, 

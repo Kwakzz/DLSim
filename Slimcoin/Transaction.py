@@ -17,6 +17,11 @@ class Transaction (BitcoinTransaction):
         )
         
         
+    def is_burn_transaction(self):
+        from Slimcoin.BurnTransaction import burn_address
+        return self.recipient_id == burn_address
+    
+        
     def __str__(self):
         fee = round(self.fee, 2)
         return f"""
@@ -30,4 +35,5 @@ class Transaction (BitcoinTransaction):
             Fee: {fee} SLM 
         )
         """
+        
         
