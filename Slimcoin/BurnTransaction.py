@@ -27,10 +27,6 @@ class BurnTransaction(SlimcoinTransaction):
         )
         self.multiplier = multiplier
         self.effective_power = 0
-        
-    
-    def get_internal_hash(self):
-        return sha256(str(self))
     
     
     def set_internal_hash(self):
@@ -38,7 +34,8 @@ class BurnTransaction(SlimcoinTransaction):
         
         
     def get_burn_hash(self):
-        return hex(self.multiplier * int(self.id, 16))
+        return hex(int(self.multiplier * int(self.id, 16)))
+
     
     
     def get_age_in_minutes(self):
@@ -60,13 +57,17 @@ class BurnTransaction(SlimcoinTransaction):
         return burn_hash_int < int(SlimcoinConfiguration.current_burn_hash_target) or burn_hash_int == SlimcoinConfiguration.current_burn_hash_target
     
     
+    def is_valid(self):
+        return self.recipient_id == burn_address
+    
+    
     def __str__(self):
         return f"""
         Burn Transaction (
             Internal Hash: {self.id},
             Multiplier: {self.multiplier}
             Burn Hash: {self.get_burn_hash()}, 
-            Burn Address: {BurnTransaction.burn_address}
+            Burn Address: {burn_address}
             Sender: {self.sender_id}, 
             Timestamp: {self.timestamp}, 
             Value: {self.value} SLM, 

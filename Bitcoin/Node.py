@@ -37,7 +37,8 @@ class Node (BaseNode):
                 recipient_id = recipient.id,
                 value = transaction_value
             )
-            transaction.id = sha256_hash(str(transaction))
+            
+            transaction.set_hash()
             transaction.set_fee()
             
             # print(transaction)

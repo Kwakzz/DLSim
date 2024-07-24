@@ -4,7 +4,7 @@ from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumCo
 from Transaction import create_random_transactions
 from Node import update_balances
 from Util import print_chain, format_datetime
-from Statistics import generate_overall_statistics, generate_current_statistics
+from Statistics import generate_overall_statistics, generate_current_statistics, record_statistics, record_time_values, plot_graphs
 
 
 def main():
@@ -31,6 +31,8 @@ def main():
             Slot.run_slot()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
+            record_statistics()
+            record_time_values()
             update_balances()
 
         
@@ -52,6 +54,8 @@ def main():
             # BitcoinNetwork.set_new_difficulty()
             GeneralConfiguration.simulation_end_time = datetime.now()
             generate_current_statistics()
+            record_statistics()
+            record_time_values()
             update_balances()
             
         
@@ -89,6 +93,8 @@ def main():
                 print_chain()
                 GeneralConfiguration.simulation_end_time = datetime.now()
                 generate_current_statistics()
+                record_statistics()
+                record_time_values()
             else: 
                 print("There's currently no leader.")
                 
@@ -99,15 +105,18 @@ def main():
     if GeneralConfiguration.selected_platform == "Slimcoin":
         
         from Slimcoin.Network import Network as SlimcoinNetwork
+        from Slimcoin.Node import Node as SlimcoinNode
+        from Slimcoin.Node import assign_miners, miners_burn_coins
         
         SlimcoinNetwork.initialize_network()  
         
         for round_count in range(GeneralConfiguration.no_of_rounds):
             create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
+            assign_miners()
+            miners_burn_coins()
             
         
-        
-
+    plot_graphs()
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
     generate_overall_statistics()

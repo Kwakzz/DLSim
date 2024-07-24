@@ -3,8 +3,7 @@ class Consensus:
     # loses 100th of its value every minute
     decay_rate = 0.01 # 0.001 
     burn_transactions = {}
-    
-    
+        
     
     
     

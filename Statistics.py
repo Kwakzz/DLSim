@@ -1,6 +1,14 @@
+from datetime import datetime
 import random
 from Configuration import GeneralConfiguration
 from Util import convert_seconds_to_minutes
+import matplotlib.pyplot as plt
+
+
+throughput_values = []
+latency_values = []
+block_time_values = []
+time_values = []
 
 
 def generate_overall_statistics():
@@ -37,6 +45,12 @@ def generate_current_statistics():
         print_fabric_statistics()
 
 
+def record_statistics():
+    record_throughput()
+    record_latency()
+    record_block_time()
+    
+
 # GENERAL
     
 def get_throughput():
@@ -69,6 +83,10 @@ def print_throughput():
     throughput = get_throughput()
     print (f"Network throughput: {throughput} transactions/second")
     
+
+def record_throughput():
+    throughput_values.append(get_throughput())
+
     
 def get_average_latency():
     
@@ -106,6 +124,10 @@ def get_average_latency():
 def print_average_latency():
     latency = get_average_latency()
     print (f"Network average latency is: {latency} minutes.")
+    
+    
+def record_latency():
+    latency_values.append(get_average_latency())
     
     
 def get_recent_block_time():
@@ -167,3 +189,55 @@ def get_average_block_time():
 def print_average_block_time():
     average_block_time = get_average_block_time()
     print(f"Average block time is {average_block_time} minutes")
+    
+    
+def record_block_time():
+    block_time_values.append(get_average_block_time())
+    
+    
+def record_time_values():
+    time = (datetime.now() - GeneralConfiguration.simulation_start_time).total_seconds()
+    time = convert_seconds_to_minutes(time)
+    time_values.append(time)
+    
+    
+def plot_graphs():
+    plot_throughput_graph()
+    plot_latency_graph()
+    plot_block_time_graph()
+    
+    
+def plot_throughput_graph():
+    plt.figure()
+    plt.plot(time_values, throughput_values, color="b", marker="o")
+    # Add title and labels
+    plt.title('Throughput throughout Simulation')
+    plt.xlabel('Time in minutes')
+    plt.ylabel('Throughput')
+
+    plt.grid(True)
+    plt.show()
+    
+    
+def plot_block_time_graph():
+    plt.figure()
+    plt.plot(time_values, block_time_values, color="b", marker="o")
+
+    plt.title('Block Time throughout Simulation')
+    plt.xlabel('Time in minutes')
+    plt.ylabel('Block Time')
+
+    plt.grid(True)
+    plt.show()
+    
+    
+def plot_latency_graph():
+    plt.figure()
+    plt.plot(time_values, latency_values, color="b", marker="o")
+    
+    plt.title('Latency throughout Simulation')
+    plt.xlabel('Time in minutes')
+    plt.ylabel('Latency')
+
+    plt.grid(True)
+    plt.show()
