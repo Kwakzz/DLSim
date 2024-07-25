@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 10
+    no_of_rounds = 15
     
     simulation_start_time = None
     simulation_end_time = None
@@ -77,7 +77,7 @@ class BitcoinConfiguration:
     no_of_miners = range(3, 6)
     miners = []
     
-    INITIAL_DIFFICULTY_TARGET_HEX = '0000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5

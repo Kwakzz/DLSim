@@ -6,6 +6,7 @@ from Util import convert_seconds_to_minutes
 import matplotlib.pyplot as plt
 
 
+processed_transaction_counts = []
 throughput_values = []
 latency_values = []
 block_time_values = []
@@ -23,6 +24,7 @@ def record_performance_statistics():
     record_throughput()
     record_latency()
     record_block_time()
+    record_no_of_processed_transactions()
     
     
 def get_throughput():
@@ -163,6 +165,30 @@ def record_block_time():
     block_time_values.append(get_average_block_time())
     
     
+def get_no_of_processed_transactions():
+    
+    random_node = None
+    
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
+        from Network import Network
+        random_node = Network.get_random_node()
+        
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network as FabricNetwork
+        random_node = FabricNetwork.get_random_peer()
+        
+    transaction_count = 0
+    
+    for block in random_node.blockchain:
+        transaction_count += block.transaction_count
+        
+    return transaction_count
+
+
+def record_no_of_processed_transactions():
+    processed_transaction_counts.append(get_no_of_processed_transactions())
+    
+    
 def record_time_values():
     time = (datetime.now() - GeneralConfiguration.simulation_start_time).total_seconds()
     time = convert_seconds_to_minutes(time)
@@ -170,31 +196,38 @@ def record_time_values():
     
     
 def plot_graphs():
-    plot_throughput_graph()
-    plot_latency_graph()
-    plot_block_time_graph()
+    plot_graph_of_throughput_over_time()
+    plot_graph_of_latency_over_time()
+    plot_graph_of_block_time_over_time()
+    plot_processed_transactions_count_over_time()
     
     
-def plot_throughput_graph():
-    title = "Throughput throughout Simulation"
+def plot_graph_of_throughput_over_time():
+    title = "Evolution of Network Throughput"
     x_label = "Time in minutes"
     y_label = "Throughput"
     plot_graph(time_values, throughput_values, title, x_label, y_label)
     
     
-def plot_block_time_graph():
-    title = "Block Time throughout Simulation"
+def plot_graph_of_block_time_over_time():
+    title = "Evolution of Block Time"
     x_label = "Time in minutes"
     y_label = "Block Time"
     plot_graph(time_values, block_time_values, title, x_label, y_label)
     
     
-def plot_latency_graph():
-    title = "Latency throughout Simulation"
+def plot_graph_of_latency_over_time():
+    title = "Evolution of Latency"
     x_label = "Time in minutes"
     y_label = "Latency"
     plot_graph(time_values, latency_values, title, x_label, y_label)
-
+    
+    
+def plot_processed_transactions_count_over_time():
+    title = "Processed Transactions Count Over Time"
+    x_label = "Time in minutes"
+    y_label = "Transaction Count"
+    plot_graph(time_values, processed_transaction_counts, title, x_label, y_label)
 
 
 def plot_graph(x_values, y_values, title, x_label, y_label):
