@@ -26,7 +26,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[2]
+    selected_platform = available_platforms[0]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -77,7 +77,7 @@ class BitcoinConfiguration:
     no_of_miners = range(3, 6)
     miners = []
     
-    INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    INITIAL_DIFFICULTY_TARGET_HEX = '0000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5
