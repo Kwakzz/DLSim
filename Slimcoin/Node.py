@@ -3,7 +3,7 @@ from Bitcoin.Node import Node as BitcoinNode
 from Configuration import BitcoinConfiguration, SlimcoinConfiguration
 from Slimcoin.BurnTransaction import BurnTransaction
 from Slimcoin.Block import Block as SlimcoinBlock
-from Util import get_chain_length
+from Util import get_chain_length, transaction_propagation_delay
 
 class Node (BitcoinNode):
     
@@ -54,7 +54,8 @@ class Node (BitcoinNode):
         burn_transaction.set_burn_hash()
         self.balance -= value
         
-        self.broadcast_burn_transaction_without_delay(burn_transaction)
+        self.broadcast_burn_transaction(burn_transaction)
+        transaction_propagation_delay()
         
         print(burn_transaction)
         # print(f"Burn Hash: {int(burn_transaction.get_burn_hash(), 16)}")
@@ -62,14 +63,16 @@ class Node (BitcoinNode):
         return burn_transaction
     
     
-    def broadcast_burn_transaction_without_delay(self, burn_transaction):
+    def broadcast_burn_transaction(self, burn_transaction):
         
         from Slimcoin.Network import Network as SlimcoinNetwork
         
         for node in SlimcoinNetwork.nodes.values():
             node.burn_transactions_memory_pool[burn_transaction.id] = burn_transaction
+        
+        transaction_propagation_delay()
             
-        # print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
+        # print(f"Node {self.id} has broadcasted burn transaction {transaction.id} to the network.\n")
         return burn_transaction
     
     

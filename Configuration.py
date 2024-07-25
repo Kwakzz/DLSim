@@ -26,7 +26,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[2]
     
     
     def calculate_block_propagation_delay(network_size, block_size):

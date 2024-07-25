@@ -75,7 +75,7 @@ def format_datetime(datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S")
 
 
-def transaction_delay():
+def transaction_propagation_delay():
     transaction_propagation_delay = None 
     
     if GeneralConfiguration.selected_platform == "Bitcoin" or GeneralConfiguration.selected_platform == "Slimcoin":

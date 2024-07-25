@@ -1,7 +1,7 @@
 import random
 from time import sleep
 from Network import Network
-from Util import generate_id, transaction_delay
+from Util import generate_id
 
 
 class Node:
@@ -16,19 +16,6 @@ class Node:
     
     
     def broadcast_transaction(self, transaction):
-        
-        print(f"{self.id} is broadcasting transaction {transaction.id} to the network.\n")
-        
-        transaction_delay()
-        
-        for node in Network.nodes.values():
-            node.transactions_memory_pool[transaction.id] = transaction
-        
-        # print(f"Node {self.id} has broadcasted transaction {transaction.id} to the network.\n")
-        return transaction
-    
-    
-    def broadcast_transaction_without_delay(self, transaction):
                         
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction

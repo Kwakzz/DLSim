@@ -21,7 +21,6 @@ class Node (BaseNode):
     def initiate_transaction(self):
         
         from Ethereum.Transaction import Transaction as EthereumTransaction
-        from Util import sha256_hash
         from Network import Network
         
         transaction_value = 0

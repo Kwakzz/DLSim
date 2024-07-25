@@ -32,8 +32,7 @@ class Transaction (BaseTransaction):
         
         self.confirmation_time = datetime.now()
         
-        for node in BitcoinNetwork.nodes.values():
-            node.transactions_memory_pool.pop(self.id)
+        self.remove_from_memory_pool()
         
         
     def __str__(self):

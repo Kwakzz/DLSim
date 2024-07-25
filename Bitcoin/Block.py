@@ -38,10 +38,6 @@ class Block (BaseBlock):
     def is_valid(self):
         return self.is_pow_valid and self.are_transactions_valid and self.parent_exists
             
-        
-    # def __str__(self):
-    #     return f"Block (\nID: {self.hash},\nParent: {self.parent_hash}, \nTimestamp: {self.timestamp}, \nTransactions: {list(self.transactions.keys())},\nTransaction Count: {self.transaction_count},\nSize: {self.size} MB,\nNonce: {self.nonce},\nDifficulty Target: {self.difficulty_target}\n)\n"
-    
     
     def __str__(self):
         size_in_bytes = round(self.size, 2)

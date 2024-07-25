@@ -25,9 +25,9 @@ class BurnTransaction(SlimcoinTransaction):
             fee=0
         )
         self.burn_hash = 0
+       
         
-    def finalize(self):
-        
+    def finalize(self): 
         self.confirmation_time = datetime.now()
         self.remove_from_mempool()
         

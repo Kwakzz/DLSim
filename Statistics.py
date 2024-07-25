@@ -19,7 +19,7 @@ def print_performance_statistics():
     print()
     
 
-def record_statistics():
+def record_performance_statistics():
     record_throughput()
     record_latency()
     record_block_time()
@@ -74,23 +74,19 @@ def get_average_latency():
         
     sum_of_latencies = 0
     transaction_count = 0
-            
-    if len(random_node.blockchain) > 1:
-        for block in random_node.blockchain:
-            if len(list(block.transactions.values())) != 0:
-                for transaction in block.transactions.values():
-                    transaction_count += 1
-                    latency = (transaction.confirmation_time - transaction.timestamp).total_seconds()
-                    sum_of_latencies += latency
-                
-    average_latency = 0
-       
-    if transaction_count != 0:     
-        average_latency = sum_of_latencies/transaction_count
-        average_latency_in_minutes = convert_seconds_to_minutes(average_latency)
-        average_latency = round(average_latency_in_minutes, 2)
-            
-    return average_latency
+
+    for block in random_node.blockchain:
+        for transaction in block.transactions.values():
+            transaction_count += 1
+            latency = (transaction.confirmation_time - transaction.timestamp).total_seconds()
+            sum_of_latencies += latency
+
+    if transaction_count == 0:
+        return 0  
+
+    average_latency = sum_of_latencies / transaction_count
+    average_latency_in_minutes = convert_seconds_to_minutes(average_latency)
+    return round(average_latency_in_minutes, 2)
     
     
 def print_average_latency():

@@ -1,10 +1,8 @@
 from datetime import datetime
-from time import sleep
-from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration, SlimcoinConfiguration
+from Configuration import GeneralConfiguration
 from Network import Network 
 import random
-import sys
-from Util import format_datetime, sha256_hash, transaction_delay
+from Util import sha256_hash, transaction_propagation_delay
 
 
 class Transaction:
@@ -62,19 +60,23 @@ class Transaction:
             
     def is_valid (self):
         return self.is_external_transfer and self.within_sender_balance and self.sender_exists and self.recipient_exists
+    
+    
+    def remove_from_memory_pool(self):
+        for node in Network.nodes.values():
+            node.transactions_memory_pool.pop(self.id)
             
         
         
 def create_random_transactions(number_of_transactions):
     
     from Network import Network
-        
-        
+     
     print("Nodes are conducting transactions...\n")
     for i in range(number_of_transactions):
         sender = random.choice(list(Network.nodes.values()))
         transaction = sender.initiate_transaction()
         # print(transaction)
-        sender.broadcast_transaction_without_delay(transaction)
+        sender.broadcast_transaction(transaction)
         
-    transaction_delay()
+    transaction_propagation_delay()
