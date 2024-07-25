@@ -3,12 +3,9 @@ from Statistics import print_average_latency, print_throughput, print_average_bl
 hash_rates = []
 
 
-def print_bitcoin_statistics():
+def print_hashpower_statistics():
     print_total_hashpower()
     print_average_hash_rate()
-    print_throughput()
-    print_average_latency()
-    print_average_block_time()
     print()
     
     

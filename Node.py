@@ -1,7 +1,7 @@
 import random
 from time import sleep
 from Network import Network
-from Util import generate_id
+from Util import generate_id, transaction_delay
 
 
 class Node:
@@ -17,15 +17,9 @@ class Node:
     
     def broadcast_transaction(self, transaction):
         
-        from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumConfiguration
+        print(f"{self.id} is broadcasting transaction {transaction.id} to the network.\n")
         
-        transaction_propagation_delay = None 
-        if GeneralConfiguration.selected_platform == "Bitcoin":
-            transaction_propagation_delay = random.choice(BitcoinConfiguration.transaction_propagation_delay)
-        if GeneralConfiguration.selected_platform == "Ethereum":
-            transaction_propagation_delay = random.choice(EthereumConfiguration.transaction_propagation_delay)
-        
-        sleep(transaction_propagation_delay) 
+        transaction_delay()
         
         for node in Network.nodes.values():
             node.transactions_memory_pool[transaction.id] = transaction

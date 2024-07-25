@@ -4,7 +4,7 @@ from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumCo
 from Network import Network 
 import random
 import sys
-from Util import format_datetime, sha256_hash
+from Util import format_datetime, sha256_hash, transaction_delay
 
 
 class Transaction:
@@ -77,7 +77,4 @@ def create_random_transactions(number_of_transactions):
         # print(transaction)
         sender.broadcast_transaction_without_delay(transaction)
         
-    if GeneralConfiguration.selected_platform == "Bitcoin" or GeneralConfiguration.selected_platform == "Slimcoin":
-        sleep(random.choice(BitcoinConfiguration.transaction_propagation_delay))
-    if GeneralConfiguration.selected_platform == "Ethereum":
-        sleep(random.choice(EthereumConfiguration.transaction_propagation_delay))
+    transaction_delay()

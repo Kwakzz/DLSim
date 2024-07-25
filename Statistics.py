@@ -12,57 +12,18 @@ block_time_values = []
 time_values = []
 
 
-def generate_overall_statistics():
-    from Ethereum.Statistics import print_ethereum_statistics
-    from Bitcoin.Statistics import print_bitcoin_statistics
-    from Fabric.Statistics import print_fabric_statistics
-    from Slimcoin.Statistics import print_slimcoin_statistics
-
+def print_performance_statistics():
+    print_throughput()
+    print_average_latency()
+    print_average_block_time()
+    print()
     
-    print("\nOVERALL STATISTICS:\n")
-
-    if GeneralConfiguration.selected_platform == "Ethereum":
-        print_ethereum_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Bitcoin":
-        print_bitcoin_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        print_fabric_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Slimcoin":
-        print_slimcoin_statistics()
-        
-        
-def generate_current_statistics():
-    from Ethereum.Statistics import print_ethereum_statistics
-    from Bitcoin.Statistics import print_bitcoin_statistics
-    from Fabric.Statistics import print_fabric_statistics
-    from Slimcoin.Statistics import print_slimcoin_statistics
-
-    
-    print("\nCURRENT STATISTICS:\n")
-
-    if GeneralConfiguration.selected_platform == "Ethereum":
-        print_ethereum_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Bitcoin":
-        print_bitcoin_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        print_fabric_statistics()
-        
-    if GeneralConfiguration.selected_platform == "Slimcoin":
-        print_slimcoin_statistics()
-
 
 def record_statistics():
     record_throughput()
     record_latency()
     record_block_time()
     
-
-# GENERAL
     
 def get_throughput():
     
@@ -98,7 +59,7 @@ def print_throughput():
 def record_throughput():
     throughput_values.append(get_throughput())
 
-    
+
 def get_average_latency():
     
     random_node = None
@@ -219,36 +180,34 @@ def plot_graphs():
     
     
 def plot_throughput_graph():
-    plt.figure()
-    plt.plot(time_values, throughput_values, color="b", marker="o")
-    
-    plt.title('Throughput throughout Simulation')
-    plt.xlabel('Time in minutes')
-    plt.ylabel('Throughput')
-
-    plt.grid(True)
-    plt.show()
+    title = "Throughput throughout Simulation"
+    x_label = "Time in minutes"
+    y_label = "Throughput"
+    plot_graph(time_values, throughput_values, title, x_label, y_label)
     
     
 def plot_block_time_graph():
-    plt.figure()
-    plt.plot(time_values, block_time_values, color="b", marker="o")
-
-    plt.title('Block Time throughout Simulation')
-    plt.xlabel('Time in minutes')
-    plt.ylabel('Block Time')
-
-    plt.grid(True)
-    plt.show()
+    title = "Block Time throughout Simulation"
+    x_label = "Time in minutes"
+    y_label = "Block Time"
+    plot_graph(time_values, block_time_values, title, x_label, y_label)
     
     
 def plot_latency_graph():
+    title = "Latency throughout Simulation"
+    x_label = "Time in minutes"
+    y_label = "Latency"
+    plot_graph(time_values, latency_values, title, x_label, y_label)
+
+
+
+def plot_graph(x_values, y_values, title, x_label, y_label):
     plt.figure()
-    plt.plot(time_values, latency_values, color="b", marker="o")
+    plt.plot(x_values, y_values, color="b", marker="o")
     
-    plt.title('Latency throughout Simulation')
-    plt.xlabel('Time in minutes')
-    plt.ylabel('Latency')
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
 
     plt.grid(True)
     plt.show()

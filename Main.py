@@ -4,7 +4,7 @@ from Configuration import GeneralConfiguration, BitcoinConfiguration, EthereumCo
 from Transaction import create_random_transactions
 from Node import update_balances
 from Util import print_chain, format_datetime
-from Statistics import generate_overall_statistics, generate_current_statistics, record_statistics, record_time_values, plot_graphs
+from Statistics import print_performance_statistics, record_statistics, record_time_values, plot_graphs
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
             DepositContract.print_deposits()
             Slot.run_slot()
             GeneralConfiguration.simulation_end_time = datetime.now()
-            generate_current_statistics()
+            print_performance_statistics()
             record_statistics()
             record_time_values()
             update_balances()
@@ -40,6 +40,7 @@ def main():
         from Bitcoin.Node import assign_miners, miners_create_blocks
         from Bitcoin.Consensus import Consensus as PoW
         from Bitcoin.Network import Network as BitcoinNetwork
+        from Bitcoin.Statistics import print_hashpower_statistics
         
         BitcoinNetwork.initialize_network()
         
@@ -53,10 +54,13 @@ def main():
             print_chain()
             # BitcoinNetwork.set_new_difficulty()
             GeneralConfiguration.simulation_end_time = datetime.now()
-            generate_current_statistics()
+            print_hashpower_statistics()
+            print_performance_statistics()
             record_statistics()
             record_time_values()
             update_balances()
+            
+        print_hashpower_statistics()
             
         
     if GeneralConfiguration.selected_platform == "Fabric":
@@ -92,7 +96,7 @@ def main():
                 FabricNetwork.leader.broadcast_block_to_peers(block)
                 print_chain()
                 GeneralConfiguration.simulation_end_time = datetime.now()
-                generate_current_statistics()
+                print_performance_statistics()
                 record_statistics()
                 record_time_values()
             else: 
@@ -133,16 +137,17 @@ def main():
                 
             print_chain()
             GeneralConfiguration.simulation_end_time = datetime.now()
-            generate_current_statistics()
+            print_performance_statistics()
             record_statistics()
             record_time_values()
             update_balances()
             
         
-    plot_graphs()
     GeneralConfiguration.simulation_end_time = datetime.now()
     print(f"Simulation ends at {format_datetime(GeneralConfiguration.simulation_end_time)}.\n")
-    generate_overall_statistics()
+    print("OVERALL PERFORMANCE STATISTICS:")
+    print_performance_statistics()
+    plot_graphs()
     
     
 if __name__ == '__main__':

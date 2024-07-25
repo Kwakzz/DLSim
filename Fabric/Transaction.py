@@ -78,3 +78,5 @@ def submit_transactions_to_leader(proposals):
         client.submit_transaction_to_leader(transaction)
         
     
+        
+    

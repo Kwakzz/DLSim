@@ -1,9 +1,10 @@
 import hashlib
-from Configuration import GeneralConfiguration, coin_based_blockchains
+import random
+from time import sleep
+from Configuration import EthereumConfiguration, BitcoinConfiguration, GeneralConfiguration, coin_based_blockchains
 
 
-def generate_id():
-    
+def generate_id():    
     import os
 
     random_bytes = os.urandom(6)
@@ -72,3 +73,14 @@ def convert_bytes_to_megabytes(size):
 # Convert to %Y-%m-%d %H:%M:%S  
 def format_datetime(datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def transaction_delay():
+    transaction_propagation_delay = None 
+    
+    if GeneralConfiguration.selected_platform == "Bitcoin" or GeneralConfiguration.selected_platform == "Slimcoin":
+        transaction_propagation_delay = random.choice(BitcoinConfiguration.transaction_propagation_delay)
+    if GeneralConfiguration.selected_platform == "Ethereum":
+        transaction_propagation_delay = random.choice(EthereumConfiguration.transaction_propagation_delay)
+    
+    sleep(transaction_propagation_delay) 
