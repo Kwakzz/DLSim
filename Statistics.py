@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 from Configuration import GeneralConfiguration
 from Configuration import coin_based_blockchains
-from Util import convert_seconds_to_minutes
+from Util import convert_seconds_to_minutes, get_node_with_blockchain
 import matplotlib.pyplot as plt
 
 
@@ -17,7 +17,6 @@ def print_performance_statistics():
     print_throughput()
     print_average_latency()
     print_average_block_time()
-    print()
     
 
 def record_performance_statistics():
@@ -29,15 +28,7 @@ def record_performance_statistics():
     
 def get_throughput():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network as FabricNetwork
-        random_node = FabricNetwork.get_random_peer()
+    random_node = get_node_with_blockchain()
         
     transaction_count = 0
     
@@ -48,7 +39,7 @@ def get_throughput():
     simulation_time_in_minutes = convert_seconds_to_minutes(simulation_time)
     throughput = transaction_count/simulation_time
     throughput = round(throughput, 2)
-    print(f"{transaction_count} transactions processed in {simulation_time_in_minutes} minutes.")
+    print(f"{transaction_count} transactions processed in {simulation_time_in_minutes} minutes.\n")
     
     return throughput
     
@@ -64,15 +55,7 @@ def record_throughput():
 
 def get_average_latency():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network as FabricNetwork
-        random_node = FabricNetwork.get_random_peer()
+    random_node = get_node_with_blockchain()
         
     sum_of_latencies = 0
     transaction_count = 0
@@ -102,15 +85,7 @@ def record_latency():
     
 def get_recent_block_time():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network as FabricNetwork
-        random_node = FabricNetwork.get_random_peer()
+    random_node = get_node_with_blockchain()
      
     if len(random_node.blockchain) < 2:
         print("Blockchain must contain at least two blocks to calculate average block time.")
@@ -127,15 +102,7 @@ def get_recent_block_time():
     
 def get_average_block_time():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network as FabricNetwork
-        random_node = FabricNetwork.get_random_peer()
+    random_node = get_node_with_blockchain()
             
     no_of_block_times = len(random_node.blockchain) - 1
     cumulative_block_time = 0
@@ -167,15 +134,7 @@ def record_block_time():
     
 def get_no_of_processed_transactions():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network as FabricNetwork
-        random_node = FabricNetwork.get_random_peer()
+    random_node = get_node_with_blockchain()
         
     transaction_count = 0
     
@@ -204,28 +163,28 @@ def plot_graphs():
     
 def plot_graph_of_throughput_over_time():
     title = "Evolution of Network Throughput"
-    x_label = "Time in minutes"
-    y_label = "Throughput"
+    x_label = "Time (mins)"
+    y_label = "Throughput (tps)"
     plot_graph(time_values, throughput_values, title, x_label, y_label)
     
     
 def plot_graph_of_block_time_over_time():
     title = "Evolution of Block Time"
-    x_label = "Time in minutes"
-    y_label = "Block Time"
+    x_label = "Time (mins)"
+    y_label = "Block Time (mins)"
     plot_graph(time_values, block_time_values, title, x_label, y_label)
     
     
 def plot_graph_of_latency_over_time():
     title = "Evolution of Latency"
-    x_label = "Time in minutes"
-    y_label = "Latency"
+    x_label = "Time (mins)"
+    y_label = "Latency (mins)"
     plot_graph(time_values, latency_values, title, x_label, y_label)
     
     
 def plot_processed_transactions_count_over_time():
     title = "Processed Transactions Count Over Time"
-    x_label = "Time in minutes"
+    x_label = "Time (mins)"
     y_label = "Transaction Count"
     plot_graph(time_values, processed_transaction_counts, title, x_label, y_label)
 

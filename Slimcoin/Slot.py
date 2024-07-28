@@ -1,22 +1,21 @@
 from datetime import datetime
 from time import sleep
-from Ethereum.Epoch import Epoch
 from Util import print_chain
+from Configuration import GeneralConfiguration
+from Ethereum.Slot import Slot as EthereumSlot
 
-
-class Slot:
+class Slot (EthereumSlot):
     
-    current_slot_number = 0
-    block_proposers = {}
+    current_slot_number = (datetime.now() - GeneralConfiguration.simulation_start_time).total_seconds()//12
     
     
     @staticmethod
     def run_slot ():
         
-        from Ethereum.Consensus import Consensus as PoS
-        from Ethereum.Consensus import RANDAO      
-        from Ethereum.SlashContract import SlashContract
-        from Ethereum.Network import Network as EthereumNetwork
+        from Slimcoin.PoS import Consensus as PoS
+        from Slimcoin.PoS import RANDAO      
+        from Slimcoin.SlashContract import SlashContract
+        from Slimcoin.Network import Network as SlimcoinNetwork
                     
         slot_start_time = datetime.now()
         Slot.current_slot_number += 1
@@ -25,25 +24,21 @@ class Slot:
 
         print(f"\nEntered Slot {Slot.current_slot_number} at {formatted_datetime}.")
         
-        Epoch.update_number()
-
         PoS.update_validators_list()
         PoS.print_validators()
         
         sleep(2)  
-        if Slot.is_new_epoch(): 
-            RANDAO.set_random_beacon()
         
         block_proposer = RANDAO.select_block_proposer()
         
         if block_proposer is None:
             print(f"No block proposer found in slot {Slot.current_slot_number}.")
-
+        
         else:
             Slot.set_slot_block_proposer(block_proposer, Slot.current_slot_number)
             
             sleep(4)
-            block = block_proposer.create_block()
+            block = block_proposer.create_pos_block()
             
             sleep(3)
             block_proposer.broadcast_block(block)
@@ -59,25 +54,11 @@ class Slot:
                 SlashContract.slash(block_proposer)
             
             print(f"Slot {Slot.current_slot_number} completed. Proposer: {block_proposer.id}")
-            
+        
             print_chain()
             
-            EthereumNetwork.adjust_base_fee(block)
+            SlimcoinNetwork.adjust_base_fee(block)
                     
-            
-    @staticmethod
-    def set_slot_block_proposer(block_proposer, slot_number):
-        Slot.block_proposers[slot_number] = block_proposer
-                        
-    
-    @staticmethod     
-    def get_slot_block_proposer(slot_number):
-        return Slot.block_proposers[slot_number]
-    
-    
-    @staticmethod
-    def is_new_epoch():
-        return Slot.current_slot_number % 32 == 0 or Slot.current_slot_number == 1
-    
+        
     
     

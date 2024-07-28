@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 15
+    no_of_rounds = 25
     
     simulation_start_time = None
     simulation_end_time = None
@@ -20,13 +20,13 @@ class GeneralConfiguration:
     MAXIMUM_INITIAL_BALANCE = 10000000000
     MINIMUM_INITIAL_BALANCE = 100000000
     
-    no_of_nodes = 60
+    no_of_nodes = 100
     
     BASE_BLOCK_PROPAGATION_DELAY = 1  
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[0]
+    selected_platform = available_platforms[3]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -78,6 +78,8 @@ class BitcoinConfiguration:
     miners = []
     
     INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    # INITIAL_DIFFICULTY_TARGET_HEX = '0ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
     DIFFICULTY_ADJUSTMENT_INTERVAL = 5
@@ -118,12 +120,42 @@ class FabricConfiguration:
     
 class SlimcoinConfiguration:
             
-    no_of_miners = range(3, 6)
+    no_of_miners = range(3, 5)
     miners = []
+    
+    BURN_CONSTANT = 0.01
+    MINIMUM_NUMBER_OF_POW_BLOCKS_PRECEEDING_POB_BLOCK = 6
+    BURN_HASH_DOUBLE = 350000
     
     TARGET_BLOCK_TIME = 60 * 1.5 # 1.5 minutes
     
     INITIAL_BURN_HASH_TARGET_HEX = 'fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    # INITIAL_BURN_HASH_TARGET_HEX = '0x1e07ffff'
     INITIAL_BURN_HASH_TARGET = int(INITIAL_BURN_HASH_TARGET_HEX, 16)
     
     REFERENCE_TOTAL_EFFECTIVE_BURNT_COINS = 100
+    
+    
+    """slimcoin: a burn hash is calculated by:
+    * hash = (c / b) * 2 ** ((nPoWBlocks - M) / E) * [Hash]
+    *
+    * Where: c = BURN_CONSTANT (0.01 * CENT)
+    *        b = amount of coins burned
+    *        nPoWBlocks = the number of proof of work blocks between (not including)
+    *                     the blocks with heights last_BlkNHeight and burned_BlkNHeight
+    *                         where
+    *                             last_BlkNHeight = the height of the last block in the chain
+    *                             burned_BlkNHeight = the height of the block at the time of the burning
+    *        M = BURN_MIN_CONFIRMS (6), the required amount of proof of work blocks between (not including)
+    *                                   the block at the time of burning and the last block in the chain
+    *                                   The offset by M allows for the first burn block the burnt coins
+    *                                   can hash to be at 100% strength and decay from there, instead of having
+    *                                   the coins slightly decayed from the beginning
+    *        E = BURN_HASH_DOUBLE (350000.0), an exponential constant which causes 
+    *                                   burnt coins to produce slightly larger hashes as time passes
+    *
+    *        [Hash] = Hash(burntBlockHash ++ burnWTx.GetHash() ++ hashBestBlock)
+    *        Where: burntBlockHash = the hash of the block the transaction is found ing
+    *               burnTx.GetHash() = the hash of this transaction
+    *               hashBestBlock = the hash of the best proof-of-work block in the chain at the time of hashing
+    """

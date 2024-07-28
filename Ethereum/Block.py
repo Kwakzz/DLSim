@@ -10,12 +10,13 @@ class Block (BaseBlock):
         self, 
         hash='0'*64, 
         parent_hash = None, 
+        slot = Slot.current_slot_number
     ):
         super().__init__(hash='0'*64, parent_hash=None)
         self.gas_used = 0
         self.target_gas_usage = EthereumConfiguration.target_gas_usage
         self.base_fee = EthereumConfiguration.current_base_fee
-        self.slot = Slot.current_slot_number
+        self.slot = slot
         
         
     def is_slot_number_accurate(self):

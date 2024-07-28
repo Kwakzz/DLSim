@@ -1,11 +1,13 @@
 import random
 from Bitcoin.Node import Node as BitcoinNode
-from Configuration import BitcoinConfiguration, SlimcoinConfiguration
+from Ethereum.Node import Node as EthereumNode
+from Configuration import BitcoinConfiguration, EthereumConfiguration, SlimcoinConfiguration
 from Slimcoin.BurnTransaction import BurnTransaction
-from Slimcoin.Block import Block as SlimcoinBlock
+from Slimcoin.Block import Block as PoBBlock
 from Util import get_chain_length, transaction_propagation_delay
+from Bitcoin.Block import genesis_block
 
-class Node (BitcoinNode):
+class Node (BitcoinNode, EthereumNode):
     
     def __init__(
         self, 
@@ -16,7 +18,7 @@ class Node (BitcoinNode):
             balance, 
             hashpower,
         )
-        self.burn_transactions_memory_pool = {}
+        self.blockchain = [genesis_block]
         
     
     def initiate_transaction(self):
@@ -42,8 +44,8 @@ class Node (BitcoinNode):
         
     
     def burn_coins(self, value):
-        
-        from Slimcoin.Consensus import Consensus as PoB
+        from Slimcoin.BurnAddress import BurnAddress        
+        from Slimcoin.PoB import PoB
 
         burn_transaction = BurnTransaction(
             value = value,
@@ -51,43 +53,30 @@ class Node (BitcoinNode):
         )
 
         burn_transaction.set_hash()
-        burn_transaction.set_burn_hash()
-        self.balance -= value
         
-        self.broadcast_burn_transaction(burn_transaction)
-        transaction_propagation_delay()
+        self.broadcast_transaction(burn_transaction)
         
+        BurnAddress.burn_transactions[burn_transaction.id] = burn_transaction
+    
         print(burn_transaction)
         # print(f"Burn Hash: {int(burn_transaction.get_burn_hash(), 16)}")
         # print(f"Burn Hash Target: {int(PoB.burn_hash_target, 16)}")
         return burn_transaction
     
     
-    def broadcast_burn_transaction(self, burn_transaction):
-        
-        from Slimcoin.Network import Network as SlimcoinNetwork
-        
-        for node in SlimcoinNetwork.nodes.values():
-            node.burn_transactions_memory_pool[burn_transaction.id] = burn_transaction
-        
-        transaction_propagation_delay()
-            
-        # print(f"Node {self.id} has broadcasted burn transaction {transaction.id} to the network.\n")
-        return burn_transaction
+    def stake(self, amount):
+        from Slimcoin.DepositContract import DepositContract
+
+        DepositContract.deposits[self.id] += amount
+        print(f"{self.id} has staked {amount} SLM into the deposit contract.")
+        return amount
     
     
     def create_pow_block(self):
-        return super().create_block()
-    
-    
-    def create_pob_block(self, burn_transaction):
+        from Bitcoin.Block import Block as BitcoinBlock
         
-        print(f"{self.id} is creating a PoB block.")
-        
-        block = SlimcoinBlock()
-        
-        block.transactions[burn_transaction.id] = burn_transaction
-        cumulative_transaction_size = burn_transaction.size
+        block = BitcoinBlock()
+        cumulative_transaction_size = 0
         
         transactions_memory_pool_copy = list(self.transactions_memory_pool.values())
         for transaction in transactions_memory_pool_copy:
@@ -96,6 +85,76 @@ class Node (BitcoinNode):
             if transaction.is_valid():
                 block.transactions[transaction.id] = transaction
                 cumulative_transaction_size += transaction.size
+            if transaction.is_burn_transaction():
+                transaction.block_index = get_chain_length()
+                print(f"Burn transaction {transaction.id} has been deposited in this block.")
+    
+        block.size=cumulative_transaction_size
+        block.transaction_count = len(block.transactions)
+        block.height = get_chain_length()
+        
+        block.parent_hash = self.blockchain[-1].hash
+        
+        block.set_merkle_root()
+        block.set_hash()
+        
+        self.created_blocks.append(block)
+        
+        print(block)
+        return block
+    
+    
+    def create_pos_block(self):
+        from Ethereum.Block import Block as EthereumBlock
+        from Slimcoin.Slot import Slot
+        
+        block = EthereumBlock(slot=Slot.current_slot_number)
+        cumulative_transaction_gas = 0
+        cumulative_transaction_size = 0
+        
+        transactions_memory_pool_copy = list(self.transactions_memory_pool.values())
+        for transaction in transactions_memory_pool_copy:
+            if cumulative_transaction_gas + transaction.gas_used > EthereumConfiguration.BLOCK_GAS_LIMIT:
+                break
+            if transaction.is_valid():
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_gas += transaction.gas_used
+                cumulative_transaction_size = transaction.size
+            if transaction.is_burn_transaction():
+                transaction.block_index = get_chain_length()
+                print(f"Burn transaction {transaction.id} has been deposited in this block.")
+        
+        block.gas_used=cumulative_transaction_gas
+        block.size = cumulative_transaction_size
+        block.height = get_chain_length()
+        
+        block.transaction_count = len(block.transactions)
+        
+        block.parent_hash = self.blockchain[-1].hash
+        
+        block.set_merkle_root()
+        block.set_hash()
+                
+        print(f"{self.id} has created a PoS block with hash, {block.hash}")
+        print(block)
+        return block
+    
+    
+    def create_pob_block(self, burn_transaction):
+        
+        block = PoBBlock()    
+        cumulative_transaction_size = 0
+        
+        transactions_memory_pool_copy = list(self.transactions_memory_pool.values())
+        for transaction in transactions_memory_pool_copy:
+            if cumulative_transaction_size + transaction.size > BitcoinConfiguration.BLOCK_SIZE_LIMIT:
+                break
+            if transaction.is_valid():
+                block.transactions[transaction.id] = transaction
+                cumulative_transaction_size += transaction.size
+            if transaction.is_burn_transaction():
+                transaction.block_index = get_chain_length()
+                print(f"Burn transaction {transaction.id} has been deposited in this block.")
         
         block.size=cumulative_transaction_size
         block.transaction_count = len(block.transactions)
@@ -106,7 +165,8 @@ class Node (BitcoinNode):
         
         block.set_merkle_root()
         block.set_hash()
-                
+        
+        print(f"{self.id} has created a PoB block with hash, {block.hash}.")   
         print(block)
         return block
     
@@ -121,26 +181,48 @@ class Node (BitcoinNode):
 
 def assign_miners():
     
-    from Network import Network
-    from itertools import combinations
+    from Slimcoin.Network import Network as SlimcoinNetwork
     
     no_of_miners = random.choice(SlimcoinConfiguration.no_of_miners)
-    SlimcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), no_of_miners)))
+    SlimcoinConfiguration.miners = random.sample(list(SlimcoinNetwork.nodes.values()), no_of_miners)
             
     for miner in SlimcoinConfiguration.miners:
         print(f"{miner.id} is a miner.")
     print("") 
     
     
-def miners_burn_coins():
+def nodes_burn_coins():
     
-    for miner in SlimcoinConfiguration.miners:
-        burn_value = random.randrange(10, 100)
-        miner.burn_coins(burn_value)
+    from Slimcoin.Network import Network as SlimcoinNetwork
+    
+    print("\nNodes are burning coins...")
+    
+    nodes = random.sample(list(SlimcoinNetwork.nodes.values()), 5)
+            
+    for node in nodes:
+        burn_value = random.randrange(10, 1000)
+        node.burn_coins(burn_value)
+        
+    transaction_propagation_delay()
+
+
+def nodes_stake():
+    from Slimcoin.Network import Network as SlimcoinNetwork
+    
+    nodes_staking = random.sample(list(SlimcoinNetwork.nodes.values()), 2)
+            
+    for node in nodes_staking:
+        if node.balance > 32:
+            amount = random.randrange(EthereumConfiguration.MINIMUM_STAKE, EthereumConfiguration.MAXIMUM_STAKE)
+            node.stake(amount)
+        else:
+            print(f"{node.id} doesn't have enough coins to stake.")   
         
         
 def miners_create_pow_blocks():
                 
     for miner in SlimcoinConfiguration.miners:
-        print(f"{miner.id} is creating a  PoW block.")
+        print(f"{miner.id} is creating a PoW block.")
         miner.create_pow_block()
+        
+        

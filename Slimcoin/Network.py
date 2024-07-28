@@ -1,8 +1,10 @@
 import random
 from Bitcoin.Network import Network as BitcoinNetwork
-from Configuration import BitcoinConfiguration, GeneralConfiguration
+from Ethereum.Network import Network as EthereumNetwork
+from Configuration import BitcoinConfiguration, GeneralConfiguration, SlimcoinConfiguration
+from Util import get_last_block
 
-class Network (BitcoinNetwork):
+class Network (BitcoinNetwork, EthereumNetwork):
         
     @staticmethod
     def add_node():
@@ -27,4 +29,15 @@ class Network (BitcoinNetwork):
         # print(node)
         
 
+    @staticmethod
+    def is_pob_eligible(round_count):        
+        if round_count > SlimcoinConfiguration.MINIMUM_NUMBER_OF_POW_BLOCKS_PRECEEDING_POB_BLOCK:
+            if get_last_block().is_pow_block():
+                return True
+        
+        return False
     
+    
+    @staticmethod
+    def pos_or_pob():
+        return random.choice(["PoS", "PoB"])

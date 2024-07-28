@@ -21,6 +21,24 @@ class Block:
                 return False      
         return True
     
+    def is_pow_block(self):
+        if hasattr(self, 'nonce'):
+            if self.nonce != '0'*64:
+                return True
+        return False
+    
+    
+    def is_pob_block(self):
+        if hasattr(self, 'burn_hash'):
+            return True
+        return False
+
+
+    def is_pos_block(self):
+        if hasattr(self, 'slot'):
+            return True
+        return False
+        
 
     def add_to_chain(self):
         
@@ -33,9 +51,9 @@ class Block:
         print(f"{self.hash} has been added to the chain.\n")
         
         
-    def finalize_transactions(self, block_creator):
+    def finalize_transactions(self, block_creator, block):
         for transaction in self.transactions.values():
-            transaction.finalize(block_creator)
+            transaction.finalize(block_creator, block)
         print(f"Block {self.hash} transactions have been finalized.")
     
     
@@ -125,4 +143,5 @@ class Block:
             Transaction Count: {self.transaction_count},
             Size: {size} bytes\n
         )"""
-            
+        
+        

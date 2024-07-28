@@ -50,10 +50,12 @@ class Consensus:
                 
                 if BitcoinNetwork.verify_block(block) and miner == Consensus.latest_winners[0]:
                     block.add_to_chain()
-                    block.finalize_transactions(miner)
+                    block.finalize_transactions(miner, block)
+                    # for transaction in block.transactions.values():
+                    #     transaction.finalize(miner, block)
                 
                 break
-    
+  
     
     @staticmethod   
     def competition_and_block_processing(miners):

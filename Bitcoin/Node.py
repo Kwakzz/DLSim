@@ -2,7 +2,7 @@ import random
 import time
 from Bitcoin.Block import Block as BitcoinBlock
 from Configuration import BitcoinConfiguration
-from Util import double_256_hash, get_chain_length, sha256_hash
+from Util import double_256_hash, get_chain_length
 from Bitcoin.Nonce import Nonce
 from Bitcoin.Block import genesis_block
 from Node import Node as BaseNode
@@ -97,11 +97,10 @@ class Node (BaseNode):
     
 def assign_miners():
     
-    from Network import Network
-    from itertools import combinations
+    from Bitcoin.Network import Network as BitcoinNetwork
     
     no_of_miners = random.choice(BitcoinConfiguration.no_of_miners)
-    BitcoinConfiguration.miners = random.choice(list(combinations(Network.nodes.values(), no_of_miners)))
+    BitcoinConfiguration.miners = random.sample(list(BitcoinNetwork.nodes.values()), no_of_miners)
             
     for miner in BitcoinConfiguration.miners:
         print(f"{miner.id} is a miner.")

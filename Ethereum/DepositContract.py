@@ -29,6 +29,7 @@ class DepositContract:
     @staticmethod
     def get_total_stake():
         return sum(DepositContract.deposits.values())
+    
         
         
     @staticmethod
@@ -66,7 +67,6 @@ class DepositContract:
         
 def nodes_stake():
     
-    network_size = len(EthereumNetwork.nodes)
     nodes_staking = random.choice(list(combinations(EthereumNetwork.nodes.values(), 2)))
             
     for node in nodes_staking:

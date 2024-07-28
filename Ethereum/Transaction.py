@@ -25,7 +25,7 @@ class Transaction (BaseTransaction):
         return excess * self.gas_used
     
     
-    def finalize(self, block_proposer):
+    def finalize(self, block_proposer, block):
         
         from Ethereum.Network import Network as EthereumNetwork
         from Ethereum.Consensus import Consensus as PoS

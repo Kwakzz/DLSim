@@ -100,31 +100,60 @@ def simulate_fabric():
 
 def simulate_slimcoin():
     from Slimcoin.Network import Network as SlimcoinNetwork
-    from Slimcoin.Node import assign_miners, miners_burn_coins, miners_create_pow_blocks
-    from Slimcoin.Consensus import Consensus as PoB
+    from Slimcoin.Node import assign_miners, nodes_burn_coins, miners_create_pow_blocks
+    from Slimcoin.PoB import PoB 
+    from Slimcoin.Slot import Slot
+    from Slimcoin.DepositContract import DepositContract, nodes_stake
+    from Slimcoin.SlashContract import SlashContract
     from Bitcoin.Consensus import Consensus as PoW
     
     SlimcoinNetwork.initialize_network()  
+    DepositContract.create()
+    SlashContract.create()
+    
+    print(f"Burn Hash Target: {PoB.burn_hash_target_in_hex}")
+    print(f"Burn Hash Target as int: {int(PoB.burn_hash_target_in_hex, 16)}")
     
     for round_count in range(GeneralConfiguration.no_of_rounds):
+        
         create_random_transactions(GeneralConfiguration.TRANSACTION_COUNT_PER_ROUND)
-        assign_miners()
-        miners_burn_coins()
+        nodes_burn_coins()
         
-        if PoB.select_block_proposer():
-            block_proposer, burn_transaction = PoB.select_block_proposer()
-            block = block_proposer.create_pob_block(burn_transaction)
-            block_proposer.broadcast_block(block)
-            if SlimcoinNetwork.verify_block(block):
-                block.finalize_transactions(block_proposer)
-                block.add_to_chain()
-                PoB.adjust_burn_hash_target()
-        
-        else:
+        if SlimcoinNetwork.is_pob_eligible(round_count):
+            
+            pos_or_pob = SlimcoinNetwork.pos_or_pob()
+            
+            if pos_or_pob == "PoB":
+                print("Consensus mechanism for this round is PoB.\n")
+                return_value = PoB.select_block_proposer()
+            
+                if return_value is not None:
+                    block_proposer, burn_transaction = return_value
+                    block = block_proposer.create_pob_block(burn_transaction)
+                    block_proposer.broadcast_block(block)
+                    
+                    if SlimcoinNetwork.verify_block(block):
+                        block.finalize_transactions(block_proposer, block)
+                        block.add_to_chain()
+                        PoB.adjust_burn_hash_target()
+                else:
+                    print("No block proposer selected. Skipping PoB round.")
+
+                
+            if pos_or_pob == "PoS": 
+                print("Consensus mechanism for this round is PoS.\n")
+                nodes_stake()
+                DepositContract.print_deposits()
+                Slot.run_slot() 
+            
+            
+        else:   
+            print("Consensus mechanism for this round is PoW.\n")
+            assign_miners()
             miners_create_pow_blocks()
             PoW.competition_and_block_processing(SlimcoinConfiguration.miners)
             PoW.reset_winners_and_blocks()
-            SlimcoinNetwork.clear_block_memory()      
+            SlimcoinNetwork.clear_block_memory()
             
         print_chain()
         GeneralConfiguration.simulation_end_time = datetime.now()

@@ -12,6 +12,26 @@ def generate_id():
     return id_in_hex
 
 
+def get_node_with_blockchain():
+    
+    random_node = None
+    
+    if GeneralConfiguration.selected_platform in coin_based_blockchains:
+            from Network import Network
+            random_node = Network.get_random_node()
+            
+    if GeneralConfiguration.selected_platform == "Fabric":
+        from Fabric.Network import Network
+        random_node = Network.get_random_peer()
+        
+    return random_node
+
+
+def get_blockchain():
+    random_node = get_node_with_blockchain()
+    return random_node.blockchain
+
+
 def sha256_hash(data):    
     if isinstance(data, str):
         data = data.encode('utf-8')
@@ -27,15 +47,7 @@ def double_256_hash(data):
             
 def print_chain():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network
-        random_node = Network.get_random_peer()
+    random_node = get_node_with_blockchain()
     
     print ("\nBlockchain:", end=" ")
     
@@ -47,19 +59,16 @@ def print_chain():
     
 def get_chain_length():
     
-    random_node = None
-    
-    if GeneralConfiguration.selected_platform in coin_based_blockchains:
-        from Network import Network
-        random_node = Network.get_random_node()
-        
-    if GeneralConfiguration.selected_platform == "Fabric":
-        from Fabric.Network import Network
-        random_node = Network.get_random_peer()
+    random_node = get_node_with_blockchain()
         
     blockchain_length = len(random_node.blockchain)
     return blockchain_length
     
+    
+def get_last_block():
+    
+    random_node = get_node_with_blockchain()
+    return random_node.blockchain[-1]
 
     
 def convert_seconds_to_minutes(time):

@@ -18,12 +18,11 @@ class Transaction (BaseTransaction):
         self.fee = fee
         
         
-    def finalize(self, miner):
+    def finalize(self, miner, block):
         
         from Bitcoin.Network import Network as BitcoinNetwork
         from Bitcoin.Consensus import Consensus as PoW
         
-        miner = BitcoinNetwork.nodes[miner.id]
         sender = BitcoinNetwork.nodes[self.sender_id]
         recipient = BitcoinNetwork.nodes[self.recipient_id]
         
