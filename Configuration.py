@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 35
+    no_of_rounds = 30
     
     simulation_start_time = None
     simulation_end_time = None
