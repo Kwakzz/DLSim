@@ -20,12 +20,31 @@ class PoB:
         return total_effective_burnt_coins
     
     
+    # @staticmethod
+    # def get_new_burn_hash_target ():
+    #     previous_burn_hash_target = int(PoB.burn_hash_target_in_hex, 16)
+    #     recent_block_time = get_recent_block_time()
+    #     new_burn_hash_target = (previous_burn_hash_target * SlimcoinConfiguration.TARGET_BLOCK_TIME)/recent_block_time  * (SlimcoinConfiguration.REFERENCE_TOTAL_EFFECTIVE_BURNT_COINS/PoB.get_total_effective_burnt_coins())
+    #     new_burn_hash_target = hex(int(new_burn_hash_target))
+    #     print(f"\nNew burn hash target: {new_burn_hash_target}.\n")
+    #     return new_burn_hash_target
     @staticmethod
-    def get_new_burn_hash_target ():
+    def get_new_burn_hash_target():
         previous_burn_hash_target = int(PoB.burn_hash_target_in_hex, 16)
         recent_block_time = get_recent_block_time()
-        new_burn_hash_target = (previous_burn_hash_target * SlimcoinConfiguration.TARGET_BLOCK_TIME)/recent_block_time  * (SlimcoinConfiguration.REFERENCE_TOTAL_EFFECTIVE_BURNT_COINS/PoB.get_total_effective_burnt_coins())
-        new_burn_hash_target = hex(int(new_burn_hash_target))
+        
+        new_burn_hash_target = (
+            previous_burn_hash_target *
+            SlimcoinConfiguration.TARGET_BLOCK_TIME / 
+            recent_block_time * 
+            SlimcoinConfiguration.REFERENCE_TOTAL_EFFECTIVE_BURNT_COINS / 
+            PoB.get_total_effective_burnt_coins()
+        )
+        
+        new_burn_hash_target = hex(int(new_burn_hash_target)).rstrip('0').rstrip('x')
+        if not new_burn_hash_target.startswith('0x'):
+            new_burn_hash_target = '0x' + new_burn_hash_target
+            
         print(f"\nNew burn hash target: {new_burn_hash_target}.\n")
         return new_burn_hash_target
         

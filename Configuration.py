@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 25
+    no_of_rounds = 35
     
     simulation_start_time = None
     simulation_end_time = None
@@ -20,7 +20,7 @@ class GeneralConfiguration:
     MAXIMUM_INITIAL_BALANCE = 10000000000
     MINIMUM_INITIAL_BALANCE = 100000000
     
-    no_of_nodes = 100
+    no_of_nodes = 150
     
     BASE_BLOCK_PROPAGATION_DELAY = 1  
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
@@ -55,7 +55,7 @@ class EthereumConfiguration:
     
     slot_duration = 12 # 12 seconds
     epoch_duration = slot_duration * 32
-    max_no_of_slots = 20
+    max_no_of_slots = 25
         
     MINIMUM_STAKE = 32
     MAXIMUM_STAKE = 90
@@ -78,7 +78,7 @@ class BitcoinConfiguration:
     miners = []
     
     INITIAL_DIFFICULTY_TARGET_HEX = '00000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-    # INITIAL_DIFFICULTY_TARGET_HEX = '0ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+    # INITIAL_DIFFICULTY_TARGET_HEX = '00fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
     INITIAL_DIFFICULTY_TARGET = int(INITIAL_DIFFICULTY_TARGET_HEX, 16) 
     INITIAL_DIFFICULTY_LEVEL = 1
@@ -122,6 +122,9 @@ class SlimcoinConfiguration:
             
     no_of_miners = range(3, 5)
     miners = []
+        
+    MINIMUM_BURN_VALUE = 10
+    MAXIMUM_BURN_VALUE = 1000
     
     BURN_CONSTANT = 0.01
     MINIMUM_NUMBER_OF_POW_BLOCKS_PRECEEDING_POB_BLOCK = 6

@@ -76,7 +76,12 @@ class BurnTransaction(SlimcoinTransaction):
         
         
     def get_burn_hash(self):
-        return hex(int(self.get_multiplier() * int(self.get_internal_hash(), 16)))
+        # return hex(int(self.get_multiplier() * int(self.get_internal_hash(), 16)))
+        burn_hash = hex(int(self.get_multiplier() * int(self.get_internal_hash(), 16)))
+        burn_hash = burn_hash.rstrip('0').rstrip('x')
+        if not burn_hash.startswith('0x'):
+            burn_hash = '0x' + burn_hash
+        return burn_hash
     
     
     def set_burn_hash(self):
@@ -92,7 +97,9 @@ class BurnTransaction(SlimcoinTransaction):
         self.set_burn_hash()
         burn_hash_int = int(self.get_burn_hash(), 16)
         if burn_hash_int < int(PoB.burn_hash_target_in_hex, 16) or burn_hash_int == int(PoB.burn_hash_target_in_hex, 16):
-            print(f"Burn transaction {self.id}'s burn hash {self.burn_hash} meets the burn hash target")
+            print(f"\nBurn transaction {self.id}'s burn hash {self.burn_hash} meets the burn hash target.")
+            print(self)
+            print()
             return True
         return False
         

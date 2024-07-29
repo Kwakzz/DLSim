@@ -197,10 +197,11 @@ def nodes_burn_coins():
     
     print("\nNodes are burning coins...")
     
-    nodes = random.sample(list(SlimcoinNetwork.nodes.values()), 5)
+    no_of_miners = random.choice(SlimcoinConfiguration.no_of_miners)
+    nodes = random.sample(list(SlimcoinNetwork.nodes.values()), no_of_miners)
             
     for node in nodes:
-        burn_value = random.randrange(10, 1000)
+        burn_value = random.randrange(SlimcoinConfiguration.MINIMUM_BURN_VALUE, SlimcoinConfiguration.MAXIMUM_BURN_VALUE)
         node.burn_coins(burn_value)
         
     transaction_propagation_delay()

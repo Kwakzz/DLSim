@@ -18,3 +18,17 @@ To install and run DLSim, follow these steps:
    cd DLSim
    python Main.py
 
+## Usage
+1. Configure parameters in Configuration.py. We recommend you only change the following:
+- **no_of_rounds**
+- **no_of_nodes**
+- **INITIAL_DIFFICULTY_TARGET_HEX**
+2. Set number of desired blocks by editing the no_of_rounds variable in GeneralConfiguration.
+3. Use selected_platform variable in GeneralConfiguration to switch platforms. 
+4. Run python Main.py while in the root directory
+
+## Authors
+DLSim was developed by Kwaku Osafo and Laura Larbi-Tieku as part of their capstone project at Ashesi University. For any questions or contributions, please contact:
+
+- Kwaku Osafo: kwakuosafo20@gmail.com
+- Laura Larbi-Tieku: lauralarbi02@gmail.com
