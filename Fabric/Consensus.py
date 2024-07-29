@@ -23,6 +23,7 @@ class Consensus:
         print("An election has begun.")
         
         FabricNetwork.leader = None
+        FabricNetwork.reset_orderer_statuses_to_follower()
         
         while not FabricNetwork.leader:
             candidate = Consensus.get_random_candidate()

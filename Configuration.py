@@ -20,13 +20,13 @@ class GeneralConfiguration:
     MAXIMUM_INITIAL_BALANCE = 10000000000
     MINIMUM_INITIAL_BALANCE = 100000000
     
-    no_of_nodes = 150
+    no_of_nodes = 100
     
     BASE_BLOCK_PROPAGATION_DELAY = 1  
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[1]
+    selected_platform = available_platforms[2]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -55,7 +55,7 @@ class EthereumConfiguration:
     
     slot_duration = 12 # 12 seconds
     epoch_duration = slot_duration * 32
-    max_no_of_slots = 35
+    max_no_of_slots = 15
         
     MINIMUM_STAKE = 32
     MAXIMUM_STAKE = 90
