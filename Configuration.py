@@ -55,7 +55,7 @@ class EthereumConfiguration:
     
     slot_duration = 12 # 12 seconds
     epoch_duration = slot_duration * 32
-    max_no_of_slots = 25
+    max_no_of_slots = 35
         
     MINIMUM_STAKE = 32
     MAXIMUM_STAKE = 90

@@ -2,7 +2,6 @@ from Block import Block as BaseBlock
 from Configuration import EthereumConfiguration
 from Ethereum.Slot import Slot
 from Ethereum.Transaction import convert_eth_to_gwei
-from Util import convert_bytes_to_megabytes
 
 class Block (BaseBlock):
     
@@ -16,7 +15,7 @@ class Block (BaseBlock):
         self.gas_used = 0
         self.target_gas_usage = EthereumConfiguration.target_gas_usage
         self.base_fee = EthereumConfiguration.current_base_fee
-        self.slot = slot
+        self.slot = Slot.current_slot_number
         
         
     def is_slot_number_accurate(self):

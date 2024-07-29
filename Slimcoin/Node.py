@@ -108,7 +108,7 @@ class Node (BitcoinNode, EthereumNode):
         from Ethereum.Block import Block as EthereumBlock
         from Slimcoin.Slot import Slot
         
-        block = EthereumBlock(slot=Slot.current_slot_number)
+        block = EthereumBlock(slot=Slot.get_current_slot_no())
         cumulative_transaction_gas = 0
         cumulative_transaction_size = 0
         

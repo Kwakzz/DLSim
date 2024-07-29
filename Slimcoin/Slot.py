@@ -6,7 +6,11 @@ from Ethereum.Slot import Slot as EthereumSlot
 
 class Slot (EthereumSlot):
     
-    current_slot_number = (datetime.now() - GeneralConfiguration.simulation_start_time).total_seconds()//12
+    
+    @staticmethod
+    def get_current_slot_no():
+        current_slot_number = int((datetime.now() - GeneralConfiguration.simulation_start_time).total_seconds()/12)
+        return current_slot_number
     
     
     @staticmethod
@@ -18,7 +22,6 @@ class Slot (EthereumSlot):
         from Slimcoin.Network import Network as SlimcoinNetwork
                     
         slot_start_time = datetime.now()
-        Slot.current_slot_number += 1
         
         formatted_datetime = slot_start_time.strftime("%Y-%m-%d %H:%M:%S")
 
