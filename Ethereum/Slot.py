@@ -38,6 +38,7 @@ class Slot:
         
         if block_proposer is None:
             print(f"No block proposer found in slot {Slot.current_slot_number}.")
+            sleep(10)
 
         else:
             Slot.set_slot_block_proposer(block_proposer, Slot.current_slot_number)

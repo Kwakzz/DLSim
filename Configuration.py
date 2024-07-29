@@ -26,7 +26,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[3]
+    selected_platform = available_platforms[1]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -128,7 +128,7 @@ class SlimcoinConfiguration:
     
     BURN_CONSTANT = 0.01
     MINIMUM_NUMBER_OF_POW_BLOCKS_PRECEEDING_POB_BLOCK = 6
-    BURN_HASH_DOUBLE = 350000
+    BURN_HASH_DHOUBLE = 350000
     
     TARGET_BLOCK_TIME = 60 * 1.5 # 1.5 minutes
     
