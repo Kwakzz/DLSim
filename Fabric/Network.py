@@ -84,7 +84,7 @@ class Network:
     
     def reset_orderer_statuses_to_follower():
         for orderer in Network.orderers.values():
-            orderer.status == FabricConfiguration.ORDERER_TYPES[0]
+            orderer.status = FabricConfiguration.ORDERER_TYPES[0]
                 
                 
     @staticmethod

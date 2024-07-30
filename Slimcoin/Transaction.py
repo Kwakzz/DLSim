@@ -22,7 +22,7 @@ class Transaction (BitcoinTransaction, EthereumTransaction):
         
     def finalize(self, block_creator, block):
         
-        from Slimcoin.PoS import Consensus as PoS
+        from Slimcoin.PoS import PoS as PoS
         from Bitcoin.Consensus import Consensus as PoW
         
         sender = SlimcoinNetwork.nodes[self.sender_id]
@@ -58,5 +58,3 @@ class Transaction (BitcoinTransaction, EthereumTransaction):
             Fee: {fee} SLM 
         )
         """
-        
-        

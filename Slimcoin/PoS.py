@@ -5,7 +5,7 @@ from Ethereum.Consensus import RANDAO as EthereumRANDAO
 from Ethereum.Consensus import Consensus as EthereumConsensus
 import random
 
-class Consensus (EthereumConsensus):
+class PoS (EthereumConsensus):
 
         
     @staticmethod
@@ -78,7 +78,7 @@ class RANDAO (EthereumRANDAO):
         for validator in SlimcoinNetwork.validators.values():
             current_deposit_sum += DepositContract.deposits[validator.id]
             if current_deposit_sum > pick:
-                Consensus.block_proposer = validator
+                PoS.block_proposer = validator
                 print(f"{validator.id} has been selected as the block proposer for slot {str(Slot.current_slot_number)}.")
                 return validator
     

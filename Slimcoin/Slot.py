@@ -16,7 +16,7 @@ class Slot (EthereumSlot):
     @staticmethod
     def run_slot ():
         
-        from Slimcoin.PoS import Consensus as PoS
+        from Slimcoin.PoS import PoS as PoS
         from Slimcoin.PoS import RANDAO      
         from Slimcoin.SlashContract import SlashContract
         from Slimcoin.Network import Network as SlimcoinNetwork

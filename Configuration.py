@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 50
+    no_of_rounds = 10
     
     simulation_start_time = None
     simulation_end_time = None
@@ -20,13 +20,13 @@ class GeneralConfiguration:
     MAXIMUM_INITIAL_BALANCE = 10000000000
     MINIMUM_INITIAL_BALANCE = 100000000
     
-    no_of_nodes = 100
+    no_of_nodes = 80
     
     BASE_BLOCK_PROPAGATION_DELAY = 1  
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[2]
+    selected_platform = available_platforms[3]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
@@ -100,7 +100,7 @@ class FabricConfiguration:
     NO_OF_ORDERERS = 5
     
     BATCH_TIMEOUT = 2
-    MAX_TRANSACTION_COUNT_PER_BLOCK = 500
+    MAX_TRANSACTION_COUNT_PER_BLOCK = 1000
     ABSOLUTE_MAX_BYTES = 1024*1024 *49 #99 MB
     PREFERRED_MAX_BYTES = MAX_TRANSACTION_COUNT_PER_BLOCK * 3500 # 3500 bytes is average transaction size
     
@@ -128,7 +128,7 @@ class SlimcoinConfiguration:
     
     BURN_CONSTANT = 0.01
     MINIMUM_NUMBER_OF_POW_BLOCKS_PRECEEDING_POB_BLOCK = 6
-    BURN_HASH_DHOUBLE = 350000
+    BURN_HASH_DOUBLE = 350000
     
     TARGET_BLOCK_TIME = 60 * 1.5 # 1.5 minutes
     
