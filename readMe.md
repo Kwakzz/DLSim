@@ -14,7 +14,7 @@ To install and run DLSim, follow these steps:
 
 1. **Clone the Repository**:
    ```sh
-   git clone [https://github.com/Kwakzz/DLSim.git](https://github.com/Kwakzz/DLSim.git)
+   git clone https://github.com/Kwakzz/DLSim.git
    cd DLSim
    python Main.py
 
