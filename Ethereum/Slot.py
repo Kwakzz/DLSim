@@ -55,7 +55,6 @@ class Slot:
             if is_block_valid:
                 block.add_to_chain()
                 block.finalize_transactions(block_proposer, block)
-                
             else:
                 SlashContract.slash(block_proposer)
             

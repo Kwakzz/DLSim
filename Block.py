@@ -55,6 +55,11 @@ class Block:
         for transaction in self.transactions.values():
             transaction.finalize(block_creator, block)
         print(f"Block {self.hash} transactions have been finalized.")
+        
+    
+    def print_transactions(self):
+        for transaction in self.transactions.values():
+            print(transaction)
     
     
     def generate_merkle_root(self):

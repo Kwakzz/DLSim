@@ -14,7 +14,7 @@ To install and run DLSim, follow these steps:
 
 1. **Clone the Repository**:
    ```sh
-   git clone https://github.com/Kwakzz/DLSim.git
+   git clone [https://github.com/Kwakzz/DLSim.git](https://github.com/Kwakzz/DLSim.git)
    cd DLSim
    python Main.py
 
@@ -23,8 +23,14 @@ To install and run DLSim, follow these steps:
 - **no_of_rounds**
 - **no_of_nodes**
 - **INITIAL_DIFFICULTY_TARGET_HEX**
-2. Set number of desired blocks by editing the no_of_rounds variable in GeneralConfiguration.
-3. Use selected_platform variable in GeneralConfiguration to switch platforms. 
+
+Refer to Hyperledger Fabric's documentation for appropriate Fabric configurations.
+All constants in the configuration classes are based on real world settings.
+
+2. Set number of desired blocks by editing the no_of_rounds variable in GeneralConfiguration. For Ethereum, edit the max_no_of_slots variable in the EthereumConfiguration class.
+
+3. Use selected_platform variable in GeneralConfiguration to switch platforms.
+ 
 4. Run python Main.py while in the root directory
 
 ## Authors

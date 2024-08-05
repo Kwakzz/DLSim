@@ -53,7 +53,8 @@ class Transaction (BaseTransaction):
             Value: {self.value} ETH, 
             Size: {self.size} bytes, 
             Gas Used: {self.gas_used} units,
-            Fee: {fee_in_gwei} gwei 
+            Fee: {fee_in_gwei} gwei, 
+            Confirmation Time: {self.confirmation_time}
         )
         """
          

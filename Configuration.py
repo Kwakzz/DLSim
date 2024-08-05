@@ -7,7 +7,7 @@ coin_based_blockchains = ["Bitcoin", "Ethereum", "Slimcoin"]
 
 class GeneralConfiguration:
         
-    no_of_rounds = 10
+    no_of_rounds = 20
     
     simulation_start_time = None
     simulation_end_time = None
@@ -26,7 +26,7 @@ class GeneralConfiguration:
     NETWORK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.05  
     BLOCK_SIZE_FACTOR_FOR_BLOCK_PROPAGATION_DELAY_INCREASE = 0.01  
         
-    selected_platform = available_platforms[3]
+    selected_platform = available_platforms[1]
     
     
     def calculate_block_propagation_delay(network_size, block_size):
