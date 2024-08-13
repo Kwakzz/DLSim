@@ -23,6 +23,8 @@ To install and run DLSim, follow these steps:
     ```bash
     git clone https://github.com/Kwakzz/DLSim.git
     cd DLSim
+    pip freeze > requirements.txt
+    pip install -r requirements.txt 
     python Main.py
     ```
 
