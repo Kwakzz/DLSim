@@ -16,15 +16,13 @@ DLSim is a configurable blockchain simulator designed to model and analyze the p
 
 ## Installation
 
-To install and run DLSim, follow these steps:
+To install and run DLSim, ensure you have at least Python 3.7 installed, and follow these steps:
 
 1. **Clone the Repository:**
 
     ```bash
     git clone https://github.com/Kwakzz/DLSim.git
     cd DLSim
-    pip freeze > requirements.txt
-    pip install -r requirements.txt 
     python Main.py
     ```
 
